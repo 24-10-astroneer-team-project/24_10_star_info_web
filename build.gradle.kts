@@ -36,8 +36,13 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    //임시 데이터 베이스
-    implementation("com.h2database:h2")
+    implementation(kotlin("script-runtime"))
+
+    implementation ("io.github.cdimascio:dotenv-java:2.2.0")
+    //파이어베이스
+    implementation("com.google.firebase:firebase-admin:8.1.0")
+    //mysql
+    implementation("mysql:mysql-connector-java:8.0.33")
 }
 
 tasks.withType<Test> {
