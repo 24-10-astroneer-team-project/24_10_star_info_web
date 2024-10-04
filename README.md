@@ -58,6 +58,23 @@ REACT_APP_FIREBASE_MEASUREMENT_ID=your-measurement-id
 
 **⚠️ 중요: 절대로 `.env` 파일을 Git에 업로드하지 마세요! `.gitignore`에 이미 추가되어 있습니다.**
 
+**`.gitignore`에 이미 추가되어 있지만**
+
+```bash
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+.evn
+/src/main/resources/teamastroneerstarinfo-firebase-adminsdk-l8qw1-62cdf88ebf.json
+```
+
+맨 아래 두줄 한번만 확인하고 push 하세요.
+
 ---
 
 ### 5. 프로젝트 실행
