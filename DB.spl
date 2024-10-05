@@ -7,12 +7,14 @@ USE `2024_10_ASTRONEER_TEAMPROJECT`;
 CREATE TABLE `User` (
                         `user_id` INT NOT NULL AUTO_INCREMENT COMMENT '고유 사용자 ID (Primary Key)',
                         `u_name` VARCHAR(100) NOT NULL COMMENT '사용자 이름',
+                        `nickname` VARCHAR(50) NOT NULL COMMENT '사용자 닉네임',  -- 닉네임 추가
                         `email` VARCHAR(100) NOT NULL UNIQUE COMMENT '사용자의 이메일 (Google 계정과 연동)',
                         `google_id` VARCHAR(255) NOT NULL UNIQUE COMMENT '구글 소셜 로그인 ID (고유)',
-                        `latitude` DECIMAL(10, 7) NULL COMMENT '사용자의 선호 관측 위치 (위도)',
-                        `longitude` DECIMAL(10, 7) NULL COMMENT '사용자의 선호 관측 위치 (경도)',
+                        `latitude` DOUBLE NULL COMMENT '사용자의 선호 관측 위치 (위도)',  -- DOUBLE 타입으로 수정
+                        `longitude` DOUBLE NULL COMMENT '사용자의 선호 관측 위치 (경도)',  -- DOUBLE 타입으로 수정
                         `preferred_time` VARCHAR(50) NULL COMMENT '선호하는 관측 시간대 (예: 아침, 저녁)',
                         `alert_enabled` BOOLEAN DEFAULT TRUE COMMENT '천문 현상 알림 활성화 여부 (True: 활성화, False: 비활성화)',
+                        `auth_level` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '권한 레벨 (1=일반 사용자, 5=관리자)',
                         `reg_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '사용자 가입 시각',
                         `update_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '사용자 정보 업데이트 시각',
                         `del_status` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '탈퇴 여부 (0=탈퇴 전, 1=탈퇴 후)',
@@ -24,8 +26,8 @@ CREATE TABLE `User` (
 CREATE TABLE `ObservationLocation` (
                                        `loc_id` INT NOT NULL AUTO_INCREMENT COMMENT '고유 관측 장소 ID (Primary Key)',
                                        `loc_name` VARCHAR(100) NULL COMMENT '관측 장소 이름',
-                                       `latitude` DECIMAL(10, 7) NULL COMMENT '관측 장소 위도',
-                                       `longitude` DECIMAL(10, 7) NULL COMMENT '관측 장소 경도',
+                                       `latitude` DOUBLE NULL COMMENT '관측 장소 위도',  -- DOUBLE 타입으로 수정
+                                       `longitude` DOUBLE NULL COMMENT '관측 장소 경도',  -- DOUBLE 타입으로 수정
                                        `is_recommended` BOOLEAN DEFAULT FALSE COMMENT '장소 추천 여부 (True: 추천, False: 비추천)',
                                        `loc_reg_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '장소 등록 시간',
                                        PRIMARY KEY (`loc_id`)
@@ -37,8 +39,8 @@ CREATE TABLE `AstronomicalEvent` (
                                      `event_name` VARCHAR(100) NOT NULL COMMENT '천문 현상 이름 (예: 일식, 월식)',
                                      `start_time` DATETIME NOT NULL COMMENT '천문 현상 시작 시간',
                                      `end_time` DATETIME NOT NULL COMMENT '천문 현상 종료 시간',
-                                     `latitude` DECIMAL(10, 7) NULL COMMENT '이벤트 발생 위치 (위도)',
-                                     `longitude` DECIMAL(10, 7) NULL COMMENT '이벤트 발생 위치 (경도)',
+                                     `latitude` DOUBLE NULL COMMENT '이벤트 발생 위치 (위도)',  -- DOUBLE 타입으로 수정
+                                     `longitude` DOUBLE NULL COMMENT '이벤트 발생 위치 (경도)',  -- DOUBLE 타입으로 수정
                                      `event_reg_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '천문 현상 등록 시간',
                                      PRIMARY KEY (`event_id`)
 );
@@ -61,8 +63,8 @@ CREATE TABLE `ObservationRecord` (
                                      `user_id` INT NOT NULL COMMENT '고유 사용자 ID',
                                      `event_id` INT NOT NULL COMMENT '고유 천문 현상 ID',
                                      `observation_date` DATETIME NOT NULL COMMENT '관측 날짜',
-                                     `latitude` DECIMAL(10, 7) NULL COMMENT '관측한 장소의 위도',
-                                     `longitude` DECIMAL(10, 7) NULL COMMENT '관측한 장소의 경도',
+                                     `latitude` DOUBLE NULL COMMENT '관측한 장소의 위도',  -- DOUBLE 타입으로 수정
+                                     `longitude` DOUBLE NULL COMMENT '관측한 장소의 경도',  -- DOUBLE 타입으로 수정
                                      `observation_result` TEXT NULL COMMENT '관측 결과 (성공 여부, 메모 등)',
                                      `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '기록 생성 시간',
                                      PRIMARY KEY (`record_id`),
@@ -78,3 +80,8 @@ CREATE TABLE `UserEventInterest` (
                                      FOREIGN KEY (`user_id`) REFERENCES `User` (`user_id`) ON DELETE CASCADE,
                                      FOREIGN KEY (`event_id`) REFERENCES `AstronomicalEvent` (`event_id`) ON DELETE CASCADE
 );
+
+
+-- user table 조회
+
+SELECT * FROM User;
