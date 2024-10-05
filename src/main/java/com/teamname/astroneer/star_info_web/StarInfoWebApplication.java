@@ -15,6 +15,8 @@ public class StarInfoWebApplication {
         System.setProperty("GOOGLE_CLIENT_ID", dotenv.get("GOOGLE_CLIENT_ID"));
         System.setProperty("GOOGLE_CLIENT_SECRET", dotenv.get("GOOGLE_CLIENT_SECRET"));
 
+        System.out.println(Dotenv.configure().ignoreIfMissing().load());
+
         // Spring Boot 애플리케이션 실행
         SpringApplication.run(StarInfoWebApplication.class, args);
     }
