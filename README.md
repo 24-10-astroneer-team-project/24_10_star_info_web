@@ -101,6 +101,20 @@ or
 
 그냥 서버 실행 시키셔도 됩니다.
 
+### 5.3 Gradle 빌드
+
+프로젝트의 빌드를 위해 Gradle을 사용하는 경우, Gradle Wrapper를 통해 별도의 Gradle 설치 없이 프로젝트를 빌드할 수 있습니다.
+
+- **Mac/Linux**: 
+
+  ./gradlew build
+
+- **Windows**: 
+
+  gradlew.bat build
+
+위 명령어를 실행하면, Gradle Wrapper가 필요한 Gradle 버전을 자동으로 다운로드하고 빌드를 진행합니다.
+
 ---
 
 ### 6. 빌드
