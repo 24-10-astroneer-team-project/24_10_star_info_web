@@ -4,7 +4,7 @@ CREATE DATABASE `2024_10_ASTRONEER_TEAMPROJECT`;
 USE `2024_10_ASTRONEER_TEAMPROJECT`;
 
 -- User 테이블
-CREATE TABLE `User` (
+CREATE TABLE `user` (
                         `user_id` INT NOT NULL AUTO_INCREMENT COMMENT '고유 사용자 ID (Primary Key)',
                         `u_name` VARCHAR(100) NOT NULL COMMENT '사용자 이름',
                         `nickname` VARCHAR(50) NOT NULL COMMENT '사용자 닉네임',  -- 닉네임 추가
@@ -23,7 +23,7 @@ CREATE TABLE `User` (
 );
 
 -- ObservationLocation 테이블
-CREATE TABLE `ObservationLocation` (
+CREATE TABLE `observation_location` (
                                        `loc_id` INT NOT NULL AUTO_INCREMENT COMMENT '고유 관측 장소 ID (Primary Key)',
                                        `loc_name` VARCHAR(100) NULL COMMENT '관측 장소 이름',
                                        `latitude` DOUBLE NULL COMMENT '관측 장소 위도',  -- DOUBLE 타입으로 수정
@@ -34,7 +34,7 @@ CREATE TABLE `ObservationLocation` (
 );
 
 -- AstronomicalEvent 테이블
-CREATE TABLE `AstronomicalEvent` (
+CREATE TABLE `astronomical_event` (
                                      `event_id` INT NOT NULL AUTO_INCREMENT COMMENT '고유 천문 현상 ID (Primary Key)',
                                      `event_name` VARCHAR(100) NOT NULL COMMENT '천문 현상 이름 (예: 일식, 월식)',
                                      `start_time` DATETIME NOT NULL COMMENT '천문 현상 시작 시간',
@@ -46,7 +46,7 @@ CREATE TABLE `AstronomicalEvent` (
 );
 
 -- ObservationRecommendation 테이블
-CREATE TABLE `ObservationRecommendation` (
+CREATE TABLE `observation_recommendation` (
                                              `recommendation_id` INT NOT NULL AUTO_INCREMENT COMMENT '고유 추천 ID (Primary Key)',
                                              `recommended_time` DATETIME NULL COMMENT '추천된 시간',
                                              `recom_reg_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '추천 생성 시간',
@@ -54,11 +54,11 @@ CREATE TABLE `ObservationRecommendation` (
                                              `loc_id` INT NOT NULL COMMENT '고유 관측 장소 ID',
                                              PRIMARY KEY (`recommendation_id`),
                                              FOREIGN KEY (`user_id`) REFERENCES `User` (`user_id`) ON DELETE CASCADE,
-                                             FOREIGN KEY (`loc_id`) REFERENCES `ObservationLocation` (`loc_id`) ON DELETE CASCADE
+                                             FOREIGN KEY (`loc_id`) REFERENCES `observation_location` (`loc_id`) ON DELETE CASCADE
 );
 
 -- ObservationRecord 테이블
-CREATE TABLE `ObservationRecord` (
+CREATE TABLE `observation_record` (
                                      `record_id` INT NOT NULL AUTO_INCREMENT COMMENT '고유 관측 기록 ID (Primary Key)',
                                      `user_id` INT NOT NULL COMMENT '고유 사용자 ID',
                                      `event_id` INT NOT NULL COMMENT '고유 천문 현상 ID',
@@ -69,19 +69,24 @@ CREATE TABLE `ObservationRecord` (
                                      `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '기록 생성 시간',
                                      PRIMARY KEY (`record_id`),
                                      FOREIGN KEY (`user_id`) REFERENCES `User` (`user_id`) ON DELETE CASCADE,
-                                     FOREIGN KEY (`event_id`) REFERENCES `AstronomicalEvent` (`event_id`) ON DELETE CASCADE
+                                     FOREIGN KEY (`event_id`) REFERENCES `astronomical_event` (`event_id`) ON DELETE CASCADE
 );
 
 -- UserEventInterest 테이블
-CREATE TABLE `UserEventInterest` (
+CREATE TABLE `user_event_interest` (
                                      `user_id` INT NOT NULL COMMENT '고유 사용자 ID',
                                      `event_id` INT NOT NULL COMMENT '고유 천문 현상 ID',
                                      PRIMARY KEY (`user_id`, `event_id`),
                                      FOREIGN KEY (`user_id`) REFERENCES `User` (`user_id`) ON DELETE CASCADE,
-                                     FOREIGN KEY (`event_id`) REFERENCES `AstronomicalEvent` (`event_id`) ON DELETE CASCADE
+                                     FOREIGN KEY (`event_id`) REFERENCES `astronomical_event` (`event_id`) ON DELETE CASCADE
 );
 
 
 -- user table 조회
+SELECT * FROM user;
 
-SELECT * FROM User;
+-- observation_location table 조회
+SELECT * FROM observation_location;
+
+-- astronomical_event table 조회
+SELECT * FROM astronomical_event;

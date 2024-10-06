@@ -43,8 +43,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()  // FORWARD 요청은 인증 없이 허용
-                                .requestMatchers("/usr/member/login", "/usr/member/doGLogin", "/firebaseUser", "/usr/member/doLogout").permitAll()  // 소셜 로그인 관련 경로 허용
+                                .requestMatchers("/usr/member/login","/firebaseUser", "/usr/member/doLogout").permitAll()  // 소셜 로그인 관련 경로 허용
                                 .requestMatchers("/", "/usr/home/**", "/usr/home/main").permitAll()  // 홈 페이지 및 특정 리소스 접근 허용
+                                .requestMatchers("/locations", "/locations/**").permitAll() // location 요청 접근 허용
+                                .requestMatchers("/events", "/events/**").permitAll() // events 요청 접근 허용
                                 .requestMatchers("/js/**", "/css/**", "/img/**", "/fontawesome-free-6.5.1-web/**").permitAll()  // 정적 리소스 허용
                                 .anyRequest().authenticated()  // 나머지 요청은 인증 필요
                 )
