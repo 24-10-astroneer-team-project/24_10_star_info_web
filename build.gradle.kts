@@ -1,5 +1,6 @@
 plugins {
     java
+    kotlin("jvm") version "1.8.0"  // 혹은 최신 버전으로 변경 가능
     id("org.springframework.boot") version "3.3.4"
     id("io.spring.dependency-management") version "1.1.6"
 }
