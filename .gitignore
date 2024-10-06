@@ -16,6 +16,7 @@ build/
 .evn
 /src/main/resources/teamastroneerstarinfo-firebase-adminsdk-l8qw1-62cdf88ebf.json
 bin/
+/src/main/resources/application-DB.properties
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
