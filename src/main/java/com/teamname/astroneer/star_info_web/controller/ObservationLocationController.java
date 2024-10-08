@@ -1,6 +1,7 @@
 package com.teamname.astroneer.star_info_web.controller;
 
 import com.teamname.astroneer.star_info_web.entity.ObservationLocation;
+import com.teamname.astroneer.star_info_web.service.AstronomyApiService;
 import com.teamname.astroneer.star_info_web.service.ObservationLocationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,19 +11,44 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")  // 모든 도메인 허용, 필요에 따라 특정 도메인만 허용 가능
 @RequestMapping("/locations")
 public class ObservationLocationController {
 
     private static final Logger logger = LoggerFactory.getLogger(ObservationLocationController.class);
+    private final ObservationLocationService locationService;
+    private final AstronomyApiService astronomyApiService;
 
     @Autowired
-    private ObservationLocationService locationService;
+    public ObservationLocationController(ObservationLocationService locationService,AstronomyApiService astronomyApiService) {
+        this.locationService = locationService;
+        this.astronomyApiService = astronomyApiService;
+    }
 
     // 모든 관측 장소 리스트 가져오기
     @GetMapping
     public List<ObservationLocation> getAllLocations() {
         logger.info("========location Get 요청 받음. Controller 작동.========");
         return locationService.getAllLocations();
+    }
+
+    // 특정 관측 장소의 천문 이벤트 정보 가져오기
+//    @GetMapping("/{id}/astronomy")
+//    public String getAstronomicalDataForLocation(@PathVariable int id, @RequestParam String date) {
+//        logger.info("========Astronomy Get 요청 받음. id: {}, date: {}========", id, date); // 로그 추가
+//        ObservationLocation location = locationService.getLocationById(id);
+//        double latitude = location.getLatitude();
+//        double longitude = location.getLongitude();
+//
+//        // Astronomy API를 호출하여 해당 위치와 날짜의 천문 데이터를 가져옴
+//        return astronomyApiService.getAstronomicalData(latitude, longitude, date);
+//    }
+
+    // 특정 관측 장소 가져오기
+    @GetMapping("/{id}")
+    public ObservationLocation getLocationById(@PathVariable int id) {
+        logger.info("========location Get 요청 받음. id: {}========", id);
+        return locationService.getLocationById(id);
     }
 
     // 새로운 관측 장소 추가

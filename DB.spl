@@ -93,3 +93,5 @@ SELECT * FROM observation_location;
 
 -- astronomical_event table 조회
 SELECT * FROM astronomical_event;
+
+SELECT * FROM observation_location WHERE loc_id = 2;

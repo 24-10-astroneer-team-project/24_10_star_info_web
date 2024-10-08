@@ -1,5 +1,6 @@
 package com.teamname.astroneer.star_info_web.security;
 
+import com.teamname.astroneer.star_info_web.exception.EmailAlreadyExistsException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,6 +26,6 @@ public class CustomOAuth2FailureHandler implements AuthenticationFailureHandler 
         }
 
         // 오류 페이지로 리다이렉트 또는 알림
-        response.sendRedirect("/usr/member/login?error=true&message=" + URLEncoder.encode(errorMessage, "UTF-8"));
+        response.sendRedirect("/api/member/login?error=true&message=" + URLEncoder.encode(errorMessage, "UTF-8"));
     }
 }
