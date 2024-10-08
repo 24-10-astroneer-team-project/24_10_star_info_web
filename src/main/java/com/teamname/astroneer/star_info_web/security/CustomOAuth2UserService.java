@@ -1,6 +1,7 @@
 package com.teamname.astroneer.star_info_web.security;
 
 import com.teamname.astroneer.star_info_web.entity.Member;
+import com.teamname.astroneer.star_info_web.exception.EmailAlreadyExistsException;
 import com.teamname.astroneer.star_info_web.repository.MemberRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -24,6 +25,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        System.err.println("================================로그인 DB 접근로직 시작.=================================");
         // 기본적으로 OAuth2User 정보를 가져옴
         OAuth2User oAuth2User = super.loadUser(userRequest);
 

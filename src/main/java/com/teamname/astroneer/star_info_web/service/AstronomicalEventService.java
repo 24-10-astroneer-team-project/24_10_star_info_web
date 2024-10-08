@@ -19,6 +19,12 @@ public class AstronomicalEventService {
         return eventRepository.findAll();
     }
 
+    // 특정 ID로 천문 이벤트 조회
+    public AstronomicalEvent getEventById(int id) {
+        return eventRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 ID의 천문 이벤트를 찾을 수 없습니다: " + id));
+    }
+
     // 새로운 천문 이벤트 추가
     public AstronomicalEvent addEvent(AstronomicalEvent event) {
         return eventRepository.save(event);

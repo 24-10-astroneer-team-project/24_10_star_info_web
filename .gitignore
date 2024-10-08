@@ -13,7 +13,11 @@ build/
 .settings
 .springBeans
 .sts4-cache
-.evn
+# Spring .env
+.env
+# React .env
+starinfo-app/.env
+#firebase API KEY
 /src/main/resources/teamastroneerstarinfo-firebase-adminsdk-l8qw1-62cdf88ebf.json
 bin/
 /src/main/resources/application-DB.properties

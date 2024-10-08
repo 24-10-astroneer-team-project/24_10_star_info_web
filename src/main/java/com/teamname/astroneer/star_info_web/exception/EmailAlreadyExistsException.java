@@ -1,4 +1,4 @@
-package com.teamname.astroneer.star_info_web.security;
+package com.teamname.astroneer.star_info_web.exception;
 
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;

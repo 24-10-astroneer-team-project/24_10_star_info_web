@@ -27,9 +27,9 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+//    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+//    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
@@ -47,9 +47,56 @@ dependencies {
     // OAuth2 클라이언트 의존성
     implementation ("org.springframework.boot:spring-boot-starter-oauth2-client")
     // OAuth2 리소스 서버 의존성 (선택사항, 필요시)
-    implementation ("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+//    implementation ("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.withType<Copy> {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+val frontendDir = "$projectDir/starinfo-app"
+
+sourceSets {
+    main {
+        resources {
+            srcDirs("src/main/resources")
+        }
+    }
+}
+
+tasks {
+    val installReact by registering(Exec::class) {
+        workingDir = file(frontendDir)
+        group = BasePlugin.BUILD_GROUP
+        commandLine = if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            listOf("npm.cmd", "install")
+        } else {
+            listOf("npm", "install")
+        }
+    }
+
+    val buildReact by registering(Exec::class) {
+        dependsOn(installReact)
+        workingDir = file(frontendDir)
+        group = BasePlugin.BUILD_GROUP
+        commandLine = if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            listOf("npm.cmd", "run", "build")
+        } else {
+            listOf("npm", "run", "build")
+        }
+    }
+
+    val copyReactBuildFiles by registering(Copy::class) {
+        dependsOn(buildReact)
+        from("$frontendDir/build")
+        into("$buildDir/resources/main/static")
+    }
+
+    processResources {
+        dependsOn(copyReactBuildFiles)
+    }
 }
