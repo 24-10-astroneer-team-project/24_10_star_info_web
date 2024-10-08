@@ -25,7 +25,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         System.err.println("로그인한 사용자 이메일: " + email);
 
         // 로그인 성공 후 리다이렉트 설정
-        System.err.println("메인 페이지로 리다이렉트: /usr/home/main");
-        getRedirectStrategy().sendRedirect(req, res, "/usr/home/main");
+        System.err.println("메인 페이지로 리다이렉트: /api/home/main");
+        getRedirectStrategy().sendRedirect(req, res, "/api/home/main");
     }
 }

@@ -12,12 +12,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -25,76 +24,84 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity(debug = true)  // 개발 단계이므로 디버깅 모드 활성화
 public class SecurityConfig {
 
-    @Autowired
-    private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final CustomOAuth2SuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
+    // 생성자 주입을 통한 의존성 주입
     @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
+    public SecurityConfig(CustomOAuth2SuccessHandler oAuth2AuthenticationSuccessHandler,
+                          CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
+                          CustomOAuth2UserService customOAuth2UserService) {
+        this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+        this.customOAuth2UserService = customOAuth2UserService;
+    }
 
-    @Autowired
-    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomOAuth2FailureHandler customOAuth2FailureHandler, CustomLogoutHandler customLogoutHandler) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomOAuth2FailureHandler customOAuth2FailureHandler) throws Exception {
         http
-                .cors(withDefaults())  // CORS 설정 추가
+                .headers(headers -> headers
+                        .contentTypeOptions(HeadersConfigurer.ContentTypeOptionsConfig::disable)
+                )
+                .cors(withDefaults())  // CORS 설정
                 .csrf(AbstractHttpConfigurer::disable)  // CSRF 비활성화
-
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()  // FORWARD 요청은 인증 없이 허용
-                                .requestMatchers("/usr/member/login","/firebaseUser", "/usr/member/doLogout").permitAll()  // 소셜 로그인 관련 경로 허용
-                                .requestMatchers("/", "/usr/home/**", "/usr/home/main").permitAll()  // 홈 페이지 및 특정 리소스 접근 허용
-                                .requestMatchers("/locations", "/locations/**").permitAll() // location 요청 접근 허용
-                                .requestMatchers("/events", "/events/**").permitAll() // events 요청 접근 허용
-                                .requestMatchers("/js/**", "/css/**", "/img/**", "/fontawesome-free-6.5.1-web/**").permitAll()  // 정적 리소스 허용
-                                .anyRequest().authenticated()  // 나머지 요청은 인증 필요
+                                .requestMatchers("/","/react/**", "/static/**", "/react/login", "/react/main").permitAll()  // React 경로 추가
+                                .requestMatchers("/api/**", "/auth/**", "/oauth2/**").authenticated() // API 경로는 명확히 구분
+                                .requestMatchers("/locations", "/locations/**").permitAll()
+                                .requestMatchers("/events", "/events/**").permitAll()
+                                .requestMatchers("/js/**", "/css/**", "/img/**", "/fontawesome-free-6.5.1-web/**").permitAll()
+                                .anyRequest().authenticated()
                 )
-
-                // 인증 실패 시 사용할 엔트리 포인트 등록
                 .exceptionHandling(exceptionHandling ->
-                        exceptionHandling
-                                .defaultAuthenticationEntryPointFor(
-                                        customAuthenticationEntryPoint,
-                                        new AntPathRequestMatcher("/usr/home/uploadForm")
-                                )
+                        exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint)
                 )
-
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/usr/member/login")
-                        .successHandler(oAuth2AuthenticationSuccessHandler)  // 로그인 성공 후 핸들러
-                        .defaultSuccessUrl("/usr/home/main", true)
-                        .failureHandler(customOAuth2FailureHandler) // 로그인 실패 핸들러
+                        .loginPage("/react/login")
+                        .successHandler(oAuth2AuthenticationSuccessHandler)
+                        .failureHandler(customOAuth2FailureHandler)
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService))
                 )
-
-                // 세션 관리 설정: OAuth2 로그인 시 세션을 사용하므로 세션 정책을 기본으로 두거나 필요 시 생성
                 .sessionManagement(sessionManagement ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // 필요 시 세션 생성
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
-
-                // 로그아웃 설정
                 .logout(logout ->
                         logout
-                                .addLogoutHandler(customLogoutHandler)  // 커스텀 로그아웃 핸들러 추가
-                                .logoutUrl("/usr/member/doLogout")  // 로그아웃 URL 설정
-                                .logoutSuccessUrl("/usr/member/login?logout")  // 로그아웃 성공 시 이동할 경로
-                                .invalidateHttpSession(true)  // 로그아웃 시 세션 무효화
-                                .deleteCookies("JSESSIONID")  // 쿠키 삭제
+                                .logoutUrl("/api/member/logout")
+                                .logoutSuccessUrl("/login?logout")
+                                .invalidateHttpSession(true)
+                                .deleteCookies("JSESSIONID")
                 );
-
-        return http.build();  // SecurityFilterChain 생성
+//                .cors(withDefaults())  // 기본 CORS 설정
+//                .csrf(AbstractHttpConfigurer::disable)  // CSRF 비활성화
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers("/static/**", "/index.html", "/react/**").permitAll()  // 정적 파일과 React 경로 허용
+//                        .requestMatchers("/api/**").authenticated()  // API는 인증 필요
+//                        .anyRequest().authenticated()  // 그 외의 경로는 인증 필요
+//                )
+//                .oauth2Login(oauth2 -> oauth2
+//                        .loginPage("/auth/login")  // OAuth2 로그인 페이지 경로
+//                        .defaultSuccessUrl("/react/main")  // 로그인 성공 시 이동할 경로
+//                )
+//                .logout(logout -> logout
+//                        .logoutUrl("/logout")
+//                        .logoutSuccessUrl("/login"));  // 로그아웃 성공 시 이동할 경로
+        return http.build();
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                .requestMatchers(
-                        PathRequest.toStaticResources().atCommonLocations()  // 정적 리소스에 대한 보안 검사를 무시
-                );
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())  // Spring이 제공하는 공통 정적 리소스 경로
+                .requestMatchers("/static/**", "/js/**", "/css/**", "/img/**");        // 추가적으로 정의한 정적 리소스 경로
     }
 
-    // AuthenticationManager 빈 설정
+
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();

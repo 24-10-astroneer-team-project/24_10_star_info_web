@@ -18,6 +18,12 @@ public class ObservationLocationService {
         return locationRepository.findAll();
     }
 
+    // 특정 ID로 관측 장소 조회
+    public ObservationLocation getLocationById(int id) {
+        return locationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 ID의 관측 장소를 찾을 수 없습니다: " + id));
+    }
+
     // 새로운 관측 장소 추가
     public ObservationLocation addLocation(ObservationLocation location) {
         return locationRepository.save(location);
