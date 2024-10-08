@@ -1,7 +1,6 @@
 package com.teamname.astroneer.star_info_web.controller;
 
 import com.teamname.astroneer.star_info_web.entity.ObservationLocation;
-import com.teamname.astroneer.star_info_web.service.AstronomyApiService;
 import com.teamname.astroneer.star_info_web.service.ObservationLocationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,12 +16,10 @@ public class ObservationLocationController {
 
     private static final Logger logger = LoggerFactory.getLogger(ObservationLocationController.class);
     private final ObservationLocationService locationService;
-    private final AstronomyApiService astronomyApiService;
 
     @Autowired
-    public ObservationLocationController(ObservationLocationService locationService,AstronomyApiService astronomyApiService) {
+    public ObservationLocationController(ObservationLocationService locationService) {
         this.locationService = locationService;
-        this.astronomyApiService = astronomyApiService;
     }
 
     // 모든 관측 장소 리스트 가져오기
