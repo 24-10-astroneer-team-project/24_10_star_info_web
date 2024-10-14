@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "firebase": "^10.14.0"
+    "firebase": "^10.14.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.7",
