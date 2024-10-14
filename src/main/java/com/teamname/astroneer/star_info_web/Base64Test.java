@@ -15,6 +15,5 @@ public class Base64Test {
         // 디코딩해서 정상적으로 변환되는지 확인
         String decodedCredentials = new String(Base64.getDecoder().decode(encodedCredentials));
         System.out.println("디코딩 값: " + decodedCredentials);
-        // push 테스트
     }
 }
