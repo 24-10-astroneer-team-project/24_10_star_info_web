@@ -4,13 +4,16 @@ import LogoutButton from "./LogoutButton";
 
 function LoginPage() {
     return (
-        <div>
-            <h1>Login Page</h1>
-            {/* Google 로그인 버튼 */}
-            <GoogleLoginButton />
+        <div className="flex items-center justify-center min-h-screen">
+            <div className="bg-white p-8 rounded-lg shadow-lg">
+                <h1 className="text-xl font-bold text-center mb-6">LogoName</h1>
 
-            {/* 로그아웃 버튼 */}
-            <LogoutButton />
+                {/* Google 로그인 버튼 */}
+                <GoogleLoginButton />
+
+                {/* 로그아웃 버튼 */}
+                {/*<LogoutButton />*/}
+            </div>
         </div>
     );
 }
