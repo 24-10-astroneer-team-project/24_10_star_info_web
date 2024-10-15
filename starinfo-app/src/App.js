@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
 import MainPage from './components/MainPage'; // 예시로 MainPage 추가
 import NotFoundPage from './components/NotFoundPage';
-import AstroInfo from "./components/AstroInfo";
 
 
 function App() {
