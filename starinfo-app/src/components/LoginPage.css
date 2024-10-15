@@ -1,0 +1,43 @@
+body {
+    background-color: #0d1b2a;  /* 우주 배경색 */
+    margin: 0;
+    padding: 0;
+    overflow: hidden;  /* 스크롤바 제거 */
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);  /* 반투명 배경 */
+    padding: 20px;
+}
+
+.login-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 30px;
+}
+
+button {
+    background-color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 15px 40px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    width: 300px;
+    height: 60px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #f1f1f1;
+}
