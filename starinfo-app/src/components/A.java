@@ -1,0 +1,1 @@
+cd starinfo-app
