@@ -26,16 +26,8 @@ function LoginPage() {
                 <h2>로그인 방법을 선택해주세요</h2>
 
                 {/* Google 로그인 버튼 */}
-                <GoogleLoginButton style={{
-                    padding: "15px 30px", // 버튼 크기를 조정
-                    fontSize: "50px", // 텍스트 크기
-                    borderRadius: "10px", // 테두리 둥글게
-                    border: "none", // 테두리 없애기
-                    backgroundColor: "#4285F4", // 구글 로그인 버튼 스타일
-                    color: "#ffffff", // 글자 색상
-                    cursor: "pointer", // 커서 스타일
-                    marginTop: "20px" // 간격 추가
-                }} />
+                {/* 스타일을 인라인에서 설정하지 않고, CSS 클래스 사용 */}
+                <GoogleLoginButton className="google-login-button" />
             </div>
         </div>
     );

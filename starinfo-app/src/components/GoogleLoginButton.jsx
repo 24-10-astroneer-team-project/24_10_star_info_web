@@ -8,7 +8,20 @@ const GoogleLoginButton = () => {
     };
 
     return (
-        <button onClick={googleLogin}>
+        <button
+            onClick={googleLogin}
+            style={{
+                fontSize: "16px",
+                fontWeight: "bold",
+                padding: "12px 24px",
+                backgroundColor: "#4285F4",
+                color: "#fff",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)"
+            }}
+        >
             Google 로그인
         </button>
     );
