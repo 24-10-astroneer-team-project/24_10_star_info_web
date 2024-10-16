@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { Text } from "../pixi/text";
+import { Text } from "./text";
 import { Particle } from "./particle";
 
 export default class Visual {
