@@ -5,7 +5,7 @@ import LogoutButton from "./LogoutButton";
 function LoginPage() {
     return (
         <div>
-            <h1>Login Page</h1>
+            <h1>Login Pagex</h1>
             {/* Google 로그인 버튼 */}
             <GoogleLoginButton />
 
