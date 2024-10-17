@@ -27,7 +27,7 @@ export class Visual {
             const dy = p.targetY - p.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
 
-            const force = dist * 0.01;  // 이동 속도 조절
+            const force = dist * 0.003;  // 이동 속도를 더욱 천천히
             const angle = Math.atan2(dy, dx);
 
             p.vx += Math.cos(angle) * force;

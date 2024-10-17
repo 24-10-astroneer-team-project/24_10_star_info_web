@@ -8,7 +8,7 @@ export class Text {
         this.canvas.width = stageWidth;
         this.canvas.height = stageHeight;
 
-        const fontSize = stageHeight / 2;
+        const fontSize = stageHeight / 5;  // 글자 크기를 더 작게 조정
         this.ctx.clearRect(0, 0, stageWidth, stageHeight);
         this.ctx.font = `bold ${fontSize}px Hind`; // Hind 폰트 사용
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'; // 흰색 텍스트
