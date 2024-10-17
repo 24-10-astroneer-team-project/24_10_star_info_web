@@ -53,8 +53,16 @@ function MainPage() {
     }, []);
 
     return (
-        <div>
-            <canvas ref={canvasRef} style={{ width: '100%', height: '100vh', backgroundColor: 'black' }}></canvas>
+        <div
+            style={{
+                width: '100%',
+                height: '100vh',
+                backgroundImage: 'url(/star-background.png)',  // 이미지 경로 확장자 수정
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+            }}
+        >
+            <canvas ref={canvasRef} style={{ width: '100%', height: '100vh' }}></canvas>
         </div>
     );
 }
