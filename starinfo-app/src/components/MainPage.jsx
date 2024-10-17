@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import styles from '../main/SecondSection.module.css';  // CSS 모듈 불러오기
+import styles from '../main1/SecondSection.module.css';  // CSS 모듈 불러오기
 
 function MainPage() {
     const textRef = useRef(null);
