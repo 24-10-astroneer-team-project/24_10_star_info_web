@@ -1,11 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import stylesFirst from '../main1/firstSection.module.css';
-import styles from '../main1/SecondSection.module.css';  // CSS 모듈 불러오기
+import EarthAnimation from '../main2/EarthAnimation';
 
 function MainPage() {
     return (
-        <div style={{ width: '100%', height: '200vh' }}> {/* 전체 200vh로 구성 */}
-
+        <div style={{ width: '100%', height: '200vh' }}>
             {/* 첫 번째 섹션 */}
             <div className={stylesFirst.firstSection}>
                 <div className={stylesFirst.firstSectionText}>
@@ -13,14 +12,10 @@ function MainPage() {
                 </div>
             </div>
 
-
-            {/* 두 번째 섹션 */}
-            <div>
-                <div >
-                    Hello Universe
-                </div>
+            {/* 두 번째 섹션: Earth Animation */}
+            <div style={{ width: '100%', height: '100vh', overflow: 'hidden' }}>
+                <EarthAnimation />
             </div>
-
         </div>
     );
 }
