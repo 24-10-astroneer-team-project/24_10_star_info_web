@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import stylesFirst from '../main/firstSection.module.css'; // 첫 번째 섹션 CSS
+import stylesFirst from '../main1/firstSection.module.css';
 
 
 function MainPage() {
