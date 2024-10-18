@@ -1,10 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-<<<<<<< HEAD
-import stylesFirst from '../main/firstSection.module.css'; // 첫 번째 섹션 CSS
-
-=======
+import stylesFirst from '../main1/firstSection.module.css';
 import styles from '../main1/SecondSection.module.css';  // CSS 모듈 불러오기
->>>>>>> 2eeeae88 (merge 요청 login,mainpage 구현 중)
 
 function MainPage() {
     return (
