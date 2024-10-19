@@ -2,7 +2,7 @@ HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
+!starinfo-app/src/main1/**/build/
 !**/src/test/**/build/
 
 ### STS ###
@@ -21,7 +21,7 @@ starinfo-app/.env
 /src/main/resources/teamastroneerstarinfo-firebase-adminsdk-l8qw1-62cdf88ebf.json
 bin/
 /src/main/resources/application-DB.properties
-!**/src/main/**/bin/
+!starinfo-app/src/main1/**/bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
@@ -30,7 +30,7 @@ bin/
 *.iml
 *.ipr
 out/
-!**/src/main/**/out/
+!starinfo-app/src/main1/**/out/
 !**/src/test/**/out/
 
 ### NetBeans ###
