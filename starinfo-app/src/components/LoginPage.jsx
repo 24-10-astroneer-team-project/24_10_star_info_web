@@ -12,7 +12,7 @@ function LoginPage() {
                 <GoogleLoginButton />
 
                 {/* 로그아웃 버튼 */}
-                {/*<LogoutButton />*/}
+                <LogoutButton />
             </div>
         </div>
     );
