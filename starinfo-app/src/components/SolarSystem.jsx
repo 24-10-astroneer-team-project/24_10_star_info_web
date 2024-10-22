@@ -7,8 +7,9 @@ const SolarSystem = ({solarSystemClass, handlePlanetClick}) => {
             <div id="solar-system" className={solarSystemClass}>
                 <div id="mercury" className="orbit">
                     <div className="pos">
-                        <div className="planet">
+                        <div className="planet" data-planet="mercury" onClick={() => handlePlanetClick('mercury')}>
                             <dl className="infos">
+                                <dt>Mercury</dt>
                                 <dd><span></span></dd>
                             </dl>
                         </div>
@@ -16,7 +17,7 @@ const SolarSystem = ({solarSystemClass, handlePlanetClick}) => {
                 </div>
                 <div id="venus" className="orbit">
                     <div className="pos">
-                        <div className="planet">
+                        <div className="planet" data-planet="venus" onClick={() => handlePlanetClick('venus')}>
                             <dl className="infos">
                                 <dt>Venus</dt>
                                 <dd><span></span></dd>
@@ -31,7 +32,7 @@ const SolarSystem = ({solarSystemClass, handlePlanetClick}) => {
                                 <div className="moon"></div>
                             </div>
                         </div>
-                        <div className="planet">
+                        <div className="planet" data-planet="earth" onClick={() => handlePlanetClick('earth')}>
                             <dl className="infos">
                                 <dt>Earth</dt>
                                 <dd><span></span></dd>
@@ -41,7 +42,7 @@ const SolarSystem = ({solarSystemClass, handlePlanetClick}) => {
                 </div>
                 <div id="mars" className="orbit">
                     <div className="pos">
-                        <div className="planet">
+                        <div className="planet" data-planet="mars" onClick={() => handlePlanetClick('mars')}>
                             <dl className="infos">
                                 <dt>Mars</dt>
                                 <dd><span></span></dd>
@@ -51,7 +52,7 @@ const SolarSystem = ({solarSystemClass, handlePlanetClick}) => {
                 </div>
                 <div id="jupiter" className="orbit">
                     <div className="pos">
-                        <div className="planet">
+                        <div className="planet" data-planet="jupiter" onClick={() => handlePlanetClick('jupiter')}>
                             <dl className="infos">
                                 <dt>Jupiter</dt>
                                 <dd><span></span></dd>
@@ -61,7 +62,7 @@ const SolarSystem = ({solarSystemClass, handlePlanetClick}) => {
                 </div>
                 <div id="saturn" className="orbit">
                     <div className="pos">
-                        <div className="planet">
+                        <div className="planet" data-planet="saturn" onClick={() => handlePlanetClick('saturn')}>
                             <div className="ring"></div>
                             <dl className="infos">
                                 <dt>Saturn</dt>
@@ -72,7 +73,7 @@ const SolarSystem = ({solarSystemClass, handlePlanetClick}) => {
                 </div>
                 <div id="uranus" className="orbit">
                     <div className="pos">
-                        <div className="planet">
+                        <div className="planet" data-planet="uranus" onClick={() => handlePlanetClick('uranus')}>
                             <dl className="infos">
                                 <dt>Uranus</dt>
                                 <dd><span></span></dd>
@@ -82,7 +83,7 @@ const SolarSystem = ({solarSystemClass, handlePlanetClick}) => {
                 </div>
                 <div id="neptune" className="orbit">
                     <div className="pos">
-                        <div className="planet">
+                        <div className="planet" data-planet="neptune" onClick={() => handlePlanetClick('neptune')}>
                             <dl className="infos">
                                 <dt>Neptune</dt>
                                 <dd><span></span></dd>
