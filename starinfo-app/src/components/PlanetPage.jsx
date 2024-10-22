@@ -7,13 +7,12 @@ const PlanetPage = () => {
     const [bodyClass, setBodyClass] = useState('opening hide-UI view-2D zoom-large data-close controls-close');
     const [solarSystemClass, setSolarSystemClass] = useState('earth');
     const [isDataOpen, setIsDataOpen] = useState(false);
-    // const [isControlsOpen, setIsControlsOpen] = useState(false);
+    const [previousPlanet, setPreviousPlanet] = useState(null);  // 이전에 클릭된 행성 추적
 
     useEffect(() => {
         const init = () => {
             setTimeout(() => {
                 setBodyClass('view-3D set-speed');
-                // setSolarSystemClass('earth');
                 // 화면 크기에 따라 처음 데이터 패널 열기 설정
                 if (window.innerWidth >= 1000) {
                     setIsDataOpen(true);  // 큰 화면일 때만 열기
@@ -47,13 +46,26 @@ const PlanetPage = () => {
     }, []);
 
     const handlePlanetClick = (planetClass) => {
-        setSolarSystemClass(planetClass);
+        // 이전에 클릭된 행성이 있다면 그 행성 크기를 원래대로 돌리기
+        if (previousPlanet) {
+            anime({
+                targets: `#solar-system .planet[data-planet="${previousPlanet}"]`,
+                scale: [1.5, 1],  // 이전에 클릭된 행성을 원래 크기로
+                duration: 1000,
+                easing: 'easeInOutQuad',
+            });
+        }
+
+        // 현재 클릭된 행성만 확대
         anime({
-            targets: `#solar-system.${planetClass} .planet`,
-            scale: [1, 1],
+            targets: `#solar-system .planet[data-planet="${planetClass}"]`,
+            scale: [1, 1.5],  // 클릭한 행성만 확대
             duration: 1000,
             easing: 'easeInOutQuad',
         });
+
+        setPreviousPlanet(planetClass);  // 현재 클릭된 행성을 상태로 저장
+        setSolarSystemClass(planetClass);
     };
 
     return (
@@ -63,10 +75,6 @@ const PlanetPage = () => {
                     e.preventDefault();
                     setIsDataOpen(!isDataOpen);
                 }}>Data</a>
-                {/*<a id="toggle-controls" href="#controls" onClick={(e) => {*/}
-                {/*    e.preventDefault();*/}
-                {/*    setIsControlsOpen(!isControlsOpen);*/}
-                {/*}}>Controls</a>*/}
             </div>
 
             {isDataOpen && (
@@ -82,16 +90,6 @@ const PlanetPage = () => {
                     <a className={`neptune ${solarSystemClass === 'neptune' ? 'active' : ''}`} onClick={() => handlePlanetClick('neptune')} href="#neptunespeed">Neptune</a>
                 </div>
             )}
-
-            {/*{isControlsOpen && (*/}
-            {/*    <div id="controls">*/}
-            {/*        <label className="set-view"><input type="checkbox"/> View</label>*/}
-            {/*        <label className="set-zoom"><input type="checkbox"/> Zoom</label>*/}
-            {/*        <label><input type="radio" className="set-speed" name="scale" defaultChecked/> Speed</label>*/}
-            {/*        <label><input type="radio" className="set-size" name="scale"/> Size</label>*/}
-            {/*        <label><input type="radio" className="set-distance" name="scale"/> Distance</label>*/}
-            {/*    </div>*/}
-            {/*)}*/}
 
             <div id="universe" className="scale-stretched">
                 <div id="galaxy">
