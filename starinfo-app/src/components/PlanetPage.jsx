@@ -69,7 +69,7 @@ const PlanetPage = () => {
     };
 
     return (
-        <div className={`planet-container ${bodyClass}`}>
+        <div id="planet-page" className={`planet-container ${bodyClass}`}>
             <div id="navbar">
                 <a id="toggle-data" href="#data" onClick={(e) => {
                     e.preventDefault();
@@ -79,21 +79,30 @@ const PlanetPage = () => {
 
             {isDataOpen && (
                 <div id="data">
-                    <a className={`sun ${solarSystemClass === 'sun' ? 'active' : ''}`} onClick={() => handlePlanetClick('sun')} href="#sunspeed">Sun</a>
-                    <a className={`mercury ${solarSystemClass === 'mercury' ? 'active' : ''}`} onClick={() => handlePlanetClick('mercury')} href="#mercuryspeed">Mercury</a>
-                    <a className={`venus ${solarSystemClass === 'venus' ? 'active' : ''}`} onClick={() => handlePlanetClick('venus')} href="#venusspeed">Venus</a>
-                    <a className={`earth ${solarSystemClass === 'earth' ? 'active' : ''}`} onClick={() => handlePlanetClick('earth')} href="#earthspeed">Earth</a>
-                    <a className={`mars ${solarSystemClass === 'mars' ? 'active' : ''}`} onClick={() => handlePlanetClick('mars')} href="#marsspeed">Mars</a>
-                    <a className={`jupiter ${solarSystemClass === 'jupiter' ? 'active' : ''}`} onClick={() => handlePlanetClick('jupiter')} href="#jupiterspeed">Jupiter</a>
-                    <a className={`saturn ${solarSystemClass === 'saturn' ? 'active' : ''}`} onClick={() => handlePlanetClick('saturn')} href="#saturnspeed">Saturn</a>
-                    <a className={`uranus ${solarSystemClass === 'uranus' ? 'active' : ''}`} onClick={() => handlePlanetClick('uranus')} href="#uranusspeed">Uranus</a>
-                    <a className={`neptune ${solarSystemClass === 'neptune' ? 'active' : ''}`} onClick={() => handlePlanetClick('neptune')} href="#neptunespeed">Neptune</a>
+                    <a className={`sun ${solarSystemClass === 'sun' ? 'active' : ''}`}
+                       onClick={() => handlePlanetClick('sun')} href="#sunspeed">Sun</a>
+                    <a className={`mercury ${solarSystemClass === 'mercury' ? 'active' : ''}`}
+                       onClick={() => handlePlanetClick('mercury')} href="#mercuryspeed">Mercury</a>
+                    <a className={`venus ${solarSystemClass === 'venus' ? 'active' : ''}`}
+                       onClick={() => handlePlanetClick('venus')} href="#venusspeed">Venus</a>
+                    <a className={`earth ${solarSystemClass === 'earth' ? 'active' : ''}`}
+                       onClick={() => handlePlanetClick('earth')} href="#earthspeed">Earth</a>
+                    <a className={`mars ${solarSystemClass === 'mars' ? 'active' : ''}`}
+                       onClick={() => handlePlanetClick('mars')} href="#marsspeed">Mars</a>
+                    <a className={`jupiter ${solarSystemClass === 'jupiter' ? 'active' : ''}`}
+                       onClick={() => handlePlanetClick('jupiter')} href="#jupiterspeed">Jupiter</a>
+                    <a className={`saturn ${solarSystemClass === 'saturn' ? 'active' : ''}`}
+                       onClick={() => handlePlanetClick('saturn')} href="#saturnspeed">Saturn</a>
+                    <a className={`uranus ${solarSystemClass === 'uranus' ? 'active' : ''}`}
+                       onClick={() => handlePlanetClick('uranus')} href="#uranusspeed">Uranus</a>
+                    <a className={`neptune ${solarSystemClass === 'neptune' ? 'active' : ''}`}
+                       onClick={() => handlePlanetClick('neptune')} href="#neptunespeed">Neptune</a>
                 </div>
             )}
 
             <div id="universe" className="scale-stretched">
                 <div id="galaxy">
-                    <SolarSystem solarSystemClass={solarSystemClass} handlePlanetClick={handlePlanetClick} />
+                    <SolarSystem solarSystemClass={solarSystemClass} handlePlanetClick={handlePlanetClick}/>
                 </div>
             </div>
         </div>
