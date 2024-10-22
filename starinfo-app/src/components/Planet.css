@@ -4,47 +4,13 @@
   Copyright (c) 2012 Julian Garnier
   Licensed under the MIT license
 */
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
-    margin: 0;
-    padding: 0;
-}
 
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
-    display: block;
-}
-
-body {
-    line-height: 1;
-}
-
-ol, ul {
-    list-style: none;
-}
-
-blockquote, q {
-    quotes: none;
-}
-
-blockquote:before, blockquote:after, q:before, q:after {
-    content: none;
-}
-
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-
-* {
+#planet-page * {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    box-sizing: border-box;
 }
 
-body {
+#planet-page{
     font-size: 10px;
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
@@ -172,7 +138,6 @@ body {
     margin-top: -1.1em;
     margin-left: -1.1em;
     border: 0.07em solid rgba(160, 147, 130, 0.5);
-    box-sizing: border-box;
     box-sizing: border-box;
 }
 
@@ -1409,8 +1374,7 @@ dl.infos dd span:after {
 
 .hide-UI h1,
 .hide-UI #data,
-.hide-UI dl.infos,
-.hide-UI #controls {
+.hide-UI dl.infos {
     opacity: 0 !important;
     margin-top: -30px;
 }
@@ -1423,7 +1387,7 @@ dl.infos dd span:after {
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
-h1 {
+#planet-page h1 {
     width: 100%;
     font-weight: 600;
     font-size: 14px;
@@ -1431,7 +1395,7 @@ h1 {
     color: rgba(255, 255, 255, 0.8);
 }
 
-h1 span, #navbar h1 a {
+#planet-page h1 span, #planet-page #navbar h1 a {
     display: inline;
     position: relative;
     padding: 0;
@@ -1441,7 +1405,7 @@ h1 span, #navbar h1 a {
     color: rgba(255, 255, 255, 0.5);
 }
 
-#navbar, #controls, #data {
+#navbar, #data {
     background: rgba(0, 0, 0, 0.4);
 }
 
@@ -1455,14 +1419,14 @@ h1 span, #navbar h1 a {
     height: 48px;
 }
 
-#navbar a, #data a, #controls label {
+#navbar a, #data a {
     color: rgba(255, 255, 255, 0.6);
     display: block;
     position: relative;
     text-decoration: none;
 }
 
-#navbar a:hover, #data a:hover, #controls label:hover {
+#navbar a:hover, #data a:hover {
     color: #FFF;
 }
 
@@ -1482,10 +1446,6 @@ h1 span, #navbar h1 a {
     left: 0;
 }
 
-#toggle-controls {
-    right: 0;
-}
-
 #data, #controls {
     z-index: 99;
     position: fixed;
@@ -1502,141 +1462,10 @@ h1 span, #navbar h1 a {
     left: 0px;
 }
 
-.controls-close #controls {
-    right: -100%;
-}
-
-.controls-open #controls {
-    right: 0px;
-}
-
 #data a {
     margin-bottom: 1px;
     padding: 6px 10px;
     font-size: 18px;
-}
-
-#controls label {
-    opacity: .6;
-    height: 24px;
-    margin-bottom: 28px;
-}
-
-#controls label:hover {
-    opacity: 1;
-}
-
-#controls label:before {
-    position: absolute;
-    display: block;
-    width: 20px;
-    height: 20px;
-    margin-top: 3px;
-    text-align: center;
-    color: #FFF;
-    z-index: 99;
-}
-
-#controls label span {
-    display: block;
-    margin-left: 36px;
-    padding-top: 4px;
-    font-size: 18px;
-    color: #FFF;
-}
-
-#controls input {
-    display: block;
-    appearance: none;
-}
-
-#controls input[type="radio"]:before {
-    content: '';
-    display: block;
-    position: absolute;
-    width: 22px;
-    height: 22px;
-    border: 2px solid #FFF;
-    border-radius: 16px;
-}
-
-#controls input:checked[type="radio"]:after {
-    content: '';
-    display: block;
-    top: 3px;
-    margin-left: 3px;
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
-    background: #FFF;
-    z-index: 99;
-}
-
-#controls input[type="checkbox"]:before {
-    content: '';
-    display: block;
-    position: absolute;
-    width: 100px;
-    height: 22px;
-    border: 2px solid #FFF;
-    border-radius: 16px;
-}
-
-#controls input[type="checkbox"]:after {
-    content: '';
-    display: block;
-    top: 3px;
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
-    background: #FFF;
-    z-index: 99;
-}
-
-#controls label.set-view:before {
-    font: bold small-caps 11px/20px sans-serif;
-}
-
-.view-3D #controls label.set-view:before {
-    content: '2D';
-    margin-left: 82px;
-}
-
-.view-2D #controls label.set-view:before {
-    content: '3D';
-    margin-left: 7px;
-}
-
-.view-3D #controls .set-view input:after {
-    margin-left: 3px;
-}
-
-.view-2D #controls .set-view input:after {
-    margin-left: 81px;
-}
-
-#controls label.set-zoom:before {
-    font: normal small-caps 18px/14px sans-serif;
-}
-
-.zoom-large #controls label.set-zoom:before {
-    content: '+';
-    margin-left: 82px;
-}
-
-.zoom-close #controls label.set-zoom:before {
-    content: '-';
-    margin-left: 7px;
-}
-
-.zoom-large #controls .set-zoom input:after {
-    margin-left: 3px;
-}
-
-.zoom-close #controls .set-zoom input:after {
-    margin-left: 81px;
 }
 
 /* --------------------------------------------------------------------------- transitions */
@@ -1690,8 +1519,7 @@ h1 span, #navbar h1 a {
 .opening .infos,
 .opening h1,
 .opening #data,
-.opening dl.infos,
-.opening #controls {
+.opening dl.infos {
     transition-duration: 0s;
     transition-delay: 0s;
 }
@@ -1700,22 +1528,18 @@ h1 span, #navbar h1 a {
     transition-delay: 0s;
 }
 
-h1, #data, #controls {
+#planet-page h1, #data {
     transition-property: opacity, margin;
     transition-duration: .8s;
     transition-timing-function: ease-in-out;
 }
 
-h1 {
+#planet-page h1 {
     transition-delay: .35s;
 }
 
 #data {
     transition-delay: .7s;
-}
-
-#controls {
-    transition-delay: 1s;
 }
 
 /* --------------------------------------------------------------------------- images */
@@ -1813,7 +1637,7 @@ h1 {
         font-size: 73%;
     }
 
-    #navbar, #controls, #data {
+    #navbar, #data {
         background: transparent;
     }
 
@@ -1821,14 +1645,9 @@ h1 {
         display: none;
     }
 
-    h1 {
+    #planet-page h1 {
         font-size: 22px;
         margin-top: 8px;
-    }
-
-    #controls {
-        padding-right: 32px;
-        top: 12px;
     }
 
     #data {
@@ -1848,10 +1667,6 @@ h1 {
 
     .data-open #data, .data-close #data {
         left: 0px;
-    }
-
-    .controls-open #controls, .controls-close #controls {
-        right: 0px;
     }
 }
 
