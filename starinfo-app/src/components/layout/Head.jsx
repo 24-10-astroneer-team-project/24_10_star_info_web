@@ -40,7 +40,7 @@ function Head() {
                 <div>
                     <ul id="navbar">
                         <li><a href="./main">메인화면</a></li>
-                        <li><a href="https://naver.com">별보기</a></li>
+                        <li><a href="./starmap">별보기</a></li>
                         <li><a href="https://naver.com">천체탐구</a></li>
                         <li><a href="https://naver.com">궤도계산</a></li>
                         <li><a href="https://naver.com">시뮬레이터</a></li>

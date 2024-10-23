@@ -1,0 +1,154 @@
+body {
+    position: relative;
+    padding: 1rem;
+    font-family: 'Open sans', sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.button-bar {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 10;
+}
+
+.subtitle {
+    font-size: 12px;
+}
+
+.month {
+    font-size: 10px;
+    font-weight: normal;
+}
+
+.month,
+.title,
+.subtitle {
+    fill: white;
+    fill-opacity: 0;
+    filter: drop-shadow(0 0 2rem black);
+}
+
+.stars-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, #082551, #062044, #051b38, #06162c,   #040f20);
+}
+
+.stars-container {
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.stars-container svg {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform: translate(442.5px, 187px) scale(1);
+    transition: transform 0.25s;
+}
+
+
+.stars path {
+    fill: white;
+    fill-opacity: 0;
+    transform-origin: 0 0;
+    stroke: #F2E2A2;
+    stroke-width: 0;
+    filter: url(#glow);
+    animation: fillPath 5s linear forwards, pulseStars 3s 5s linear infinite;
+}
+
+@keyframes pulseStars {
+    0% {
+        stroke-width: 0;
+    }
+    50% {
+        stroke-width: 2;
+    }
+    100% {
+        stroke-width: 0;
+    }
+}
+
+.constellation path {
+    stroke: white;
+    stroke-width: 1;
+    fill: none;
+    filter: url(#glow);
+    filter: drop-shadow(0 0 2rem black);
+    stroke-dasharray: 550;
+    stroke-dashoffset: 550;
+    cursor: pointer;
+    pointer-events: all;
+}
+
+.constellation:hover path,
+.drawConstellation path {
+    animation: drawPath 1s linear forwards;
+}
+
+.constellation:hover text,
+.drawConstellation text {
+    animation: fillPath 1s linear forwards;
+}
+
+.diagram path {
+    fill: none;
+    stroke: white;
+    stroke-width: 0.5;
+    stroke-dasharray: 4000;
+    stroke-dashoffset: 4000;
+}
+
+.milkyway path {
+    filter: url(#glow);
+    fill: rgba(255,255,255,0.03);
+}
+
+.months path {
+    stroke: white;
+    stroke-dasharray: 4000;
+    stroke-dashoffset: 4000;
+}
+
+.drawDiagram path,
+.drawMonths path {
+    animation: drawPath 10s linear forwards;
+}
+
+.drawDiagram text,
+.drawMonths text {
+    animation: fillPath 5s linear forwards;
+}
+
+.eraseDiagram path,
+.eraseMonths path,
+.eraseConstellation path {
+    animation: drawPath 10s linear reverse forwards;
+}
+
+.eraseDiagram text,
+.eraseMonths text,
+.eraseConstellation text  {
+    animation: fillPath 5s linear reverse;
+}
+
+
+@keyframes fillPath {
+    to {
+        fill-opacity: 1;
+    }
+}
+
+@keyframes drawPath {
+    to {
+        stroke-dashoffset: 0;
+    }
+}

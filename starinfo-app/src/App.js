@@ -6,6 +6,8 @@ import NotFoundPage from './components/NotFoundPage';
 //import AstroInfo from "./components/AstroInfo";
 import Head from "./components/layout/Head";
 import Foot from "./components/layout/Foot";
+import StarMap from "./components/StarMap/StarMap";
+
 
 
 function App() {
@@ -13,9 +15,10 @@ function App() {
       <Router>
           <Routes>
               <Route path="/react/main" element={<MainPage />} />   {/* 메인 페이지로 라우팅 */}
-              <Route path="/react/login" element={<LoginPage />} />  {/* 로그인 페이지로 라우팅 */}
-              <Route path="/react/head" element={<Head />} />  {/* 헤더 페이지로 라우팅 */}
-              <Route path="/react/foot" element={<Foot />} />  {/* 헤더 페이지로 라우팅 */}
+              <Route path="/react/logins" element={<LoginPage />} />  {/* 로그인 페이지로 라우팅 */}
+              <Route path="/react/starmap" element={<StarMap />} />  {/* 스타맵 페이지로 라우팅 */}
+              <Route path="/react/head" element={<Head />} />  {/* 로그인 페이지로 라우팅 */}
+              <Route path="/react/footer" element={<Foot />} />  {/* 헤더 페이지로 라우팅 */}
               <Route path="*" element={<NotFoundPage />} />  {/* 404 처리 */}
           </Routes>
       </Router>

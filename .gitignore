@@ -42,3 +42,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### 빌드 파일 ###
+src/main/resources/static/*
