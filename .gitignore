@@ -4,6 +4,8 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !starinfo-app/src/main1/**/build/
 !**/src/test/**/build/
+node_modules/
+src/main/resources/static/*
 
 ### STS ###
 .apt_generated
