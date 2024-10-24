@@ -8,6 +8,7 @@ const PlanetPage = () => {
     const [solarSystemClass, setSolarSystemClass] = useState('earth');
     const [isDataOpen, setIsDataOpen] = useState(false);
     const [previousPlanet, setPreviousPlanet] = useState(null);  // 이전에 클릭된 행성 추적
+    const [isPlanetPopupOpen, setPlanetPopupOpen] = useState(false);
 
     useEffect(() => {
         const init = () => {
@@ -50,7 +51,7 @@ const PlanetPage = () => {
         if (previousPlanet) {
             anime({
                 targets: `#solar-system .planet[data-planet="${previousPlanet}"]`,
-                scale: [1.5, 1],  // 이전에 클릭된 행성을 원래 크기로
+                scale: [1.3, 1],  // 이전에 클릭된 행성을 원래 크기로
                 duration: 1000,
                 easing: 'easeInOutQuad',
             });
@@ -59,13 +60,35 @@ const PlanetPage = () => {
         // 현재 클릭된 행성만 확대
         anime({
             targets: `#solar-system .planet[data-planet="${planetClass}"]`,
-            scale: [1, 1.5],  // 클릭한 행성만 확대
+            scale: [1, 1.3],  // 클릭한 행성만 확대
             duration: 1000,
             easing: 'easeInOutQuad',
+            complete: () => {
+                // 팝업 창을 띄우는 로직 추가 (애니메이션이 완료된 후)
+                setTimeout(() => {
+                    openPlanetPopup(planetClass);  // 팝업을 여는 함수 실행
+                }, 500);  // 2초 대기 후 팝업 창 띄우기
+            }
         });
 
         setPreviousPlanet(planetClass);  // 현재 클릭된 행성을 상태로 저장
         setSolarSystemClass(planetClass);
+    };
+
+    // 임시
+    const openPlanetPopup = (planetClass) => {
+        setPlanetPopupOpen(true);  // 팝업을 열림 상태로 변경
+
+        // 팝업 애니메이션 적용 (팝업이 열릴 때)
+        setTimeout(() => {
+            anime({
+                targets: '.planet-popup',  // 팝업의 클래스 선택자
+                scale: [0.5, 1],  // 팝업이 작게 시작해서 원래 크기로 확대
+                opacity: [0, 1],  // 투명도 0에서 1로 페이드 인
+                duration: 600,  // 0.6초 동안 애니메이션 실행
+                easing: 'easeOutBack',  // 부드러운 끝을 위한 easing 함수
+            });
+        }, 0);  // 팝업이 렌더링된 후 애니메이션 실행
     };
 
     return (
@@ -84,11 +107,11 @@ const PlanetPage = () => {
                     <a className={`mercury ${solarSystemClass === 'mercury' ? 'active' : ''}`}
                        onClick={() => handlePlanetClick('mercury')} href="#mercuryspeed">Mercury</a>
                     <a className={`venus ${solarSystemClass === 'venus' ? 'active' : ''}`}
-                       onClick={() => handlePlanetClick('venus')} href="#venusspeed">Venus</a>
+                       onClick={() => handlePlanetClick('venus')} href="#venus">Venus</a>
                     <a className={`earth ${solarSystemClass === 'earth' ? 'active' : ''}`}
-                       onClick={() => handlePlanetClick('earth')} href="#earthspeed">Earth</a>
+                       onClick={() => handlePlanetClick('earth')} href="#earth">Earth</a>
                     <a className={`mars ${solarSystemClass === 'mars' ? 'active' : ''}`}
-                       onClick={() => handlePlanetClick('mars')} href="#marsspeed">Mars</a>
+                       onClick={() => handlePlanetClick('mars')} href="#mars">Mars</a>
                     <a className={`jupiter ${solarSystemClass === 'jupiter' ? 'active' : ''}`}
                        onClick={() => handlePlanetClick('jupiter')} href="#jupiterspeed">Jupiter</a>
                     <a className={`saturn ${solarSystemClass === 'saturn' ? 'active' : ''}`}
@@ -105,6 +128,20 @@ const PlanetPage = () => {
                     <SolarSystem solarSystemClass={solarSystemClass} handlePlanetClick={handlePlanetClick}/>
                 </div>
             </div>
+
+            {/* 팝업 창 조건부 렌더링 */}
+            {isPlanetPopupOpen && (
+                <div className="planet-popup-bc" onClick={() => setPlanetPopupOpen(false)}>
+                    <div className="planet-popup" onClick={(e) => e.stopPropagation()}>
+                        <div className="popup-content">
+                            <h2>{solarSystemClass} 정보</h2>
+                            <p>{solarSystemClass}에 대한 자세한 내용을 여기에 표시합니다.</p>
+                            <button onClick={() => setPlanetPopupOpen(false)}>닫기</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };
