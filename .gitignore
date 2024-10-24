@@ -4,6 +4,8 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+node_modules/
+src/main/resources/static/*
 
 ### STS ###
 .apt_generated
@@ -42,6 +44,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-### 빌드 파일 ###
-src/main/resources/static/*

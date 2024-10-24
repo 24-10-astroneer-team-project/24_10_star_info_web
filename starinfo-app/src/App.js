@@ -9,7 +9,6 @@ import Foot from "./components/layout/Foot";
 import StarMap from "./components/StarMap/StarMap";
 
 
-
 function App() {
   return (
       <Router>
