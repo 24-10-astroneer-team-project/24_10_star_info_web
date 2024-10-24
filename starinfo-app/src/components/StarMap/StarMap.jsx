@@ -7,31 +7,36 @@ function StarMap() {
     return (
         <>
             <Head/>
-            <star className="star">
-            <div className="button-bar">
-                <button onClick="drawdiagram()">Diagram</button>
-                <select onChange='handleClick(this)'>
-                    <option value="">select constellation</option>
-                    <option value="perseus">perseus</option>
-                    <option value="pegasus">pegasus</option>
-                </select>
-            </div>
+            <dody>
             <div className="stars-background"></div>
-
             <div className="stars-container">
-                <svg width="1001pt" height="981.64pt" style={{isolation:"isolate"}} viewBox="-1 -1 1001 981.64"
-                     xmlns="http://www.w3.org/2000/svg" id="star-container">
+                <svg
+                    width="1001pt"
+                    height="981.64pt"
+                    style={{
+                        isolation: "isolate",
+                        // gpt 발사
+                        transform: "translate(0, 0px) scale(0.9)",
+                        transition: "transform 0.25s"
+                        // gpt 끝
+                    }}
+                    viewBox="-1 -1 1001 981.64"
+                    xmlns="http://www.w3.org/2000/svg"
+                    id="star-container"
+                >
+
                     <defs>
                         <filter id="glow">
-                            <fegaussianblur className="blur" result="coloredBlur" stddeviation="2"></fegaussianblur>
-                            <femerge>
-                                <femergenode in="coloredBlur"></femergenode>
-                                <femergenode in="coloredBlur"></femergenode>
-                                <femergenode in="coloredBlur"></femergenode>
-                                <femergenode in="SourceGraphic"></femergenode>
-                            </femerge>
+                            <feGaussianBlur className="blur" result="coloredBlur" stdDeviation="2"></feGaussianBlur>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"></feMergeNode>
+                                <feMergeNode in="coloredBlur"></feMergeNode>
+                                <feMergeNode in="coloredBlur"></feMergeNode>
+                                <feMergeNode in="SourceGraphic"></feMergeNode>
+                            </feMerge>
                         </filter>
                     </defs>
+
                     <g className="months" id="months">
                         <text transform="matrix(0.619,0.786,-0.786,0.619,104.228,790.922)" className="month">May</text>
                         <text transform="matrix(0.919,0.394,-0.394,0.919,294.709,947.602)" className="month">April
@@ -73,7 +78,7 @@ function StarMap() {
                         <g className="constellation" id="pegasus">
                             <path
                                 d=" M 256 139 L 290 95 L 356.738 93 L 403 106 L 524 95 L 512 168 L 554 182 L 584.939 217 L 629 274 M 403 106 L 419 174 L 394 192 M 419 174 L 512 168 L 548 197 L 566 226 L 566 281"
-                                fill="none" fill="none" stroke="rgb(255,255,255)"/>
+                                fill="none" stroke="rgb(255,255,255)"/>
                             <text transform="matrix(1,0,0,1,429.314,143.931)" className="title">Pegasus</text>
                         </g>
                         <g className="constellation" id="cassiopeia">
@@ -191,12 +196,12 @@ function StarMap() {
                                 d=" M 272.698 295.716 L 279.518 343.457 L 279.518 391.198 M 188.299 373.295 L 203.356 364.77 L 224.588 359.808 L 241.056 353.687 L 281.546 343.457 L 316.176 343.457"
                                 fill="none" stroke="rgb(255,255,255)"/>
                             <text transform="matrix(1,0,0,1,191.213,323.966)" className="title">Cygnus</text>
-                            <text transform="matrix(1,0,0,1,181.728,338.756)" className="subtitle">Northern Cross</text>
+                            <text transform="matrix(1,0,0,1,181.728,342.756)" className="subtitle">Northern Cross</text>
                         </g>
                     </g>
                 </svg>
             </div>
-            </star>
+            </dody>
         </>
     );
 }
