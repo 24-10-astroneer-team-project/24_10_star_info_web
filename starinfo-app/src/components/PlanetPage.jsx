@@ -47,6 +47,11 @@ const PlanetPage = () => {
     }, []);
 
     const handlePlanetClick = (planetClass) => {
+        // 이전에 클릭된 행성이 있고, 애니메이션이 아직 완료되지 않은 경우 중복 실행 방지
+        if (previousPlanet && previousPlanet === planetClass) {
+            return; // 이미 클릭된 행성이면 중복으로 크기 조정하지 않음
+        }
+
         // 이전에 클릭된 행성이 있다면 그 행성 크기를 원래대로 돌리기
         if (previousPlanet) {
             anime({
@@ -67,7 +72,7 @@ const PlanetPage = () => {
                 // 팝업 창을 띄우는 로직 추가 (애니메이션이 완료된 후)
                 setTimeout(() => {
                     openPlanetPopup(planetClass);  // 팝업을 여는 함수 실행
-                }, 500);  // 2초 대기 후 팝업 창 띄우기
+                }, 500);
             }
         });
 
@@ -82,13 +87,30 @@ const PlanetPage = () => {
         // 팝업 애니메이션 적용 (팝업이 열릴 때)
         setTimeout(() => {
             anime({
-                targets: '.planet-popup',  // 팝업의 클래스 선택자
-                scale: [0.5, 1],  // 팝업이 작게 시작해서 원래 크기로 확대
-                opacity: [0, 1],  // 투명도 0에서 1로 페이드 인
-                duration: 600,  // 0.6초 동안 애니메이션 실행
-                easing: 'easeOutBack',  // 부드러운 끝을 위한 easing 함수
+                targets: '.planet-popup',
+                scale: [0.5, 1],
+                opacity: [0, 1],
+                duration: 600,
+                easing: 'easeOutBack',
             });
-        }, 0);  // 팝업이 렌더링된 후 애니메이션 실행
+        }, 0);
+    };
+
+    const closePlanetPopup = () => {
+        // 이전에 클릭된 행성의 크기를 줄이는 애니메이션
+        if (previousPlanet) {
+            anime({
+                targets: `#solar-system .planet[data-planet="${previousPlanet}"]`,
+                scale: [1.3, 1],
+                duration: 1000,
+                easing: 'easeInOutQuad',
+                complete: () => {
+                    setPreviousPlanet(null); // 팝업이 닫힌 후 previousPlanet 초기화
+                }
+            });
+        }
+
+        setPlanetPopupOpen(false); // 팝업 닫기
     };
 
     return (
@@ -107,11 +129,11 @@ const PlanetPage = () => {
                     <a className={`mercury ${solarSystemClass === 'mercury' ? 'active' : ''}`}
                        onClick={() => handlePlanetClick('mercury')} href="#mercuryspeed">Mercury</a>
                     <a className={`venus ${solarSystemClass === 'venus' ? 'active' : ''}`}
-                       onClick={() => handlePlanetClick('venus')} href="#venus">Venus</a>
+                       onClick={() => handlePlanetClick('venus')} href="#venusspeed">Venus</a>
                     <a className={`earth ${solarSystemClass === 'earth' ? 'active' : ''}`}
-                       onClick={() => handlePlanetClick('earth')} href="#earth">Earth</a>
+                       onClick={() => handlePlanetClick('earth')} href="#earthspeed">Earth</a>
                     <a className={`mars ${solarSystemClass === 'mars' ? 'active' : ''}`}
-                       onClick={() => handlePlanetClick('mars')} href="#mars">Mars</a>
+                       onClick={() => handlePlanetClick('mars')} href="#marsspeed">Mars</a>
                     <a className={`jupiter ${solarSystemClass === 'jupiter' ? 'active' : ''}`}
                        onClick={() => handlePlanetClick('jupiter')} href="#jupiterspeed">Jupiter</a>
                     <a className={`saturn ${solarSystemClass === 'saturn' ? 'active' : ''}`}
@@ -131,12 +153,12 @@ const PlanetPage = () => {
 
             {/* 팝업 창 조건부 렌더링 */}
             {isPlanetPopupOpen && (
-                <div className="planet-popup-bc" onClick={() => setPlanetPopupOpen(false)}>
+                <div className="planet-popup-bc" onClick={closePlanetPopup}>
                     <div className="planet-popup" onClick={(e) => e.stopPropagation()}>
                         <div className="popup-content">
                             <h2>{solarSystemClass} 정보</h2>
                             <p>{solarSystemClass}에 대한 자세한 내용을 여기에 표시합니다.</p>
-                            <button onClick={() => setPlanetPopupOpen(false)}>닫기</button>
+                            <button className="popup-close-button" onClick={closePlanetPopup}>닫기</button>
                         </div>
                     </div>
                 </div>
