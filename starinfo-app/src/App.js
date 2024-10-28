@@ -7,7 +7,7 @@ import NotFoundPage from './components/NotFoundPage';
 import Head from "./components/layout/Head";
 import Foot from "./components/layout/Foot";
 import StarMap from "./components/StarMap/StarMap";
-
+//import Test from "./components/Test/Test";
 
 function App() {
   return (
