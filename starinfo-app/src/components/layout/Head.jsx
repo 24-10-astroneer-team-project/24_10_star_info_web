@@ -44,7 +44,7 @@ function Head() {
                         <li><a href="https://naver.com">천체탐구</a></li>
                         <li><a href="https://naver.com">궤도계산</a></li>
                         <li><a href="https://naver.com">시뮬레이터</a></li>
-                        <li><a href="./login">로그인</a></li>
+                        <li><a href="./logins">로그인</a></li>
                     </ul>
                 </div>
             </nav>
