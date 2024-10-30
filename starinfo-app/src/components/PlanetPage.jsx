@@ -9,15 +9,17 @@ const PlanetPage = () => {
     const [isDataOpen, setIsDataOpen] = useState(false);
     const [previousPlanet, setPreviousPlanet] = useState(null);  // 이전에 클릭된 행성 추적
     const [isPlanetPopupOpen, setPlanetPopupOpen] = useState(false);
+    const [scaleFactor, setScaleFactor] = useState(1);  // Scale factor 상태 추가
 
     useEffect(() => {
+        const NEPTUNE_ORBIT_SIZE = 1500; // 기본 Neptune 궤도 크기 (예시 값)
+
         const init = () => {
             setTimeout(() => {
                 setBodyClass('view-3D set-speed');
                 // 화면 크기에 따라 처음 데이터 패널 열기 설정
-                if (window.innerWidth >= 1000) {
-                    setIsDataOpen(true);  // 큰 화면일 때만 열기
-                }
+                setIsDataOpen(window.innerWidth >= 1000); // 화면 크기가 1000 이상일 때, Data 패널 Open
+
                 anime({
                     targets: '#solar-system .planet',
                     translateX: (el) => el.dataset.x,
@@ -31,14 +33,12 @@ const PlanetPage = () => {
 
         // 윈도우 resize 이벤트 핸들러 추가
         const handleResize = () => {
-            if (window.innerWidth < 1000) {  // 특정 크기 이하일 때
-                setIsDataOpen(false);  // 데이터를 자동으로 닫기
-            } else {
-                setIsDataOpen(true);   // 큰 화면에서는 다시 열기
-            }
+            setScaleFactor(window.innerWidth < NEPTUNE_ORBIT_SIZE ? window.innerWidth / NEPTUNE_ORBIT_SIZE : 1);
+            setIsDataOpen(window.innerWidth >= 1000); // 화면 크기가 1000 이상일 때, Data 패널 Open
         };
 
         window.addEventListener('resize', handleResize);  // 리사이즈 이벤트 감지
+        handleResize();  // 초기 크기 설정
 
         // 컴포넌트가 unmount될 때 이벤트 리스너를 제거
         return () => {
@@ -146,7 +146,7 @@ const PlanetPage = () => {
             )}
 
             <div id="universe" className="scale-stretched">
-                <div id="galaxy">
+                <div id="galaxy" style={{transform: `scale(${scaleFactor})`}}>
                     <SolarSystem solarSystemClass={solarSystemClass} handlePlanetClick={handlePlanetClick}/>
                 </div>
             </div>
@@ -169,3 +169,4 @@ const PlanetPage = () => {
 };
 
 export default PlanetPage;
+

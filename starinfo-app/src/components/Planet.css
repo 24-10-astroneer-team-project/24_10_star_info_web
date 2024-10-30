@@ -38,6 +38,7 @@
     width: 100%;
     height: 100%;
     /*perspective: 4000;*/
+    transition: transform 0.3s ease-out;  /* scale 변화를 부드럽게 */
 }
 
 #solar-system {
@@ -1600,41 +1601,37 @@ dl.infos dd span:after {
     background-image: url('planet-img/neptune.png');
 }
 
-/* --------------------------------------------------------------------------- 반응형 스타일 코드 */
-@media screen and (max-width: 299px) {
-    #universe {
-        font-size: 20%;
-    }
-}
-
-@media screen and (min-width: 300px) {
-    #universe {
-        font-size: 24%;
-    }
-}
-
-@media screen and (min-width: 500px) {
-    #universe {
-        font-size: 36%;
-    }
-}
-
-@media screen and (min-width: 600px) {
-    #universe {
-        font-size: 44%;
-    }
-}
-
-@media screen and (min-width: 760px) {
-    #universe {
-        font-size: 58%;
-    }
-}
+/*!* --------------------------------------------------------------------------- 반응형 스타일 코드 *!*/
+/*@media screen and (max-width: 299px) {*/
+/*    #universe {*/
+/*        font-size: 20%;*/
+/*    }*/
+/*}*/
+/*@media screen and (min-width: 300px) {*/
+/*    #universe {*/
+/*        font-size: 24%;*/
+/*    }*/
+/*}*/
+/*@media screen and (min-width: 500px) {*/
+/*    #universe {*/
+/*        font-size: 36%;*/
+/*    }*/
+/*}*/
+/*@media screen and (min-width: 600px) {*/
+/*    #universe {*/
+/*        font-size: 44%;*/
+/*    }*/
+/*}*/
+/*@media screen and (min-width: 760px) {*/
+/*    #universe {*/
+/*        font-size: 58%;*/
+/*    }*/
+/*}*/
 
 @media screen and (min-width: 1000px) {
-    #universe {
-        font-size: 73%;
-    }
+    /*#universe {*/
+    /*    font-size: 60%;*/
+    /*}*/
 
     #navbar, #data {
         background: transparent;
@@ -1669,17 +1666,16 @@ dl.infos dd span:after {
     }
 }
 
-@media screen and (min-width: 1300px) {
-    #universe {
-        font-size: 100%;
-    }
-}
-
-@media screen and (min-width: 1600px) {
-    .zoom-close .scale-d #solar-system {
-        margin-left: -120%;
-    }
-}
+/*@media screen and (min-width: 1300px) {*/
+/*    #universe {*/
+/*        font-size: 70%;*/
+/*    }*/
+/*}*/
+/*@media screen and (min-width: 1600px) {*/
+/*    .zoom-close .scale-d #solar-system {*/
+/*        margin-left: -120%;*/
+/*    }*/
+/*}*/
 
 /* 팝업 코드 */
 .planet-popup-bc {
