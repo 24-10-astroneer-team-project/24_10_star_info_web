@@ -33,7 +33,11 @@ const PlanetPage = () => {
 
         // 윈도우 resize 이벤트 핸들러 추가
         const handleResize = () => {
-            setScaleFactor(window.innerWidth < NEPTUNE_ORBIT_SIZE ? window.innerWidth / NEPTUNE_ORBIT_SIZE : 1);
+            const availableWidth = window.innerWidth * 0.7; // 창 너비의 70%를 활용 (패딩 고려)
+            const scale = (availableWidth / NEPTUNE_ORBIT_SIZE);
+
+            // 화면이 충분히 작을 때만 scaleFactor 조정
+            setScaleFactor(scale < 1 ? scale : 1);
             setIsDataOpen(window.innerWidth >= 1000); // 화면 크기가 1000 이상일 때, Data 패널 Open
         };
 
