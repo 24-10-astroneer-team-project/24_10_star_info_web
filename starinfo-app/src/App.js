@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
 import MainPage from './components/MainPage';
 import NotFoundPage from './components/NotFoundPage';
+import MapComponent from './components/MapComponents'; // MapComponent 임포트
+
 
 function App() {
     return (
@@ -10,6 +12,7 @@ function App() {
             <Routes>
                 <Route path="/react/main" element={<MainPage />} />   {/* 메인 페이지로 라우팅 */}
                 <Route path="/react/login" element={<LoginPage />} />  {/* 로그인 페이지로 라우팅 */}
+                <Route path="/react/map" element={<MapComponent />} />  {/* 지도 컴포넌트 라우트 추가 */}
                 <Route path="*" element={<NotFoundPage />} />  {/* 404 처리 */}
             </Routes>
         </Router>
