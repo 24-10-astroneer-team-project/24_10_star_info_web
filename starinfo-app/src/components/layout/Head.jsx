@@ -31,7 +31,7 @@ function Head() {
                             className="ccustom" fill="#25CAAC"></path>
                         <path
                             d="M31.9011 21.9178C34.2114 23.5292 37.9571 23.5292 40.2673 21.9178C42.5776 20.3064 42.5776 17.6937 40.2673 16.0823C37.9571 14.4708 34.2114 14.4708 31.9011 16.0823C29.5909 17.6937 29.5909 20.3064 31.9011 21.9178Z"
-                            className="ccustom" fill="#25CAAC"></path>
+                            className="ccustom" fill="a#25CAAC"></path>
                         <path
                             d="M21.7322 29.6984C24.0425 31.3099 27.7881 31.3099 30.0984 29.6984C32.4086 28.087 32.4086 25.4744 30.0984 23.8629C27.7881 22.2515 24.0425 22.2515 21.7322 23.8629C19.422 25.4744 19.422 28.087 21.7322 29.6984Z"
                             className="ccustom" fill="#25CAAC"></path>
@@ -43,7 +43,7 @@ function Head() {
                         <li><a href="./starmap">별보기</a></li>
                         <li><a href="https://naver.com">천체탐구</a></li>
                         <li><a href="https://naver.com">궤도계산</a></li>
-                        <li><a href="https://naver.com">시뮬레이터</a></li>
+                        <li><a href="./gps">위치 입력(임시)</a></li>
                         <li><a href="./logins">로그인</a></li>
                     </ul>
                 </div>

@@ -7,7 +7,7 @@ import NotFoundPage from './components/NotFoundPage';
 import Head from "./components/layout/Head";
 import Foot from "./components/layout/Foot";
 import StarMap from "./components/StarMap/StarMap";
-//import Test from "./components/Test/Test";
+import Gps from "./components/Gps"
 
 function App() {
   return (
@@ -18,6 +18,7 @@ function App() {
               <Route path="/react/starmap" element={<StarMap />} />  {/* 스타맵 페이지로 라우팅 */}
               <Route path="/react/head" element={<Head />} />  {/* 로그인 페이지로 라우팅 */}
               <Route path="/react/footer" element={<Foot />} />  {/* 헤더 페이지로 라우팅 */}
+              <Route path="/react/gps" element={<Gps />} />  {/* 헤더 페이지로 라우팅 */}
               <Route path="*" element={<NotFoundPage />} />  {/* 404 처리 */}
           </Routes>
       </Router>
