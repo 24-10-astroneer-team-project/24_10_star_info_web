@@ -1,4 +1,6 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import './GoogleLoginButton.css'; // 스타일을 분리된 CSS 파일로 관리
 
 const GoogleLoginButton = () => {
     const googleLogin = () => {
@@ -8,22 +10,21 @@ const GoogleLoginButton = () => {
     };
 
     return (
-        <button
+        <motion.button
             onClick={googleLogin}
-            style={{
-                fontSize: "16px",
-                fontWeight: "bold",
-                padding: "12px 24px",
-                backgroundColor: "#4285F4",
-                color: "#fff",
-                border: "none",
-                borderRadius: "8px",
-                cursor: "pointer",
-                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)"
-            }}
+            className="google-login-button"
+            whileHover={{ scale: 1.1 }} // 호버 시 확대
+            whileTap={{ scale: 0.9 }} // 클릭 시 축소
         >
-            Google 로그인
-        </button>
+            <div className="bc-logo">
+                <img
+                    src="https://developers.google.com/identity/images/g-logo.png"
+                    className="google-logo"
+                    alt="Google logo"
+                />
+            </div>
+            <span className="login-text">Sign in with Google</span>
+        </motion.button>
     );
 };
 
