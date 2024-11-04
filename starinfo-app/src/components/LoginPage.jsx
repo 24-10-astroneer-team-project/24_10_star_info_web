@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-=======
-import React from "react";
 import GoogleLoginButton from "./GoogleLoginButton";
 import LogoutButton from "./LogoutButton";
 import Head from "./layout/Head";
@@ -23,4 +20,3 @@ function LoginPage() {
 }
 
 export default LoginPage;
->>>>>>> origin/feature-pte

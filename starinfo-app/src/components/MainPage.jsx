@@ -1,5 +1,5 @@
 // src/MainPage.js
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './MainPage.css';
 import stylesFirst from '../main/main1/firstSection.module.css';
 import WeatherPage from '../main/main2/WeatherPage';
@@ -9,7 +9,6 @@ import WaveCanvas from '../main/main4/WaveCanvas';
 import ConstellationSection from '../main/main5/ConstellationSection';
 import Head from "./layout/Head";
 import Foot from "./layout/Foot";
-
 
 function MainPage() {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -38,7 +37,7 @@ function MainPage() {
             }, 500);
         };
 
-        window.addEventListener('wheel', handleScroll, {passive: false});
+        window.addEventListener('wheel', handleScroll, { passive: false });
 
         return () => window.removeEventListener('wheel', handleScroll);
     }, [currentIndex]);
@@ -56,30 +55,26 @@ function MainPage() {
 
     return (
         <>
-            <Head/>
-            <div style={{overflow: 'hidden', height: '100vh', position: 'relative'}}>
-                <div ref={containerRef} style={{width: '100%', transition: 'transform 0.7s ease'}}>
-                    {/* 각 섹션 */}
-                    <div ref={(el) => (sections.current[0] = el)} className={stylesFirst.firstSection}
-                         style={{height: '100vh'}}>
+            <Head />
+            <div style={{ overflow: 'hidden', height: '100vh', position: 'relative' }}>
+                <div ref={containerRef} style={{ width: '100%', transition: 'transform 0.7s ease' }}>
+                    <div ref={(el) => (sections.current[0] = el)} className={stylesFirst.firstSection} style={{ height: '100vh' }}>
                         <div className={stylesFirst.firstSectionText}>Hello earthling</div>
                     </div>
-                    <div ref={(el) => (sections.current[1] = el)} style={{height: '100vh'}}>
-                        <WeatherPage/>
+                    <div ref={(el) => (sections.current[1] = el)} style={{ height: '100vh' }}>
+                        <WeatherPage />
                     </div>
-                    <div ref={(el) => (sections.current[2] = el)} className={stylesThird.solarSystemSection}
-                         style={{height: '100vh'}}>
-                        <SolarSystem/>
+                    <div ref={(el) => (sections.current[2] = el)} className={stylesThird.solarSystemSection} style={{ height: '100vh' }}>
+                        <SolarSystem />
                     </div>
-                    <div ref={(el) => (sections.current[3] = el)} style={{height: '100vh', backgroundColor: 'black'}}>
-                        <WaveCanvas/>
+                    <div ref={(el) => (sections.current[3] = el)} style={{ height: '100vh', backgroundColor: 'black' }}>
+                        <WaveCanvas />
                     </div>
-                    <div ref={(el) => (sections.current[4] = el)} style={{height: '100vh'}}>
-                        <ConstellationSection/> {/* 별자리 애니메이션 섹션 추가 */}
+                    <div ref={(el) => (sections.current[4] = el)} style={{ height: '100vh' }}>
+                        <ConstellationSection />
                     </div>
                 </div>
 
-                {/* Dot Navigation */}
                 <div className="dot-navigation">
                     {sections.current.map((_, index) => (
                         <div
@@ -90,7 +85,7 @@ function MainPage() {
                     ))}
                 </div>
             </div>
-            <Foot/>
+            <Foot />
         </>
     );
 }
