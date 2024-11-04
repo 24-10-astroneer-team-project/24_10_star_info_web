@@ -1,0 +1,72 @@
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: black; /*임시로 검정. 원래는 투명 예정*/
+    padding: 20px 80px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+    border-bottom-style: solid;
+    border-bottom-width: 0.5px;
+    border-bottom-color: #858585;
+    letter-spacing: -2px;
+    transition: 0.4s;
+    top:0;
+    left:0;
+    right: 0;
+}
+
+
+/* 헤더에 마우스 올렸을때 색상변화*/
+nav:hover {
+    background-color: #F5F5F5;
+    transition: 0.4s;
+}
+nav:hover #navbar li a{
+    color: #858585;
+    transition: 0.4s;
+}
+
+#icon a{
+    padding: 20px;
+}
+
+#navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#navbar li {
+    list-style: none;
+    padding: 0 30px;
+    position: relative;
+}
+#navbar li a{
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 10px;
+    color:#ffffff;
+    position: relative;
+    transition: color 0.3s;
+}
+
+#navbar li a::after {
+    content: "";
+    width: 0;
+    height: 3px;
+    background-color: #858585;
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    right:0;
+    transition: width 0.2s ease-in-out;
+}
+
+#navbar li a:hover::after {
+    width: 100%;
+}
+
+#navbar li a:hover {
+    color: #000000; /* 마우스를 올렸을 때 텍스트 색 변경 */
+}
