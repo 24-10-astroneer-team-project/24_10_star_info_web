@@ -88,6 +88,7 @@ CREATE TABLE `user_event_interest` (
 -- user table 조회
 SELECT * FROM user;
 
+
 -- observation_location table 조회
 SELECT * FROM observation_location;
 

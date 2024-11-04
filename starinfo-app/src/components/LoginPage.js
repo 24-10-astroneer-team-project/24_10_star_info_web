@@ -1,6 +1,6 @@
 import React from "react";
 import GoogleLoginButton from "./GoogleLoginButton";
-import AstroAnimation from "../pixi/AstroAnimation"; // 애니메이션 컴포넌트 추가
+import AstroAnimation from '../pixi/AstroAnimation.js'; // 애니메이션 컴포넌트 추가
 
 function LoginPage() {
     return (
