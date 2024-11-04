@@ -1,18 +1,15 @@
-<<<<<<< HEAD
 // src/MainPage.js
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import './MainPage.css';
 import stylesFirst from '../main/main1/firstSection.module.css';
 import WeatherPage from '../main/main2/WeatherPage';
 import stylesThird from '../main/main3/ThirdSection.css';
 import SolarSystem from '../main/main3/SolarSystem.jsx';
 import WaveCanvas from '../main/main4/WaveCanvas';
-import ConstellationSection from '../main/main5/ConstellationSection'; // 추가
-=======
-import React from 'react';
+import ConstellationSection from '../main/main5/ConstellationSection';
 import Head from "./layout/Head";
 import Foot from "./layout/Foot";
->>>>>>> origin/feature-pte
+
 
 function MainPage() {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -41,7 +38,7 @@ function MainPage() {
             }, 500);
         };
 
-        window.addEventListener('wheel', handleScroll, { passive: false });
+        window.addEventListener('wheel', handleScroll, {passive: false});
 
         return () => window.removeEventListener('wheel', handleScroll);
     }, [currentIndex]);
@@ -58,54 +55,43 @@ function MainPage() {
     };
 
     return (
-<<<<<<< HEAD
-        <div style={{ overflow: 'hidden', height: '100vh', position: 'relative' }}>
-            <div ref={containerRef} style={{ width: '100%', transition: 'transform 0.7s ease' }}>
-                {/* 각 섹션 */}
-                <div ref={(el) => (sections.current[0] = el)} className={stylesFirst.firstSection} style={{ height: '100vh' }}>
-                    <div className={stylesFirst.firstSectionText}>Hello earthling</div>
-                </div>
-                <div ref={(el) => (sections.current[1] = el)} style={{ height: '100vh' }}>
-                    <WeatherPage />
-                </div>
-                <div ref={(el) => (sections.current[2] = el)} className={stylesThird.solarSystemSection} style={{ height: '100vh' }}>
-                    <SolarSystem />
-                </div>
-                <div ref={(el) => (sections.current[3] = el)} style={{ height: '100vh', backgroundColor: 'black' }}>
-                    <WaveCanvas />
-                </div>
-                <div ref={(el) => (sections.current[4] = el)} style={{ height: '100vh' }}>
-                    <ConstellationSection /> {/* 별자리 애니메이션 섹션 추가 */}
-                </div>
-            </div>
-
-            {/* Dot Navigation */}
-            <div className="dot-navigation">
-                {sections.current.map((_, index) => (
-                    <div
-                        key={index}
-                        className={`dot ${currentIndex === index ? 'active' : ''}`}
-                        onClick={() => handleDotClick(index)}
-                    />
-                ))}
-            </div>
-        </div>
-=======
         <>
             <Head/>
-                <h1>A</h1>
-                <h1>B</h1>
-                <h1>C</h1>
-                <h1>D</h1>
-                <h1>E</h1>
-                <h1>F</h1>
-                <h1>G</h1>
-                <h1>H</h1>
-                <h1>I</h1>
-                <h1>J</h1>
-                <Foot/>
+            <div style={{overflow: 'hidden', height: '100vh', position: 'relative'}}>
+                <div ref={containerRef} style={{width: '100%', transition: 'transform 0.7s ease'}}>
+                    {/* 각 섹션 */}
+                    <div ref={(el) => (sections.current[0] = el)} className={stylesFirst.firstSection}
+                         style={{height: '100vh'}}>
+                        <div className={stylesFirst.firstSectionText}>Hello earthling</div>
+                    </div>
+                    <div ref={(el) => (sections.current[1] = el)} style={{height: '100vh'}}>
+                        <WeatherPage/>
+                    </div>
+                    <div ref={(el) => (sections.current[2] = el)} className={stylesThird.solarSystemSection}
+                         style={{height: '100vh'}}>
+                        <SolarSystem/>
+                    </div>
+                    <div ref={(el) => (sections.current[3] = el)} style={{height: '100vh', backgroundColor: 'black'}}>
+                        <WaveCanvas/>
+                    </div>
+                    <div ref={(el) => (sections.current[4] = el)} style={{height: '100vh'}}>
+                        <ConstellationSection/> {/* 별자리 애니메이션 섹션 추가 */}
+                    </div>
+                </div>
+
+                {/* Dot Navigation */}
+                <div className="dot-navigation">
+                    {sections.current.map((_, index) => (
+                        <div
+                            key={index}
+                            className={`dot ${currentIndex === index ? 'active' : ''}`}
+                            onClick={() => handleDotClick(index)}
+                        />
+                    ))}
+                </div>
+            </div>
+            <Foot/>
         </>
->>>>>>> origin/feature-pte
     );
 }
 
