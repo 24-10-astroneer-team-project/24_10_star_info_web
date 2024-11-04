@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import React from 'react';
 import { motion } from 'framer-motion';
 import './GoogleLoginButton.css'; // 스타일을 분리된 CSS 파일로 관리
+=======
+import React from "react";
+import "./GoogleLoginButton.css";
+import {motion} from "framer-motion";
+>>>>>>> origin/feature-jhr
 
 const GoogleLoginButton = () => {
     const googleLogin = () => {
@@ -11,7 +17,11 @@ const GoogleLoginButton = () => {
     };
 
     return (
+<<<<<<< HEAD
         <motion.button
+=======
+        <motion.button // 임시
+>>>>>>> origin/feature-jhr
             onClick={googleLogin}
             className="google-login-button"
             whileHover={{scale: 1.1}} // 호버 시 확대
@@ -27,6 +37,10 @@ const GoogleLoginButton = () => {
             <span className="login-text">Sign in with Google</span>
         </motion.button>
     );
+<<<<<<< HEAD
 }
+=======
+};
+>>>>>>> origin/feature-jhr
 
 export default GoogleLoginButton;
