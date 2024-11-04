@@ -8,6 +8,8 @@ build/
 src/main/resources/static
 node_modules/
 
+
+
 ### STS ###
 .apt_generated
 .classpath
@@ -20,6 +22,7 @@ node_modules/
 .env
 # React .env
 starinfo-app/.env
+starinfo-app/node_modules
 #firebase API KEY
 /src/main/resources/teamastroneerstarinfo-firebase-adminsdk-l8qw1-62cdf88ebf.json
 bin/
