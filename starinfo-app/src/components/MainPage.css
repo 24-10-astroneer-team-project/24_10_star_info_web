@@ -1,0 +1,46 @@
+/* Dot Navigation Container */
+.dot-navigation {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 1000;
+}
+
+/* Dot 기본 스타일 */
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #4c4c4c;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s;
+}
+
+/* Dot Hover 시 약간 확대 */
+.dot:hover {
+    transform: scale(1.2);
+}
+
+/* 활성화된 Dot 스타일 */
+.dot.active {
+    background-color: #ffffff;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.5);
+    animation: twinkling 1.5s infinite alternate;
+}
+
+/* Dot 깜빡이는 애니메이션 */
+@keyframes twinkling {
+    from {
+        transform: scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: scale(1.4);
+        opacity: 0.8;
+    }
+}
