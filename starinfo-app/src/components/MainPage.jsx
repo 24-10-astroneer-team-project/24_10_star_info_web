@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // src/MainPage.js
 import React, { useEffect, useRef, useState } from 'react';
 import './MainPage.css';
@@ -7,6 +8,11 @@ import stylesThird from '../main/main3/ThirdSection.css';
 import SolarSystem from '../main/main3/SolarSystem.jsx';
 import WaveCanvas from '../main/main4/WaveCanvas';
 import ConstellationSection from '../main/main5/ConstellationSection'; // 추가
+=======
+import React from 'react';
+import Head from "./layout/Head";
+import Foot from "./layout/Foot";
+>>>>>>> origin/feature-pte
 
 function MainPage() {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -52,6 +58,7 @@ function MainPage() {
     };
 
     return (
+<<<<<<< HEAD
         <div style={{ overflow: 'hidden', height: '100vh', position: 'relative' }}>
             <div ref={containerRef} style={{ width: '100%', transition: 'transform 0.7s ease' }}>
                 {/* 각 섹션 */}
@@ -83,6 +90,22 @@ function MainPage() {
                 ))}
             </div>
         </div>
+=======
+        <>
+            <Head/>
+                <h1>A</h1>
+                <h1>B</h1>
+                <h1>C</h1>
+                <h1>D</h1>
+                <h1>E</h1>
+                <h1>F</h1>
+                <h1>G</h1>
+                <h1>H</h1>
+                <h1>I</h1>
+                <h1>J</h1>
+                <Foot/>
+        </>
+>>>>>>> origin/feature-pte
     );
 }
 

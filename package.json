@@ -14,5 +14,11 @@
     "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.1.0"
+  },
+  "scripts": {
+    "start": "cross-env PORT=4444 react-scripts start",
+    "build": "react-scripts build && node ./moveFiles.js",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   }
 }
