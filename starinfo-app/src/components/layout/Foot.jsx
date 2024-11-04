@@ -42,7 +42,7 @@ function Foot() {
                         </div>
                     </div>
                 </div>
-                <hr></hr>
+                <hr className="foot_hr"></hr>
                 <div className="sb_footer-below">
                     <div className="sb_footer-copyright">
                         <p>@{new Date().getFullYear()} CodeInn. All right reserved. </p>
@@ -71,7 +71,7 @@ function Foot() {
         </div>
 
 
-    )
+    );
 }
 
 export default Foot;

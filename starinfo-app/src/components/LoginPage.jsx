@@ -11,7 +11,7 @@ function LoginPage() {
 
         <div>
             <Head />
-            <h1>Login Pagffhyyyggytyyex</h1>
+            <h1>Login Page</h1>
             {/* Google 로그인 버튼 */}
             <GoogleLoginButton />
 

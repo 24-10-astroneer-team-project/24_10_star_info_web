@@ -2,14 +2,17 @@ nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: black; /*임시로 검정. 원래는 투명 예정*/
+    background-color: black; /*임시로 검정. 원래는 투명 예정*/
     padding: 20px 80px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.06);
     border-bottom-style: solid;
-    border-bottom-width: 1px;
+    border-bottom-width: 0.5px;
     border-bottom-color: #858585;
     letter-spacing: -2px;
     transition: 0.4s;
+    top:0;
+    left:0;
+    right: 0;
 }
 
 
