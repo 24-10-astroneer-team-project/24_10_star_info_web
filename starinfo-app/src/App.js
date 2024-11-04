@@ -9,6 +9,7 @@ import StarMap from "./components/StarMap/StarMap";
 import Gps from "./components/Gps"
 import Head from "./components/layout/Head";
 import Foot from "./components/layout/Foot";
+import PlanetPage from "./components/PlanetPage";
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
                 <Route path="/react/map" element={<MapComponent/>}/> {/* 지도 컴포넌트 라우트 추가 */}
                 <Route path="/react/gps" element={<Gps/>}/> {/* 헤더 페이지로 라우팅 */}
                 <Route path="/react/starmap" element={<StarMap/>}/>
+                <Route path="/react/planet" element={<PlanetPage/>}/>
                 <Route path="/react/head" element={<Head/>}/> {/* 헤더 페이지로 라우팅 */}
                 <Route path="/react/foot" element={<Foot/>}/> {/* 헤더 페이지로 라우팅 */}
                 <Route path="*" element={<NotFoundPage/>}/> {/* 404 처리 */}
@@ -27,5 +29,7 @@ function App() {
         </Router>
     );
 }
+
+
 
 export default App;
