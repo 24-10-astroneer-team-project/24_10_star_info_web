@@ -55,11 +55,11 @@ function MainPage() {
 
     return (
         <>
-            <Head />
+
             <div style={{ overflow: 'hidden', height: '100vh', position: 'relative' }}>
                 <div ref={containerRef} style={{ width: '100%', transition: 'transform 0.7s ease' }}>
                     <div ref={(el) => (sections.current[0] = el)} className={stylesFirst.firstSection} style={{ height: '100vh' }}>
-                        <div className={stylesFirst.firstSectionText}>Hello earthling</div>
+                        <div className={stylesFirst.firstSectionText}>Hello Earthling</div>
                     </div>
                     <div ref={(el) => (sections.current[1] = el)} style={{ height: '100vh' }}>
                         <WeatherPage />
@@ -85,7 +85,7 @@ function MainPage() {
                     ))}
                 </div>
             </div>
-            <Foot />
+
         </>
     );
 }
