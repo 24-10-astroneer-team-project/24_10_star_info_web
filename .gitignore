@@ -2,15 +2,15 @@ HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
-!starinfo-app/src/main1/**/build/
-!**/src/test/**/build/
+!starinfo-app/src/main1//build/
+!/src/test//build/
 node_modules/
 src/main/resources/static/*
 
 src/main/resources/static
 
 
-### STS ###
+STS
 .apt_generated
 .classpath
 .factorypath
@@ -18,9 +18,9 @@ src/main/resources/static
 .settings
 .springBeans
 .sts4-cache
-# Spring .env
+Spring .env
 .env
-# React .env
+React .env
 starinfo-app/.env
 starinfo-app/node_modules
 starinfo-app/.gitignore
@@ -28,24 +28,24 @@ starinfo-app/.gitignore
 /src/main/resources/teamastroneerstarinfo-firebase-adminsdk-l8qw1-62cdf88ebf.json
 bin/
 /src/main/resources/application-DB.properties
-!starinfo-app/src/main1/**/bin/
-!**/src/test/**/bin/
+!starinfo-app/src/main1//bin/
+!/src/test//bin/
 
-### IntelliJ IDEA ###
+IntelliJ IDEA
 .idea
 *.iws
 *.iml
 *.ipr
 out/
-!starinfo-app/src/main1/**/out/
-!**/src/test/**/out/
+!starinfo-app/src/main1//out/
+!/src/test/**/out/
 
-### NetBeans ###
+NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
+VS Code
 .vscode/

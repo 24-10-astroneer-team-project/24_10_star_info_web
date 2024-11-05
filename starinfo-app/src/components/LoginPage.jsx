@@ -13,18 +13,10 @@ function LoginPage() {
             {/* Google 로그인 버튼 */}
             <GoogleLoginButton/>
 
-<<<<<<< HEAD
             {/* 로그아웃 버튼 */}
             <LogoutButton/>
             <Foot/>
-=======
-                {/* Google 로그인 버튼 */}
-                <GoogleLoginButton />
 
-                {/* 로그아웃 버튼 */}
-                <LogoutButton />
-            </div>
->>>>>>> origin/feature-jhr
         </div>
     );
 }
