@@ -1,16 +1,33 @@
 .content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
     position: relative;
 }
 
-svg {
+.header, .footer {
+    position: relative;
+    z-index: 1; /* Bring header to the front */
+}
+
+.stars-container svg {
     font-family: 'Open sans', sans-serif;
     text-transform: uppercase;
     font-weight: bold;
     font-size: 18px;
+    margin: 20px 0;
+    width: 50%; /* Adjust this percentage as needed */
+    display: block;
+}
+.stars-container {
+    width: 100%;
+    margin-left: 30%;
+
 }
 
 .stars-background {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -55,7 +72,6 @@ svg {
         stroke-width: 0;
     }
 }
-
 .constellation path {
     stroke: white;
     stroke-width: 1;
@@ -117,4 +133,17 @@ svg {
 .drawDiagram text,
 .drawMonths text {
     animation: fillPath 2s linear forwards;
+}
+
+
+@media (max-width: 768px) {
+    .stars-container {
+        width: 100%;
+        margin-left: 0; /* Center the SVG by removing the left margin */
+    }
+
+    .stars-container svg {
+        width: 100%; /* Make SVG fill the entire container width */
+        height: auto;
+    }
 }

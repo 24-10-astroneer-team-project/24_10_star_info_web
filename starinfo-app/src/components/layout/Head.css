@@ -1,4 +1,4 @@
-nav {
+.nav_header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -21,7 +21,7 @@ nav:hover {
     background-color: #F5F5F5;
     transition: 0.4s;
 }
-nav:hover #navbar li a{
+nav:hover .navbar li a{
     color: #858585;
     transition: 0.4s;
 }
@@ -30,18 +30,18 @@ nav:hover #navbar li a{
     padding: 20px;
 }
 
-#navbar {
+.navbar {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-#navbar li {
+.navbar li {
     list-style: none;
     padding: 0 30px;
     position: relative;
 }
-#navbar li a{
+.navbar li a{
     text-decoration: none;
     font-size: 20px;
     font-weight: 600;
@@ -51,7 +51,7 @@ nav:hover #navbar li a{
     transition: color 0.3s;
 }
 
-#navbar li a::after {
+.navbar li a::after {
     content: "";
     width: 0;
     height: 3px;
@@ -63,10 +63,10 @@ nav:hover #navbar li a{
     transition: width 0.2s ease-in-out;
 }
 
-#navbar li a:hover::after {
+.navbar li a:hover::after {
     width: 100%;
 }
 
-#navbar li a:hover {
+.navbar li a:hover {
     color: #000000; /* 마우스를 올렸을 때 텍스트 색 변경 */
 }
