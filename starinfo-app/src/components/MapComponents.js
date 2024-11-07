@@ -3,6 +3,8 @@
 import { useRef, useState } from 'react';
 import { GoogleMap, LoadScript, Autocomplete, Marker } from '@react-google-maps/api';
 import { useGoogleMap } from '../hooks/useGoogleMap';
+import { sendLocationToServer } from '../services/LocationService';
+import { useNavigate } from 'react-router-dom';
 import './MapComponent.css';
 
 // 외부에 상수로 라이브러리 배열을 정의
@@ -12,6 +14,7 @@ const MapComponent = () => {
     const { location, setLocation } = useGoogleMap({ lat: 37.5665, lng: 126.9780 });
     const [marker, setMarker] = useState(null);
     const autocompleteRef = useRef(null);
+    const navigate = useNavigate(); // 이름을 'history'에서 'navigate'로 변경
 
     const handlePlaceSelected = () => {
         const place = autocompleteRef.current.getPlace();
@@ -25,7 +28,6 @@ const MapComponent = () => {
     };
 
     const handleMapClick = (event) => {
-        // 클릭한 위치의 위도와 경도를 가져옴
         const lat = event.latLng.lat();
         const lng = event.latLng.lng();
         const clickedLocation = { lat, lng };
@@ -33,13 +35,48 @@ const MapComponent = () => {
         setMarker(clickedLocation); // 클릭한 위치에 마커 생성
     };
 
+
+    const handleSubmit = async () => {
+        if (marker) {
+            console.log('Sending location to server:', marker);
+            try {
+                const response = await sendLocationToServer(marker);
+                console.log('Location saved:', response.data); // 성공적으로 저장된 후의 처리
+            } catch (error) {
+                if (error) {
+                    alert('위치 정보를 서버로 보내는데 실패했습니다.'); // 기타 에러 처리
+                }
+            }
+        } else {
+            alert('관측 위치를 선택해주세요.');
+        }
+    };
+
+    const saveHandleSubmit = async () => {
+        if (marker) {
+            console.log('Sending location to server:', marker);
+            try {
+                const response = await sendLocationToServer(marker);
+                console.log('Location saved:', response.data); // 성공적으로 저장된 후의 처리
+            } catch (error) {
+                if (error instanceof Error && error.message === 'Unauthorized') {
+                    alert('로그인이 필요합니다.'); // 로그인 필요 에러 처리
+                    navigate('/react/login');  // 로그인 페이지로 리디렉션
+                } else {
+                    alert('위치 정보를 서버로 보내는데 실패했습니다.'); // 기타 에러 처리
+                }
+            }
+        } else {
+            alert('관측 위치를 선택해주세요.');
+        }
+    };
+
     return (
         <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_KEY} libraries={libraries}>
             <GoogleMap
                 center={location}
                 zoom={15}
-                mapContainerStyle={{ height: "400px", width: "100%" }}
-                mapContainerClassName="google-map-container" // CSS 클래스 적용
+                mapContainerStyle={{height: "400px", width: "100%"}}
                 onClick={handleMapClick}
             >
                 <Autocomplete
@@ -53,8 +90,10 @@ const MapComponent = () => {
                         className="autocomplete-input" // CSS 클래스 확인
                     />
                 </Autocomplete>
-                {marker && <Marker position={marker} />}
+                {marker && <Marker position={marker}/>}
             </GoogleMap>
+            <button onClick={handleSubmit} className="submit-button mt-3">검색</button>
+            <button onClick={saveHandleSubmit} className="submit-button mt-3">내 위치로 저장</button>
         </LoadScript>
     );
 };

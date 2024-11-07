@@ -33,3 +33,18 @@
     border-color: #0056b3; /* 포커스시 경계선 색상 변경 */
     box-shadow: 0 0 8px rgba(0,86,179,0.8); /* 포커스시 그림자 효과 */
 }
+
+/* 확인 버튼 스타일 */
+.submit-button {
+    padding: 8px 16px;
+    background-color: #4CAF50; /* 초록색 배경 */
+    color: white; /* 텍스트 색상 */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.submit-button:hover {
+    background-color: #45a049; /* 호버 시 색상 변경 */
+}
