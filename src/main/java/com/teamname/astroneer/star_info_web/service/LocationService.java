@@ -17,6 +17,7 @@ public class LocationService {
     private MemberRepository memberRepository;
 
     public void saveLocation(LocationDTO locationDTO) throws InvalidLocationException {
+        System.err.println("=================LocationService: 유저 위치 정보 저장 로직 시작 ================");
         if (!isValidLocation(locationDTO)) {
             throw new InvalidLocationException("Invalid latitude or longitude");
         }
@@ -24,10 +25,13 @@ public class LocationService {
         location.setLatitude(locationDTO.getLat());
         location.setLongitude(locationDTO.getLng());
         location.setDescription(locationDTO.getDescription()); // 설명 추가
-        // userId로 Member를 조회하여 설정
+
+        // userId로 Member 조회 및 설정
         Member user = memberRepository.findById(locationDTO.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        location.setUser(user);  // 사용자 설정        locationRepository.save(location);
+        location.setUser(user);
+
+        locationRepository.save(location);
     }
 
     private boolean isValidLocation(LocationDTO locationDTO) {

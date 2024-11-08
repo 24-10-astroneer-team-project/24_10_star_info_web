@@ -5,6 +5,8 @@ import { GoogleMap, LoadScript, Autocomplete, Marker } from '@react-google-maps/
 import { useGoogleMap } from '../hooks/useGoogleMap';
 import { sendLocationToServer } from '../services/LocationService';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 import './MapComponent.css';
 
 // 외부에 상수로 라이브러리 배열을 정의
@@ -42,32 +44,82 @@ const MapComponent = () => {
             try {
                 const response = await sendLocationToServer(marker);
                 console.log('Location saved:', response.data); // 성공적으로 저장된 후의 처리
+
+                toast.success('페이지 이동중..', {
+                    position: "top-center",
+                    autoClose: 2000, // 2초 후 자동 닫힘
+                    style: {
+                        zIndex: 9999, // 다른 요소보다 높게 설정
+                    },
+                });
+                // 알림이 닫힌 후 리디렉션
+                setTimeout(() => {
+                    navigate('추후 수정 예정.'); // 리디렉션할 경로
+                }, 2000);
             } catch (error) {
-                if (error) {
-                    alert('위치 정보를 서버로 보내는데 실패했습니다.'); // 기타 에러 처리
-                }
+                toast.error('위치 정보를 서버로 보내는데 실패했습니다.', {
+                    position: "top-center",
+                    autoClose: 3000,
+                    style: {
+                        zIndex: 9999, // 다른 요소보다 높게 설정
+                    },
+                });
+                console.error('Error sending location to server:', error);
             }
         } else {
-            alert('관측 위치를 선택해주세요.');
+            toast.warn('관측 위치를 선택해주세요.', {
+                position: "top-center",
+                autoClose: 3000,
+                style: {
+                    zIndex: 9999, // 다른 요소보다 높게 설정
+                },
+            });
         }
     };
 
     const saveHandleSubmit = async () => {
         if (marker) {
-            console.log('Sending location to server:', marker);
+            console.log('Sending location to server:', marker); // userId 없이 marker 데이터만 전송
             try {
                 const response = await sendLocationToServer(marker);
                 console.log('Location saved:', response.data); // 성공적으로 저장된 후의 처리
+                // 성공 알림 표시
+                toast.success('위치 저장 성공!', {
+                    position: "top-center",
+                    autoClose: 2000, // 2초 후 자동 닫힘
+                    style: {
+                        zIndex: 9999, // 다른 요소보다 높게 설정
+                    },
+                });
+                // 알림이 닫힌 후 리디렉션
+                setTimeout(() => {
+                    navigate('/react/main'); // 리디렉션할 경로
+                }, 2000);
             } catch (error) {
                 if (error instanceof Error && error.message === 'Unauthorized') {
-                    alert('로그인이 필요합니다.'); // 로그인 필요 에러 처리
-                    navigate('/react/login');  // 로그인 페이지로 리디렉션
+                    toast.warn('관측 위치 저장은 로그인부터 해주세요.', {
+                        position: "top-center",
+                        autoClose: 3000,
+                        style: {
+                            zIndex: 9999, // 다른 요소보다 높게 설정
+                        },
+                    });
+                    // 알림이 닫힌 후 리디렉션
+                    setTimeout(() => {
+                        navigate('/react/login'); // 리디렉션할 경로
+                    }, 2000);
                 } else {
-                    alert('위치 정보를 서버로 보내는데 실패했습니다.'); // 기타 에러 처리
+                    alert('위치 정보를 서버로 보내는데 실패했습니다.');
                 }
             }
         } else {
-            alert('관측 위치를 선택해주세요.');
+            toast.warn('관측 위치를 선택해주세요.', {
+                position: "top-center",
+                autoClose: 3000,
+                style: {
+                    zIndex: 9999, // 다른 요소보다 높게 설정
+                },
+            });
         }
     };
 

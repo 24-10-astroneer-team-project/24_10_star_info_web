@@ -94,6 +94,9 @@ CREATE TABLE `user_event_interest` (
 -- user table 조회
 SELECT * FROM users;
 
+-- location tavle 조회
+SELECT * FROM Location;
+
 -- observation_location table 조회
 SELECT * FROM observation_location;
 

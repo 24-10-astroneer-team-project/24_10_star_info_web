@@ -16,6 +16,9 @@ const AstroAnimation = () => {
         // canvas를 HTML에 추가
         if (canvasRef.current) {
             canvasRef.current.appendChild(app.view);
+        } else {
+            console.error("Canvas reference is not available.");
+            return;
         }
 
         // 별 생성 함수 호출
@@ -24,7 +27,9 @@ const AstroAnimation = () => {
         const visual = new Visual();
 
         const onResize = () => {
-            visual.show(app.screen.width, app.screen.height, app.stage);
+            if (app && app.screen) {
+                visual.show(app.screen.width, app.screen.height, app.stage);
+            }
         };
 
         window.addEventListener("resize", onResize);
@@ -34,11 +39,12 @@ const AstroAnimation = () => {
             visual.animate();
         });
 
+        // 컴포넌트가 언마운트될 때 Pixi 앱 정리
         return () => {
             window.removeEventListener("resize", onResize);
             app.destroy(true, true);
         };
-    }, []);
+    }, []); // 빈 배열로 마운트 시 한 번만 실행
 
     // 별을 추가하는 함수
     const createStars = (app, count) => {
@@ -55,7 +61,19 @@ const AstroAnimation = () => {
         }
     };
 
-    return <div ref={canvasRef} style={{ width: "100%", height: "100vh" }}></div>;
+    return (
+        <div
+            ref={canvasRef}
+            style={{
+                width: "100%",
+                height: "100vh",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                zIndex: 0, // 애니메이션을 배경에 위치시키기 위해 낮은 z-index
+            }}
+        ></div>
+    );
 };
 
 export default AstroAnimation;

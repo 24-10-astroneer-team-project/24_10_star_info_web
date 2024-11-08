@@ -6,7 +6,12 @@ export default class Visual {
     constructor() {
         this.text = new Text();
 
-        this.texture = PIXI.Texture.from('/particle.png'); // particle.png 경로 확인 필요
+        // 텍스처 로드 (경로가 모든 사용자에게 접근 가능한지 확인 필요)
+        try {
+            this.texture = PIXI.Texture.from('/particle.png');
+        } catch (error) {
+            console.error('Error loading particle texture:', error);
+        }
 
         this.particles = [];
 
@@ -16,8 +21,11 @@ export default class Visual {
             radius: 100,
         };
 
-        document.addEventListener('pointermove', this.onMove.bind(this), false);
-        document.addEventListener('touchend', this.onTouchEnd.bind(this), false);
+        // 이벤트 리스너 등록
+        this.onMove = this.onMove.bind(this);
+        this.onTouchEnd = this.onTouchEnd.bind(this);
+        document.addEventListener('pointermove', this.onMove, false);
+        document.addEventListener('touchend', this.onTouchEnd, false);
     }
 
     show(stageWidth, stageHeight, stage) {
@@ -25,8 +33,10 @@ export default class Visual {
             stage.removeChild(this.container);
         }
 
+        // 텍스트를 위치 배열로 설정
         this.pos = this.text.setText('ASTRO', 2, stageWidth, stageHeight);
 
+        // 파티클 컨테이너 생성
         this.container = new PIXI.ParticleContainer(this.pos.length, {
             vertices: false,
             position: true,
@@ -38,6 +48,7 @@ export default class Visual {
 
         stage.addChild(this.container);
 
+        // 파티클 초기화
         this.particles = [];
         for (let i = 0; i < this.pos.length; i++) {
             const item = new Particle(this.pos[i], this.texture);
@@ -47,6 +58,7 @@ export default class Visual {
     }
 
     animate() {
+        // 모든 파티클 애니메이션
         for (let i = 0; i < this.particles.length; i++) {
             const item = this.particles[i];
             const dx = this.mouse.x - item.x;
@@ -70,12 +82,20 @@ export default class Visual {
     }
 
     onMove(e) {
+        // 마우스 위치 저장
         this.mouse.x = e.clientX;
         this.mouse.y = e.clientY;
     }
 
     onTouchEnd() {
+        // 터치가 끝나면 마우스 위치 초기화
         this.mouse.x = 0;
         this.mouse.y = 0;
+    }
+
+    // 이벤트 리스너 제거
+    removeEventListeners() {
+        document.removeEventListener('pointermove', this.onMove, false);
+        document.removeEventListener('touchend', this.onTouchEnd, false);
     }
 }
