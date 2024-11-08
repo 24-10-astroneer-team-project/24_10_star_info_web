@@ -1,7 +1,7 @@
 
 .section_padding {
     position : relative;
-    padding: 2rem 4rem;
+    padding: 0.2rem 5rem;
     letter-spacing: -1px;
 
 }
@@ -21,12 +21,11 @@
     flex-direction: row;
     flex-wrap: wrap;
     text-align: left;
-    margin-bottom: 2rem;
 }
 
 .sb_footer-links-div {
     width:120px;
-    margin: 1rem;
+    margin: 0.2rem;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;

@@ -22,8 +22,8 @@
 }
 .stars-container {
     width: 100%;
+    max-width: 1001px;
     margin-left: 35%;
-
 }
 
 .stars-background {
