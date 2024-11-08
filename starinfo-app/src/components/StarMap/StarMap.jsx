@@ -7,6 +7,10 @@ import ConstellationPopup from './ConstellationPopup';
 
 function StarMap() {
 
+    const closePopup = () => {
+        setPopupInfo({ isVisible: false, constellationId: '', position: { x: 0, y: 0 } });
+    };
+
     const [popupInfo, setPopupInfo] = useState({isVisible: false, constellationId: '', position: {x: 0, y: 0}});
     const [newSelection, setNewSelection] = useState(null); // 새로운 별자리 선택을 위한 상태
 
@@ -63,7 +67,7 @@ function StarMap() {
                         preserveAspectRatio="xMidYMid meet"
                         style={{
                             isolation: "isolate",
-                            width: "70%", // Set width to 100% to make it responsive
+                            width: "65%", // Set width to 100% to make it responsive
                             height: "auto",    // Maintain aspect ratio based on width
                             margin: "80 auto",
                         }}
@@ -262,6 +266,7 @@ function StarMap() {
                     constellationId={popupInfo.constellationId}
                     isVisible={popupInfo.isVisible}
                     position={popupInfo.position}
+                    closePopup={closePopup}
                 />
             </div>
             <div className="footer">

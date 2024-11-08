@@ -1,10 +1,8 @@
 /* ConstellationPopup.css */
-
 .tooltip {
     position: absolute;
-    top: -40px; /* 아이콘 위에 위치하도록 설정 */
-    left: 50%;
-    transform: translateX(-50%);
+    top: 30px; /* 아이콘 아래로 30px */
+    left: 30px; /* 아이콘 오른쪽으로 30px */
     background-color: rgba(0, 0, 0, 0.8);
     color: #ffffff;
     padding: 5px 10px;
@@ -13,34 +11,53 @@
     white-space: nowrap;
     z-index: 10;
     opacity: 0;
-    transition: opacity 0.3s ease;
 }
 
 .icon-container:hover .tooltip {
     opacity: 1;
 }
 
-
 .popup-container {
     box-sizing: border-box;
-    width: 490px;
+    width: 35vw; /* Use viewport width for immediate responsiveness */
+    max-width: 490px; /* Maximum width constraint */
+    max-height: 100%;
     position: absolute;
-    top: 40%;
-    left: 22%;
-    transform: translateY(-45%);
-    background: linear-gradient(#151829,  #353A50);
+    top: 50%;
+    margin-left: -20%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(#151829, #353A50);
     border: 0.5px solid rgba(255, 255, 255, 0.8);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
-    padding: 10px;
+    padding: 1vw; /* Responsive padding */
     color: #C7C7C7;
-    /*color: #1D2237;*/
     font-family: 'Jaldi', sans-serif;
     font-style: normal;
     font-weight: 400;
     letter-spacing: -0.05em;
     opacity: 0;
     animation: fadeIn 0.3s ease forwards;
+}
+
+/* Image Container */
+.image-container {
+    display: flex;
+    justify-content: center;
+    max-width: 100%;
+    margin: 10px 0;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeIn 1.1s ease forwards;
+}
+
+/* Image Styles */
+.con_image {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 350px;
+    object-fit: contain;
 }
 
 /* Header 스타일 */
@@ -52,36 +69,37 @@
 }
 
 .detail_icon, .con_icon {
-    width: 65px;
+    width: clamp(30px, 5vw, 65px);
     border: 0.5px solid #ffffff;
     border-radius: 50%;
 }
 
-.detail_icon {
-    margin-right: 30px;
-    margin-left: 5px;
+.tab-buttons button {
+    background-color: #1D2237;
+    color: #C7C7C7;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
+
 .detail_icon:hover {
     cursor: pointer;
 }
 
-
-.con_icon {
-    margin-left: 30px;
-    margin-right: 5px;
-}
-
 /* name 및 name_k 텍스트 스타일 */
 .name {
-    font-size: 24px;
+    font-size: clamp(16px, 2vw, 24px);
     color: #98AED2;
     text-align: center;
 }
 
 .name_k {
-    font-size: 28px;
+    font-size: clamp(18px, 2.5vw, 26px);
     color: #98AED2;
     text-align: center;
+    white-space: nowrap;
 }
 
 hr {
@@ -91,27 +109,9 @@ hr {
     margin: 2px auto;
 }
 
-.image-container {
-    display: flex;
-    justify-content: center; /* 가로 중앙 정렬 */
-    margin: 10px 0; /* hr과 본문 사이의 간격 */
-    opacity: 0;
-    animation: fadeIn 1.1s ease forwards;
-
-}
-
-/* 별자리 이미지 스타일 */
-.con_image {
-    width: auto;
-    max-height: 320px;
-    height: auto;
-}
-
-
-
 /* 본문 텍스트 스타일 */
 .popup-container .text_constellation {
-    font-size: 20px;
+    font-size: clamp(10px, 2.5vw, 20px);
     line-height: 37px;
     color: #C7C7C7;
     margin: 15px;
@@ -155,16 +155,6 @@ hr {
     margin: 10px 0;
 }
 
-.tab-buttons button {
-    background-color: #1D2237;
-    color: #C7C7C7;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
 .tab-buttons button:hover {
     background-color: #3D4465;
 }
@@ -178,6 +168,8 @@ hr {
     font-size: 18px;
     color: #C7C7C7;
     margin-left: 15px;
+    max-height: 220px;
+    overflow-y: auto;
 }
 
 /* Fade-in & Fade-out 애니메이션 */
