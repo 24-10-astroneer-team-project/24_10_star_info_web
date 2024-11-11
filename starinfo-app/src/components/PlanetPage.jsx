@@ -3,6 +3,7 @@ import anime from 'animejs/lib/anime.es.js';
 import SolarSystem from './SolarSystem';
 import './Planet.css';
 
+<<<<<<< HEAD
 const planets = [
     { id: '1', name: 'Mercury', diameter: '3,031.67 mi', moons: 'none', desc: 'Mercury is the closest planet to the Sun. Due to its proximity, it\'s not easily seen except during twilight. For every two orbits of the Sun, Mercury completes three rotations about its axis. Up until 1965 it was thought that the same side of Mercury constantly faced the Sun.', url: 'img/mercury.jpg' },
     { id: '2', name: 'Venus', diameter: '7,521 mi', moons: 'none', desc: 'Venus is the second planet from the Sun and is the second brightest object in the night sky after the Moon. Venus is the second largest terrestrial planet and is sometimes referred to as the Earth’s sister planet due the their similar size and mass.', url: 'img/venus.jpg' },
@@ -30,6 +31,8 @@ const PlanetCard = ({ name, diameter, moons, desc, url }) => (
     </div>
 );
 
+=======
+>>>>>>> d80e1566534f4463b772354c317430220515fb47
 const PlanetPage = () => {
     const [bodyClass, setBodyClass] = useState('opening hide-UI view-2D zoom-large data-close controls-close');
     const [solarSystemClass, setSolarSystemClass] = useState('earth');
@@ -71,7 +74,11 @@ const PlanetPage = () => {
         window.addEventListener('resize', handleResize);  // 리사이즈 이벤트 감지
         handleResize();  // 초기 크기 설정
 
+<<<<<<< HEAD
         // 컴포넌트가 unmount 될 때 이벤트 리스너를 제거
+=======
+        // 컴포넌트가 unmount될 때 이벤트 리스너를 제거
+>>>>>>> d80e1566534f4463b772354c317430220515fb47
         return () => {
             window.removeEventListener('resize', handleResize);
         };
@@ -144,9 +151,12 @@ const PlanetPage = () => {
         setPlanetPopupOpen(false); // 팝업 닫기
     };
 
+<<<<<<< HEAD
     // 클릭된 행성 데이터 필터링
     const selectedPlanet = planets.find(planet => planet.name.toLowerCase() === solarSystemClass.toLowerCase());
 
+=======
+>>>>>>> d80e1566534f4463b772354c317430220515fb47
     return (
         <div id="planet-page" className={`planet-container ${bodyClass}`}>
             <div id="navbar">
@@ -158,7 +168,11 @@ const PlanetPage = () => {
 
             {isDataOpen && (
                 <div id="data">
+<<<<<<< HEAD
                     <a className={`sudan ${solarSystemClass === 'sun' ? 'active' : ''}`}
+=======
+                    <a className={`sun ${solarSystemClass === 'sun' ? 'active' : ''}`}
+>>>>>>> d80e1566534f4463b772354c317430220515fb47
                        onClick={() => handlePlanetClick('sun')} href="#sunspeed">Sun</a>
                     <a className={`mercury ${solarSystemClass === 'mercury' ? 'active' : ''}`}
                        onClick={() => handlePlanetClick('mercury')} href="#mercuryspeed">Mercury</a>
@@ -185,6 +199,7 @@ const PlanetPage = () => {
                 </div>
             </div>
 
+<<<<<<< HEAD
             {/* PlanetCard를 팝업 형태로 렌더링 */}
             {isPlanetPopupOpen && selectedPlanet && (
                 <div id="planetPopup" className="planet-popup-bc" onClick={closePlanetPopup}>
@@ -200,6 +215,21 @@ const PlanetPage = () => {
                     </div>
                 </div>
             )}
+=======
+            {/* 팝업 창 조건부 렌더링 */}
+            {isPlanetPopupOpen && (
+                <div className="planet-popup-bc" onClick={closePlanetPopup}>
+                    <div className="planet-popup" onClick={(e) => e.stopPropagation()}>
+                        <div className="popup-content">
+                            <h2>{solarSystemClass} 정보</h2>
+                            <p>{solarSystemClass}에 대한 자세한 내용을 여기에 표시합니다.</p>
+                            <button className="popup-close-button" onClick={closePlanetPopup}>닫기</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+>>>>>>> d80e1566534f4463b772354c317430220515fb47
         </div>
     );
 };

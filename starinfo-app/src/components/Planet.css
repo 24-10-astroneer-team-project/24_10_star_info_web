@@ -1697,6 +1697,7 @@ dl.infos dd span:after {
     color: white;
     z-index: 200;
     border-radius: 10px;
+<<<<<<< HEAD
     width: 400px;
     height: 500px;
     box-sizing: border-box;
@@ -1760,6 +1761,17 @@ dl.infos dd span:after {
 /*    text-align: center;*/
 /*}*/
 
+=======
+    width: 300px;
+    height: 300px;
+    box-sizing: border-box;
+}
+
+.popup-content {
+    text-align: center;
+}
+
+>>>>>>> d80e1566534f4463b772354c317430220515fb47
 .popup-close-button {
     margin-top: 20px;
     padding: 10px 20px;
@@ -1773,6 +1785,7 @@ dl.infos dd span:after {
 .popup-close-button:hover {
     background-color: #ccc;
 }
+<<<<<<< HEAD
 
 /*일단은 이 윗부분까지 팝업 그대로 옮겨오는 것 성공*/
 /* 행성 이미지와 회전축 스타일만 포함 */
@@ -1823,3 +1836,5 @@ dl.infos dd span:after {
 }
 
 /* 필요한 행성들만 추가 */
+=======
+>>>>>>> d80e1566534f4463b772354c317430220515fb47
