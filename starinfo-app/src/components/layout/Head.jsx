@@ -4,7 +4,7 @@ import './Head.css'
 function Head() {
     return (
         <>
-            <nav>
+            <nav className="nav_header">
                 <icon id="icon"><a href="./main">
                     <svg id="logo-37" width="42" height="38" viewBox="0 0 42 38" fill="none"
                          xmlns="http://www.w3.org/2000/svg">
@@ -38,13 +38,13 @@ function Head() {
                     </svg>
                 </a></icon>
                 <div>
-                    <ul id="navbar">
+                    <ul className="navbar">
                         <li><a href="./main">메인화면</a></li>
                         <li><a href="./starmap">별보기</a></li>
                         <li><a href="https://naver.com">천체탐구</a></li>
                         <li><a href="https://naver.com">궤도계산</a></li>
                         <li><a href="./gps">위치 입력(임시)</a></li>
-                        <li><a href="./logins">로그인</a></li>
+                        <li><a href="./login">로그인</a></li>
                     </ul>
                 </div>
             </nav>

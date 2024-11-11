@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Head from "./layout/Head";
 import Foot from "./layout/Foot";
 import { saveCoordinates, loadCoordinates } from './storage';
+import Main_Button from '../components/layout/Main_Button'; // 임시추가'
 
 function Gps() {
     const [latitude, setLatitude] = useState('');
@@ -78,6 +79,7 @@ function Gps() {
                         <p>경도: {savedCoordinates.longitude}</p>
                     </div>
                 )}
+                <Main_Button/>
             </div>
             <Foot />
         </>
