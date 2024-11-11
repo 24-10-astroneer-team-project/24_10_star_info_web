@@ -1,72 +1,138 @@
-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: black; /*임시로 검정. 원래는 투명 예정*/
-    padding: 20px 80px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.06);
-    border-bottom-style: solid;
-    border-bottom-width: 0.5px;
-    border-bottom-color: #858585;
-    letter-spacing: -2px;
-    transition: 0.4s;
-    top:0;
-    left:0;
+/* 헤더 스타일 */
+.nav_header {
+    position: fixed;
+    top: 0;
+    left: 0;
     right: 0;
-}
-
-
-/* 헤더에 마우스 올렸을때 색상변화*/
-nav:hover {
-    background-color: #F5F5F5;
-    transition: 0.4s;
-}
-nav:hover #navbar li a{
-    color: #858585;
-    transition: 0.4s;
-}
-
-#icon a{
-    padding: 20px;
-}
-
-#navbar {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100px;
+    z-index: 1000;
+    margin: 0;
+    padding: 0;
 }
 
-#navbar li {
-    list-style: none;
-    padding: 0 30px;
-    position: relative;
+/* ASTRO 로고 스타일 */
+.astro-logo {
+    font-size: 36px;
+    font-weight: bold;
+    color: white;
+    width: 80%;
+    padding: 20px 0;
+    background-color: black;
+    text-align: center;
+    margin-top: -20px;
+    z-index: 1010;
+    clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%);
+    border-radius: 0 0 70px 70px;
 }
-#navbar li a{
+
+/* 메뉴 컨테이너 스타일 */
+.menu-container {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    background-color: black;
+    padding: 10px 40px;
+    clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%);
+    border-radius: 0 0 70px 70px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+    z-index: 1005;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* 메뉴 활성화 시 애니메이션 */
+.menu-container.active {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* 메뉴 아이템 스타일 */
+.navbar {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.navbar li {
+    list-style: none;
+}
+
+.navbar li a {
     text-decoration: none;
     font-size: 20px;
     font-weight: 600;
-    padding: 10px;
-    color:#ffffff;
+    color: white;
     position: relative;
     transition: color 0.3s;
 }
 
-#navbar li a::after {
+.navbar li a:hover {
+    color: #858585;
+}
+
+/* 메뉴 항목 밑줄 효과 */
+.navbar li a::after {
     content: "";
     width: 0;
     height: 3px;
     background-color: #858585;
     position: absolute;
-    bottom: -20px;
+    bottom: -5px;
     left: 0;
-    right:0;
-    transition: width 0.2s ease-in-out;
+    transition: width 0.3s;
 }
 
-#navbar li a:hover::after {
+.navbar li a:hover::after {
     width: 100%;
 }
 
-#navbar li a:hover {
-    color: #000000; /* 마우스를 올렸을 때 텍스트 색 변경 */
+/* 반응형 스타일 */
+@media (max-width: 1024px) {
+    .astro-logo {
+        font-size: 32px;
+    }
+    .menu-container {
+        padding: 8px 30px;
+    }
+    .navbar {
+        gap: 20px;
+    }
+    .navbar li a {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    .astro-logo {
+        font-size: 28px;
+    }
+    .menu-container {
+        padding: 6px 20px;
+    }
+    .navbar {
+        gap: 15px;
+    }
+    .navbar li a {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .astro-logo {
+        font-size: 24px;
+    }
+    .menu-container {
+        padding: 5px 15px;
+    }
+    .navbar {
+        gap: 10px;
+    }
+    .navbar li a {
+        font-size: 14px;
+    }
 }
