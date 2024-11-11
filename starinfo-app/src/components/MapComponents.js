@@ -143,6 +143,7 @@ const MapComponent = () => {
                     />
                 </Autocomplete>
                 {marker && <Marker position={marker}/>}
+
             </GoogleMap>
             <button onClick={handleSubmit} className="submit-button mt-3">검색</button>
             <button onClick={saveHandleSubmit} className="submit-button mt-3">내 위치로 저장</button>

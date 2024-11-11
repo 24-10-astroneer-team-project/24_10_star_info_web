@@ -49,7 +49,6 @@ function LoginPage() {
                 color: "#ffffff",  // 텍스트 색상을 흰색으로 변경
             }}>
                 <h2>로그인 방법을 선택해주세요</h2>
-
                 {/* Google 로그인 버튼 */}
                 {/* 스타일을 인라인에서 설정하지 않고, CSS 클래스 사용 */}
                 <GoogleLoginButton className="google-login-button"/>
