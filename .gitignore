@@ -1,26 +1,18 @@
+# Git 관련 파일
 HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
-<<<<<<< HEAD
-!starinfo-app/src/main1//build/
-!/src/test//build/
-node_modules/
-src/main/resources/static/*
-=======
+
+# 빌드 파일들
 !starinfo-app/src/main1/**/build/
 !**/src/test/**/build/
+
+# Node 모듈과 정적 파일들
 node_modules/
 src/main/resources/static/*
 
-src/main/resources/static
-
->>>>>>> d80e1566534f4463b772354c317430220515fb47
-
-src/main/resources/static
-
-
-STS
+# STS 관련 파일들
 .apt_generated
 .classpath
 .factorypath
@@ -28,56 +20,40 @@ STS
 .settings
 .springBeans
 .sts4-cache
-<<<<<<< HEAD
-Spring .env
+
+# 환경 변수 파일들
 .env
-React .env
-=======
-# Spring .env
-.env
-# React .env
->>>>>>> d80e1566534f4463b772354c317430220515fb47
 starinfo-app/.env
-starinfo-app/node_modules
-starinfo-app/.gitignore
-#firebase API KEY
+
+# Firebase API KEY
 /src/main/resources/teamastroneerstarinfo-firebase-adminsdk-l8qw1-62cdf88ebf.json
-bin/
+
+# 프로퍼티 파일
 /src/main/resources/application-DB.properties
-<<<<<<< HEAD
-!starinfo-app/src/main1//bin/
-!/src/test//bin/
-=======
+
+# 바이너리 파일들
+bin/
 !starinfo-app/src/main1/**/bin/
 !**/src/test/**/bin/
->>>>>>> d80e1566534f4463b772354c317430220515fb47
 
-IntelliJ IDEA
+# IntelliJ IDEA 관련 파일들
 .idea
 *.iws
 *.iml
 *.ipr
 out/
-<<<<<<< HEAD
-!starinfo-app/src/main1//out/
-!/src/test/**/out/
-=======
 !starinfo-app/src/main1/**/out/
 !**/src/test/**/out/
->>>>>>> d80e1566534f4463b772354c317430220515fb47
 
+# NPM 잠금 파일
 package-lock.json
 
-NetBeans
+# NetBeans 관련 파일들
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 
-<<<<<<< HEAD
-VS Code
-=======
-### VS Code ###
->>>>>>> d80e1566534f4463b772354c317430220515fb47
+# VS Code 관련 파일들
 .vscode/
