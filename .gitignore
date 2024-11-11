@@ -40,6 +40,8 @@ out/
 !starinfo-app/src/main1//out/
 !/src/test/**/out/
 
+package-lock.json
+
 NetBeans
 /nbproject/private/
 /nbbuild/
