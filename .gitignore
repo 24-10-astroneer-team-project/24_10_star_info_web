@@ -2,6 +2,12 @@ HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
+<<<<<<< HEAD
+!starinfo-app/src/main1//build/
+!/src/test//build/
+node_modules/
+src/main/resources/static/*
+=======
 !starinfo-app/src/main1/**/build/
 !**/src/test/**/build/
 node_modules/
@@ -9,8 +15,12 @@ src/main/resources/static/*
 
 src/main/resources/static
 
+>>>>>>> d80e1566534f4463b772354c317430220515fb47
 
-### STS ###
+src/main/resources/static
+
+
+STS
 .apt_generated
 .classpath
 .factorypath
@@ -18,9 +28,15 @@ src/main/resources/static
 .settings
 .springBeans
 .sts4-cache
+<<<<<<< HEAD
+Spring .env
+.env
+React .env
+=======
 # Spring .env
 .env
 # React .env
+>>>>>>> d80e1566534f4463b772354c317430220515fb47
 starinfo-app/.env
 starinfo-app/node_modules
 starinfo-app/.gitignore
@@ -28,24 +44,40 @@ starinfo-app/.gitignore
 /src/main/resources/teamastroneerstarinfo-firebase-adminsdk-l8qw1-62cdf88ebf.json
 bin/
 /src/main/resources/application-DB.properties
+<<<<<<< HEAD
+!starinfo-app/src/main1//bin/
+!/src/test//bin/
+=======
 !starinfo-app/src/main1/**/bin/
 !**/src/test/**/bin/
+>>>>>>> d80e1566534f4463b772354c317430220515fb47
 
-### IntelliJ IDEA ###
+IntelliJ IDEA
 .idea
 *.iws
 *.iml
 *.ipr
 out/
+<<<<<<< HEAD
+!starinfo-app/src/main1//out/
+!/src/test/**/out/
+=======
 !starinfo-app/src/main1/**/out/
 !**/src/test/**/out/
+>>>>>>> d80e1566534f4463b772354c317430220515fb47
 
-### NetBeans ###
+package-lock.json
+
+NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 
+<<<<<<< HEAD
+VS Code
+=======
 ### VS Code ###
+>>>>>>> d80e1566534f4463b772354c317430220515fb47
 .vscode/

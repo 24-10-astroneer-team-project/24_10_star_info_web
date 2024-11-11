@@ -1697,6 +1697,71 @@ dl.infos dd span:after {
     color: white;
     z-index: 200;
     border-radius: 10px;
+<<<<<<< HEAD
+    width: 400px;
+    height: 500px;
+    box-sizing: border-box;
+}
+
+/*팝업 안에 팝업 요소 감싸는 것..? */
+#planetPopup .card {
+    /* card 스타일 */
+    /*background: white;*/
+    color : black;
+    background: pink; /* 임시 공간 확인을 위함*/
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
+}
+
+/* 행성 이미지 뒤에있는 검은색 공간 */
+#planetPopup .card div {
+    text-align: center;
+    padding: 1em;
+    background-color: #000;
+    margin-bottom: 1.5em;
+}
+
+#planetPopup h2 {
+    font-size: 2em;
+    margin-bottom: 8px;
+    color: #384047;
+    line-height: 1.2;
+    margin-top: 5px;
+}
+
+#planetPopup h3 {
+    margin-top: 1.5em;
+    margin-bottom: 0;
+}
+
+#planetPopup ul {
+    padding: 0 0 0 1em;
+    margin-top: 0.85em;
+}
+
+#planetPopup li {
+    margin-bottom: 0.5em;
+}
+
+/* 행성 설명 글씨 */
+#planetPopup p {
+    color: #222;
+    font-size: 1em;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+#planetPopup img {
+    width: 150px;
+    color: white;
+}
+
+/*.popup-content {*/
+/*    text-align: center;*/
+/*}*/
+
+=======
     width: 300px;
     height: 300px;
     box-sizing: border-box;
@@ -1706,6 +1771,7 @@ dl.infos dd span:after {
     text-align: center;
 }
 
+>>>>>>> d80e1566534f4463b772354c317430220515fb47
 .popup-close-button {
     margin-top: 20px;
     padding: 10px 20px;
@@ -1719,3 +1785,56 @@ dl.infos dd span:after {
 .popup-close-button:hover {
     background-color: #ccc;
 }
+<<<<<<< HEAD
+
+/*일단은 이 윗부분까지 팝업 그대로 옮겨오는 것 성공*/
+/* 행성 이미지와 회전축 스타일만 포함 */
+.planet__atmosphere {
+    height: 190px;
+    width: 190px;
+    position: relative;
+    background: radial-gradient(circle at 30% 50%, rgba(255,255,255,.3) 0%, rgba(255,255,255,0) 65%);
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+.planet__surface {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+}
+
+.card__planet::before {
+    content: '';
+    position: absolute;
+    height: 190px;
+    z-index: -2;
+    left: 50%;
+    top: 0;
+    border-left: 1px dashed rgba(255,255,255,.25);
+}
+
+/* 행성 이미지 URL과 색상 지정 */
+:root {
+    --mercury-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/332937/mercury2.jpg);
+    --venus-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/332937/venus2.jpg);
+    --earth-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/332937/earth.jpg);
+    /* 필요한 행성들 추가 */
+}
+
+.card--mercury .planet__surface {
+    background-image: var(--mercury-image);
+}
+
+.card--venus .planet__surface {
+    background-image: var(--venus-image);
+}
+
+.card--earth .planet__surface {
+    background-image: var(--earth-image);
+}
+
+/* 필요한 행성들만 추가 */
+=======
+>>>>>>> d80e1566534f4463b772354c317430220515fb47

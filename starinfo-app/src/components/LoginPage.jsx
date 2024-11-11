@@ -17,6 +17,12 @@ function LoginPage() {
             {/* 로그아웃 버튼 */}
             <LogoutButton/>
             <Foot/>
+
+=======
+<<<<<<< HEAD
+            {/* 로그아웃 버튼 */}
+            <LogoutButton/>
+            <Foot/>
 =======
                 {/* Google 로그인 버튼 */}
                 <GoogleLoginButton />
@@ -25,6 +31,7 @@ function LoginPage() {
                 <LogoutButton />
             </div>
 >>>>>>> origin/feature-jhr
+>>>>>>> d80e1566534f4463b772354c317430220515fb47
         </div>
     );
 }
