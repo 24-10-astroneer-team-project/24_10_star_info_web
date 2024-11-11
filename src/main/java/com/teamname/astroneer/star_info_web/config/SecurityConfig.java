@@ -51,10 +51,12 @@ public class SecurityConfig {
                         authorizeRequests
                                 .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()  // FORWARD 요청은 인증 없이 허용
                                 .requestMatchers("/","/react/**", "/static/**", "/react/login", "/react/main").permitAll()  // React 경로 추가
+                                .requestMatchers("/login").anonymous() // 로그인되지 않은 사용자만 접근 가능
                                 .requestMatchers("/api/**", "/auth/**", "/oauth2/**").authenticated() // API 경로는 명확히 구분
                                 .requestMatchers("/locations", "/locations/**").permitAll()
                                 .requestMatchers("/events", "/events/**").permitAll()
-                                .requestMatchers("/js/**", "/css/**", "/img/**", "/fontawesome-free-6.5.1-web/**").permitAll()
+                                .requestMatchers("/static/**","/media/**","/js/**", "/css/**", "/img/**", "/fontawesome-free-6.5.1-web/**", "/particle.png").permitAll()
+                                .requestMatchers("/api/location/save").authenticated()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling ->
@@ -76,20 +78,6 @@ public class SecurityConfig {
                                 .invalidateHttpSession(true)
                                 .deleteCookies("JSESSIONID")
                 );
-//                .cors(withDefaults())  // 기본 CORS 설정
-//                .csrf(AbstractHttpConfigurer::disable)  // CSRF 비활성화
-//                .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers("/static/**", "/index.html", "/react/**").permitAll()  // 정적 파일과 React 경로 허용
-//                        .requestMatchers("/api/**").authenticated()  // API는 인증 필요
-//                        .anyRequest().authenticated()  // 그 외의 경로는 인증 필요
-//                )
-//                .oauth2Login(oauth2 -> oauth2
-//                        .loginPage("/auth/login")  // OAuth2 로그인 페이지 경로
-//                        .defaultSuccessUrl("/react/main")  // 로그인 성공 시 이동할 경로
-//                )
-//                .logout(logout -> logout
-//                        .logoutUrl("/logout")
-//                        .logoutSuccessUrl("/login"));  // 로그아웃 성공 시 이동할 경로
         return http.build();
     }
 

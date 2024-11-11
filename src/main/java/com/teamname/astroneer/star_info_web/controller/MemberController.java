@@ -42,6 +42,12 @@ public class MemberController {
         return null;  // 인증되지 않은 경우
     }
 
+    // 로그인 상태 확인 API
+    @GetMapping("/check-auth")
+    public boolean checkAuthenticated(Authentication authentication) {
+        return authentication != null && authentication.isAuthenticated();
+    }
+
     // 로그아웃 처리 API
     @PostMapping("/logout")
     public String logout(HttpServletRequest request) {

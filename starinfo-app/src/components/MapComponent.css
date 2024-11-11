@@ -1,0 +1,50 @@
+/* MapComponent.css */
+
+/* 지도 컨테이너 스타일 */
+.google-map-container {
+    height: 50vh; /* 뷰포트 높이의 50% 사용 */
+    width: 100%; /* 컨테이너의 전체 너비 사용 */
+    max-height: 400px; /* 최대 높이 설정 */
+    border: 1px solid #ccc; /* 경계선 스타일 */
+    border-radius: 8px; /* 경계선 둥글기 */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3); /* 그림자 효과 */
+    position: relative; /* z-index를 위한 위치 컨텍스트 설정 */
+    z-index: 0; /* 스택 순서 컨텍스트 확립 */
+}
+
+/* 검색 입력 필드 스타일 */
+.autocomplete-input {
+    box-sizing: border-box; /* 박스 사이징 방법을 변경 */
+    width: calc(50% - 24px); /* 모바일 기기를 위한 전체 너비에서 패딩 제외 */
+    height: 40px; /* 입력 필드 높이 */
+    padding: 8px 12px; /* 내부 여백 */
+    border: 2px solid #ddd; /* 경계선 스타일 */
+    border-radius: 4px; /* 경계선 둥글기 */
+    margin: 10px auto; /* 자동으로 상하 좌우 여백 설정 */
+    display: block; /* 블록 레벨 요소로 표시 */
+    font-size: 16px; /* 글꼴 크기 */
+    outline: none; /* 포커스시 외곽선 제거 */
+    position: absolute;
+    z-index: 1000;
+}
+
+/* 입력 필드에 포커스 됐을 때 스타일 */
+.autocomplete-input:focus {
+    border-color: #0056b3; /* 포커스시 경계선 색상 변경 */
+    box-shadow: 0 0 8px rgba(0,86,179,0.8); /* 포커스시 그림자 효과 */
+}
+
+/* 확인 버튼 스타일 */
+.submit-button {
+    padding: 8px 16px;
+    background-color: #4CAF50; /* 초록색 배경 */
+    color: white; /* 텍스트 색상 */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.submit-button:hover {
+    background-color: #45a049; /* 호버 시 색상 변경 */
+}

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user")  // DB의 테이블 이름과 매핑
+@Table(name = "users")  // DB의 테이블 이름과 매핑
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,11 +30,8 @@ public class Member {
     @Column(name = "google_id", nullable = false, unique = true, length = 255) // 구글 소셜 로그인 ID
     private String googleLoginId;
 
-    @Column(name = "latitude") // 선호 관측 위치 (위도)
-    private Double latitude;
-
-    @Column(name = "longitude") // 선호 관측 위치 (경도)
-    private Double longitude;
+    @Column(name = "favorite_location_id", nullable = true)  // 선호하는 위치 ID
+    private long favoriteLocationId;
 
     @Column(name = "preferred_time", length = 50) // 선호하는 관측 시간대
     private String preferredTime;
