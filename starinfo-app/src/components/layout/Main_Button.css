@@ -1,0 +1,30 @@
+.main_button {
+    bottom: 80px; /* Keep the position above the footer */
+    left: 20px;
+    padding: 15px 30px;
+    background-color: #000000; /* Dark background color */
+    color: #ffffff; /* White text color */
+    border: none;
+    border-radius: 0; /* Remove rounded corners */
+    border: 0.5px white solid;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+    z-index: 9999; /* Ensure visibility */
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    margin-top: 30%;
+    margin-left: -80%;
+
+    /* Add polygonal shape */
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+}
+
+.main_button:hover {
+    background-color: #333333; /* Slightly lighter dark color on hover */
+    transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+.main_button:active {
+    transform: scale(1.05); /* Slightly shrink on click */
+}
