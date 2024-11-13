@@ -5,8 +5,60 @@ import Foot from "../layout/Foot";
 import {drawdiagram} from './Diagram';
 import ConstellationPopup from './ConstellationPopup';
 
+import axios from 'axios';
+import useUserLocation from "../../hooks/useUserLocation";
+
+
 function StarMap() {
 
+    const [constellationData, setConstellationData] = useState(null);
+    const [error, setError] = useState(null);
+    const { location, isLoading } = useUserLocation(); // 사용자 위치와 로딩 상태를 가져옴
+
+    // 현재 날짜를 "YYYY-MM-DD" 형식으로 가져오는 함수
+    const getTodayDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더해줌
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    useEffect(() => {
+        if (isLoading) {
+            // 로딩 중일 때는 요청을 보내지 않음
+            return;
+        }
+
+        // 오늘 날짜 가져오기
+        const today = getTodayDate();
+
+        // 백엔드 API 요청 보내기
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`/constellations`, {
+                    params: {
+                        latitude: location.latitude,
+                        longitude: location.longitude,
+                        startDate: today, // 오늘 날짜로 설정
+                        endDate: today, // 현재는 오늘 날짜만 사용 추후 수정
+                    }
+                });
+                console.log('API Response:', response.data);
+                setConstellationData(response.data);
+            } catch (err) {
+                setError(err);
+                console.error('Error fetching constellation data:', err);
+            }
+        };
+
+        fetchData().then(() => {
+            console.log('데이터 요청 완료');
+        });
+    }, [location, isLoading]);
+
+
+    ////////////////
     const closePopup = () => {
         setPopupInfo({ isVisible: false, constellationId: '', position: { x: 0, y: 0 } });
     };

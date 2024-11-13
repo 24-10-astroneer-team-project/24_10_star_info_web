@@ -1,4 +1,5 @@
 // storage.js
+
 export const saveCoordinates = (latitude, longitude) => {
     localStorage.setItem('latitude', latitude);
     localStorage.setItem('longitude', longitude);
