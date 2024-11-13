@@ -1,18 +1,18 @@
 import React from 'react';
 
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import LoginPage from './components/LoginPage';
-import MainPage from './components/MainPage';
-import NotFoundPage from './components/NotFoundPage';
-import MapComponent from './components/MapComponents';
-import StarMap from "./components/StarMap/StarMap";
-import Gps from "./components/Gps"
-import Head from "./components/layout/Head";
-import Foot from "./components/layout/Foot";
-import PlanetPage from "./components/PlanetPage";
 import {AuthProvider} from "./services/AuthProvider";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import NotFoundPage from './components/NotFoundPage';
+import StarMap from "./components/StarMap/StarMap";
+import Head from "./components/layout/Head";
+import Foot from "./components/layout/Foot";
+import LoginPage from "./components/member/LoginPage";
+import PlanetPage from "./components/planet/PlanetPage";
+import MainPage from "./components/main/MainPage";
+import MapComponent from "./components/API/MapComponents";
+import Gps from "./components/StarMap/Gps";
 
 
 function App() {

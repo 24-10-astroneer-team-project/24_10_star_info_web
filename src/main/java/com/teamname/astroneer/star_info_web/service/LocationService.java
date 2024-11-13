@@ -9,6 +9,8 @@ import com.teamname.astroneer.star_info_web.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LocationService {
     @Autowired
@@ -37,5 +39,10 @@ public class LocationService {
     private boolean isValidLocation(LocationDTO locationDTO) {
         return (locationDTO.getLat() >= -90 && locationDTO.getLat() <= 90) &&
                 (locationDTO.getLng() >= -180 && locationDTO.getLng() <= 180);
+    }
+
+    // 위치 목록 조회
+    public List<Location> findLocationsByUserId(int userId) {
+        return locationRepository.findByUserId(userId);
     }
 }
