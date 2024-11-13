@@ -3,6 +3,7 @@ package com.teamname.astroneer.star_info_web.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class Member {
 
     @Id
@@ -63,5 +65,9 @@ public class Member {
     @PreUpdate
     protected void onUpdate() {
         this.updateDate = LocalDateTime.now();
+    }
+
+    public boolean isAlertEnabled() {
+        return false;
     }
 }

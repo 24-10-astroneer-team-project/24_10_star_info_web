@@ -15,3 +15,4 @@ export const useGoogleMap = (initialLocation) => {
     return { location, setLocation, handlePlaceChanged }; // setLocation 추가
 };
 
+export default useGoogleMap;
