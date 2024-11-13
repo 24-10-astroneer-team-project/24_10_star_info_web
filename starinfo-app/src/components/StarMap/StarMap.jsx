@@ -67,9 +67,9 @@ function StarMap() {
                         preserveAspectRatio="xMidYMid meet"
                         style={{
                             isolation: "isolate",
-                            width: "65%", // Set width to 100% to make it responsive
+                            width: "75%", // Set width to 100% to make it responsive
                             height: "auto",    // Maintain aspect ratio based on width
-                            margin: "80 auto",
+                            margin: "120 auto 80",
                         }}
                         xmlns="http://www.w3.org/2000/svg"
                         id="star-container"

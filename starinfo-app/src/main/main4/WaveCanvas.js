@@ -1,10 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 import { WaveGroup } from './WaveGroup';
+import Main_Button from '../../components/layout/Main_Button';
 
 function WaveCanvas() {
     const canvasRef = useRef(null);       // 물결 애니메이션 캔버스
     const starsCanvasRef = useRef(null);  // 별 배경 캔버스
     const waveGroupRef = useRef(null);
+    const handleButtonClick = () => {
+        window.location.href = 'https://www.google.com/'; // Naver로 리디렉션
+    };
 
     useEffect(() => {
         const starsCanvas = starsCanvasRef.current;
@@ -120,7 +124,9 @@ function WaveCanvas() {
         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
             <canvas ref={starsCanvasRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
             <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
+            <Main_Button onClick={handleButtonClick}/>
         </div>
+
     );
 }
 

@@ -19,11 +19,6 @@ text {
     box-shadow: 0px 0px 5px #fff;
 }
 
-.constellation {
-    animation: dash 3.5s .5s linear forwards;
-    opacity: 0.5;
-}
-
 @keyframes dash {
     100% {
         stroke-dashoffset: 0;

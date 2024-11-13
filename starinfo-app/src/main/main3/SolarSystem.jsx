@@ -1,13 +1,15 @@
 import React from 'react';
 import styles from './SolarSystem.module.scss'; // SCSS 모듈을 임포트합니다.
-import './ThirdSection.css'; // 새로 만든 CSS 파일 임포트
+import './ThirdSection.css'; // 새로운 CSS 파일 임포트
+import Main_Button from '../../components/layout/Main_Button';
 
 const SolarSystem = () => {
+    const handleButtonClick = () => {
+        window.location.href = 'https://www.google.com/'; // Naver로 리디렉션
+    };
     return (
         <div className={`${styles.solarSystemContainer} thirdSectionContainer`}>
-
-
-            <input className={`${styles.planet9} thirdSectionPlanet`} id="pluto" name="planet" type="radio" />
+            <input className={`${styles.planet9} thirdSectionPlanet`} id="pluto" name="planet" type="radio"/>
             <label className={`${styles.pluto} ${styles.menu} thirdSectionMenu`} htmlFor="pluto">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -19,7 +21,7 @@ const SolarSystem = () => {
                 </div>
             </label>
 
-            <input className={`${styles.planet8} thirdSectionPlanet`} id="neptune" name="planet" type="radio" />
+            <input className={`${styles.planet8} thirdSectionPlanet`} id="neptune" name="planet" type="radio"/>
             <label className={`${styles.neptune} ${styles.menu} thirdSectionMenu`} htmlFor="neptune">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -31,7 +33,7 @@ const SolarSystem = () => {
                 </div>
             </label>
 
-            <input className={`${styles.planet7} thirdSectionPlanet`} id="uranus" name="planet" type="radio" />
+            <input className={`${styles.planet7} thirdSectionPlanet`} id="uranus" name="planet" type="radio"/>
             <label className={`${styles.uranus} ${styles.menu} thirdSectionMenu`} htmlFor="uranus">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -43,7 +45,7 @@ const SolarSystem = () => {
                 </div>
             </label>
 
-            <input className={`${styles.planet6} thirdSectionPlanet`} id="saturn" name="planet" type="radio" />
+            <input className={`${styles.planet6} thirdSectionPlanet`} id="saturn" name="planet" type="radio"/>
             <label className={`${styles.saturn} ${styles.menu} thirdSectionMenu`} htmlFor="saturn">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -55,7 +57,7 @@ const SolarSystem = () => {
                 </div>
             </label>
 
-            <input className={`${styles.planet5} thirdSectionPlanet`} id="jupiter" name="planet" type="radio" />
+            <input className={`${styles.planet5} thirdSectionPlanet`} id="jupiter" name="planet" type="radio"/>
             <label className={`${styles.jupiter} ${styles.menu} thirdSectionMenu`} htmlFor="jupiter">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -67,7 +69,8 @@ const SolarSystem = () => {
                 </div>
             </label>
 
-            <input className={`${styles.planet4} thirdSectionPlanet`} id="mars" name="planet" type="radio" defaultChecked />
+            <input className={`${styles.planet4} thirdSectionPlanet`} id="mars" name="planet" type="radio"
+                   defaultChecked/>
             <label className={`${styles.menu} ${styles.mars} thirdSectionMenu`} htmlFor="mars">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -79,7 +82,8 @@ const SolarSystem = () => {
                 </div>
             </label>
 
-            <input className={`${styles.planet3} thirdSectionPlanet`} id="earth" name="planet" type="radio" defaultChecked />
+            <input className={`${styles.planet3} thirdSectionPlanet`} id="earth" name="planet" type="radio"
+                   defaultChecked/>
             <label className={`${styles.menu} ${styles.earth} thirdSectionMenu`} htmlFor="earth">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -91,7 +95,8 @@ const SolarSystem = () => {
                 </div>
             </label>
 
-            <input className={`${styles.planet2} thirdSectionPlanet`} id="venus" name="planet" type="radio" defaultChecked />
+            <input className={`${styles.planet2} thirdSectionPlanet`} id="venus" name="planet" type="radio"
+                   defaultChecked/>
             <label className={`${styles.menu} ${styles.venus} thirdSectionMenu`} htmlFor="venus">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -103,7 +108,8 @@ const SolarSystem = () => {
                 </div>
             </label>
 
-            <input className={`${styles.planet1} thirdSectionPlanet`} id="mercury" name="planet" type="radio" defaultChecked />
+            <input className={`${styles.planet1} thirdSectionPlanet`} id="mercury" name="planet" type="radio"
+                   defaultChecked/>
             <label className={`${styles.menu} ${styles.mercury} thirdSectionMenu`} htmlFor="mercury">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -122,7 +128,8 @@ const SolarSystem = () => {
                             <h2>Planet</h2>
                             <h1>Mercury</h1>
                             <p>
-                                태양에 가장 가까운 행성입니다. 다른 모든 행성보다 빠르게 태양을 공전하며, 이러한 이유로 로마인들은 이 행성을 발이 빠른 전령 신의 이름을 따서 명명했습니다.
+                                태양에 가장 가까운 행성입니다. 다른 모든 행성보다 빠르게 태양을 공전하며, 이러한 이유로 로마인들은 이 행성을 발이 빠른 전령 신의 이름을 따서
+                                명명했습니다.
                             </p>
                         </div>
                         <div className={`${styles.overlay} thirdSectionOverlay`}></div>
@@ -308,6 +315,7 @@ const SolarSystem = () => {
                     </div>
                 </div>
             </div>
+            <Main_Button onClick={handleButtonClick}/>
         </div>
     );
 };
