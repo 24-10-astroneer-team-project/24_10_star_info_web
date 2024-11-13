@@ -5,12 +5,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/usr/home/")
+@RequestMapping("/react/")
 public class UsrMainController {
 
     @GetMapping("main")
     public String main() {
-        System.out.println("=======================home/main 접근=========================");
-        return "main";
+        System.err.println("======================= home/main 접근=========================");
+        return "forward:/index.html";
     }
 }

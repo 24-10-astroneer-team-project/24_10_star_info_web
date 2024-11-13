@@ -1,0 +1,133 @@
+.section_padding {
+    position : relative;
+    padding: 0.2rem 5rem;
+    letter-spacing: -1px;
+
+}
+
+.footer {
+    background-color: #2d2d32;
+}
+.sb_footer{
+    display: flex;
+    flex-direction: column;
+}
+
+.sb_footer-links{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    text-align: left;
+}
+
+.sb_footer-links-div {
+    width:120px;
+    margin: 0.2rem;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    color:white;
+}
+
+.sb_footer-links-div h4:hover {
+    color:#adb5bd;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+p>a:hover {
+    color:#adb5bd;
+    transition: 0.3s;
+}
+
+
+a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.sns {
+    display: flex;
+    flex-direction: row;
+}
+.sns img {
+    width: 90%;
+}
+
+.sb_footer-links-div h4 {
+    font-size: 18px;
+    line-height: 7px;
+    margin-bottom: 0.9rem;
+}
+.sb_footer-links-div p {
+    font-size: 14px;
+    line-height: 15px;
+    margin: 0.5rem 0;
+    cursor: pointer;
+}
+
+.sb_footer-below {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+.sb_footer-below-links {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.foot_hr {
+    color:white;
+    width: 100%;
+}
+
+.sb_footer-copyright p {
+    font-size: 14px;
+    color:#ffffff;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 850px) {
+    .sb_footer-heading h1 {
+        font-size: 44px;
+        line-height: 50px;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .sb_footer-heading h1 {
+        font-size: 34px;
+        line-height: 42px;
+    }
+    .sb_footer-links div {
+        margin: 1rem 0;
+    }
+    .sb_footer-btn p {
+        font-size: 14px;
+        line-height: 20px;
+    }
+    .sb_footer-below{
+        flex-direction: column;
+        justify-content: left;
+    }
+    .sb_footer-below-links {
+        flex-direction: column;
+    }
+    .sb_footer-below-links p {
+        margin-left: 0rem;
+        margin-top: 1rem;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .sb_footer-heading h1 {
+        font-size: 27px;
+        line-height: 38px;
+    }
+}
