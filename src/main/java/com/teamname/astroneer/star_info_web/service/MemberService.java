@@ -1,10 +1,15 @@
 package com.teamname.astroneer.star_info_web.service;
 
+import com.teamname.astroneer.star_info_web.dto.LocationDTO;
 import com.teamname.astroneer.star_info_web.dto.MemberDetailDTO;
 import com.teamname.astroneer.star_info_web.entity.Location;
 import com.teamname.astroneer.star_info_web.entity.Member;
+import com.teamname.astroneer.star_info_web.mapper.LocationMapper;
+import com.teamname.astroneer.star_info_web.mapper.MemberMapper;
 import com.teamname.astroneer.star_info_web.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -18,16 +23,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final MemberRepository memberRepository;
-    private LocationService locationService;
-
-    @Autowired
-    public MemberService(MemberRepository memberRepository, LocationService locationService) {
-        this.memberRepository = memberRepository;
-        this.locationService = locationService;
-    }
+    private final LocationService locationService;
+    private final LocationMapper locationMapper;
+    private final MemberMapper memberMapper;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -65,20 +67,16 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
 
     public MemberDetailDTO getMemberDetail(long userId) {
         Optional<Member> userOptional = memberRepository.findById(userId);
+
         if (userOptional.isPresent()) {
             Member member = userOptional.get();
-            MemberDetailDTO memberDetailDTO = new MemberDetailDTO();
-            memberDetailDTO.setUserId(member.getId());
-            memberDetailDTO.setUName(member.getUName());
-            memberDetailDTO.setNickname(member.getNickname());
-            memberDetailDTO.setEmail(member.getEmail());
-            memberDetailDTO.setPreferredTime(member.getPreferredTime());
-            memberDetailDTO.setAlertEnabled(member.isAlertEnabled());
-            memberDetailDTO.setFavoriteLocationId((int) member.getFavoriteLocationId());
 
-            // 필요한 경우 사용자가 저장한 위치 목록을 추가로 조회
-            List<Location> locations = locationService.findLocationsByUserId((int) userId);
-            memberDetailDTO.setLocations(locations);
+            // 사용자가 저장한 위치 목록을 추가로 조회
+            List<Location> locations = locationService.findLocationsByUserId(userId);
+            member.setLocations(locations); // Member 객체에 위치 목록 설정
+
+            // 매퍼를 사용하여 Member -> MemberDetailDTO로 변환
+            MemberDetailDTO memberDetailDTO = memberMapper.toMemberDetailDTO(member);
 
             return memberDetailDTO;
         }
@@ -102,4 +100,20 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
         locationService.updateLocationDescription(locationId, description);
     }
 
+    public long getUserIdByLocationId(long locationId) {
+        Location location = locationService.findById(locationId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 위치 정보를 찾을 수 없습니다."));
+
+        // Location을 LocationDTO로 변환하고 DTO에서 userId를 반환
+        LocationDTO locationDTO = locationMapper.toLocationDTO(location);
+        return locationDTO.getUserId();
+    }
+
+    public Optional<Member> findByEmail(Object sub) {
+        return memberRepository.findByEmail(sub.toString());
+    }
+
+    public Optional<Member> findByGoogleLoginId(String googleLoginId) {
+        return memberRepository.findByGoogleLoginId(googleLoginId);
+    }
 }

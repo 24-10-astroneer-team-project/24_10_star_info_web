@@ -1,8 +1,8 @@
 // MapComponents.js
 
-import {useRef, useState} from 'react';
+import {useRef, useState, useEffect} from 'react';
 import {Autocomplete, GoogleMap, LoadScript, Marker} from '@react-google-maps/api';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import './MapComponent.css';
 import {sendLocationToServer} from "../../services/LocationService";
@@ -15,7 +15,41 @@ const MapComponent = () => {
     const { location, setLocation } = useGoogleMap({ lat: 37.5665, lng: 126.9780 });
     const [marker, setMarker] = useState(null);
     const autocompleteRef = useRef(null);
-    const navigate = useNavigate(); // 이름을 'history'에서 'navigate'로 변경
+    const navigate = useNavigate();
+    const locationRef = useLocation();
+    const [isSaved, setIsSaved] = useState(false);
+
+    // 상태와 위치 참조 값, 그리고 리렌더링 시 동작을 추적하기 위한 로그 추가
+    console.log('Rendering MapComponent');
+    console.log('Current isSaved state:', isSaved);
+    console.log('locationRef:', JSON.stringify(locationRef, null, 2));
+
+    useEffect(() => {
+        if (isSaved) {
+            console.log('isSaved is true, triggering toast and starting redirection');
+
+            // 먼저 토스트 알림을 띄움
+            toast.success('위치 저장 성공!', {
+                position: "top-center",
+                autoClose: 3000,
+                style: {
+                    zIndex: 9999,
+                },
+            });
+
+            // 리디렉션을 바로 실행하지 않고, 토스트 알림 후에 실행
+            setTimeout(() => {
+                if (locationRef.state?.from) {
+                    navigate(locationRef.state.from);
+                } else {
+                    navigate('/react/main');
+                }
+            }, 3000);
+
+            // 상태 초기화
+            setIsSaved(false);
+        }
+    }, [isSaved, locationRef.state, navigate]);
 
     const handlePlaceSelected = () => {
         const place = autocompleteRef.current.getPlace();
@@ -24,7 +58,8 @@ const MapComponent = () => {
             const lng = place.geometry.location.lng();
             const newLocation = { lat, lng };
             setLocation(newLocation);
-            setMarker(newLocation); // 마커 위치 업데이트
+            setMarker(newLocation);
+            console.log('New location selected:', newLocation);
         }
     };
 
@@ -32,8 +67,9 @@ const MapComponent = () => {
         const lat = event.latLng.lat();
         const lng = event.latLng.lng();
         const clickedLocation = { lat, lng };
-        setLocation(clickedLocation); // 지도의 중심 위치 업데이트
-        setMarker(clickedLocation); // 클릭한 위치에 마커 생성
+        setLocation(clickedLocation);
+        setMarker(clickedLocation);
+        console.log('Map clicked, new marker set at:', clickedLocation);
     };
 
 
@@ -44,23 +80,22 @@ const MapComponent = () => {
                 const response = await sendLocationToServer(marker);
                 console.log('Location saved:', response.data); // 성공적으로 저장된 후의 처리
 
-                toast.success('페이지 이동중..', {
+                // 저장 성공 후 토스트 알림을 표시하고 리디렉션
+                toast.success('위치 정보가 저장되었습니다. 메인 페이지로 이동합니다.', {
                     position: "top-center",
                     autoClose: 2000, // 2초 후 자동 닫힘
                     style: {
                         zIndex: 9999, // 다른 요소보다 높게 설정
                     },
+                    onClose: () => navigate('/react/main'), // 알림이 닫힐 때 리디렉션
                 });
-                // 알림이 닫힌 후 리디렉션
-                setTimeout(() => {
-                    navigate('추후 수정 예정.'); // 리디렉션할 경로
-                }, 2000);
+
             } catch (error) {
-                toast.error('위치 정보를 서버로 보내는데 실패했습니다.', {
+                toast.error('위치 정보를 서버로 보내는 데 실패했습니다.', {
                     position: "top-center",
                     autoClose: 3000,
                     style: {
-                        zIndex: 9999, // 다른 요소보다 높게 설정
+                        zIndex: 9999,
                     },
                 });
                 console.error('Error sending location to server:', error);
@@ -70,7 +105,7 @@ const MapComponent = () => {
                 position: "top-center",
                 autoClose: 3000,
                 style: {
-                    zIndex: 9999, // 다른 요소보다 높게 설정
+                    zIndex: 9999,
                 },
             });
         }
@@ -78,37 +113,29 @@ const MapComponent = () => {
 
     const saveHandleSubmit = async () => {
         if (marker) {
-            console.log('Sending location to server:', marker); // userId 없이 marker 데이터만 전송
+            console.log('Starting saveHandleSubmit with marker:', marker);
             try {
                 const response = await sendLocationToServer(marker);
-                console.log('Location saved:', response.data); // 성공적으로 저장된 후의 처리
-                // 성공 알림 표시
-                toast.success('위치 저장 성공!', {
-                    position: "top-center",
-                    autoClose: 2000, // 2초 후 자동 닫힘
-                    style: {
-                        zIndex: 9999, // 다른 요소보다 높게 설정
-                    },
-                });
-                // 알림이 닫힌 후 리디렉션
-                setTimeout(() => {
-                    navigate('/react/main'); // 리디렉션할 경로
-                }, 2000);
+                console.log('Location saved, server response:', response); // response 자체를 출력해 구조 확인
+
+                setIsSaved(true); // 저장 성공 시 상태 업데이트
+                console.log('setIsSaved called, isSaved:', isSaved);
             } catch (error) {
+                console.error('Error saving location:', error);
+
                 if (error instanceof Error && error.message === 'Unauthorized') {
                     toast.warn('관측 위치 저장은 로그인부터 해주세요.', {
                         position: "top-center",
                         autoClose: 3000,
                         style: {
-                            zIndex: 9999, // 다른 요소보다 높게 설정
+                            zIndex: 9999,
                         },
                     });
-                    // 알림이 닫힌 후 리디렉션
                     setTimeout(() => {
-                        navigate('/react/login'); // 리디렉션할 경로
-                    }, 2000);
+                        navigate('/react/login');
+                    }, 3000);
                 } else {
-                    alert('위치 정보를 서버로 보내는데 실패했습니다.');
+                    alert('위치 정보를 서버로 보내는 데 실패했습니다.');
                 }
             }
         } else {
@@ -116,7 +143,7 @@ const MapComponent = () => {
                 position: "top-center",
                 autoClose: 3000,
                 style: {
-                    zIndex: 9999, // 다른 요소보다 높게 설정
+                    zIndex: 9999,
                 },
             });
         }

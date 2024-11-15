@@ -1,25 +1,30 @@
 // MemberDetail.jsx
 
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './css/MemberDetail.css';
-import { toast, ToastContainer } from 'react-toastify'; // Toastify import
-import 'react-toastify/dist/ReactToastify.css'; // Toastify CSS import
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import LinkWithState from '../../components/LinkWithState';
 
 function MemberDetail() {
-    const { userId } = useParams(); // useParams 훅을 사용해서 URL 파라미터에서 userId 가져오기
+    const { userId } = useParams();
+    const location = useLocation(); // useLocation 훅 사용
     const [memberDetail, setMemberDetail] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [descriptions, setDescriptions] = useState({}); // 각 위치의 설명 상태 관리
+    const [descriptions, setDescriptions] = useState({});
 
     useEffect(() => {
-        // 사용자 상세 정보 가져오기
+        // 사용자가 위치 저장 후 돌아왔을 때 상태 확인
+        if (location.state?.fromSaveLocation) {
+            toast.success('위치 정보가 성공적으로 저장되었습니다!');
+        }
+
         const fetchMemberDetail = async () => {
             try {
                 const response = await axios.get(`/api/member/${userId}`);
-                console.log('API Response:', response.data);
                 setMemberDetail(response.data);
                 setLoading(false);
             } catch (err) {
@@ -31,7 +36,7 @@ function MemberDetail() {
         if (userId) {
             fetchMemberDetail();
         }
-    }, [userId]);
+    }, [userId, location.state]);
 
     if (loading) {
         return <div>로딩 중...</div>;
@@ -80,8 +85,16 @@ function MemberDetail() {
 
     return (
         <div className="member-detail">
-            <ToastContainer /> {/* ToastContainer 추가 */}
             <h2>사용자 상세 정보</h2>
+            <div>
+                <Link
+                    to="/react/map"
+                    state={{ from: location.pathname }}
+                    style={{ display: 'inline-block', marginBottom: '20px', fontWeight: 'bold', color: '#007bff' }}
+                >
+                    위치 정보 저장하러 가기
+                </Link>
+            </div>
             {memberDetail && (
                 <>
                     <p>이름: {memberDetail.uname}</p>

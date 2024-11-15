@@ -65,4 +65,7 @@ public class LocationService {
         }
     }
 
+    public Optional<Location> findById(long locationId) {
+        return locationRepository.findById(locationId);
+    }
 }

@@ -1,64 +1,67 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import './StarMap.css';
 import Head from "../layout/Head";
 import Foot from "../layout/Foot";
-import {drawdiagram} from './Diagram';
+import { drawdiagram } from './Diagram';
 import ConstellationPopup from './ConstellationPopup';
 
 import axios from 'axios';
 import useUserLocation from "../../hooks/useUserLocation";
-
+import { useAuth } from "../../services/AuthProvider";
 
 function StarMap() {
-
     const [constellationData, setConstellationData] = useState(null);
     const [error, setError] = useState(null);
-    const { location, isLoading } = useUserLocation(); // 사용자 위치와 로딩 상태를 가져옴
+    const { location, isLoading } = useUserLocation(); // useUserLocation 훅 사용
+    const { isAuthenticated, user } = useAuth(); // 로그인 상태와 사용자 정보 확인
 
     // 현재 날짜를 "YYYY-MM-DD" 형식으로 가져오는 함수
     const getTodayDate = () => {
         const today = new Date();
         const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더해줌
+        const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     };
 
+    // 별자리 데이터를 가져오는 useEffect
     useEffect(() => {
         if (isLoading) {
             // 로딩 중일 때는 요청을 보내지 않음
             return;
         }
 
-        // 오늘 날짜 가져오기
-        const today = getTodayDate();
+        if (!location) {
+            console.log("위치 정보가 설정되지 않았습니다.");
+            return;
+        }
 
-        // 백엔드 API 요청 보내기
         const fetchData = async () => {
             try {
-                const response = await axios.get(`/constellations`, {
+                const today = getTodayDate();
+                const url = `/constellations`;
+                console.log(`API 요청 경로: ${url}, 위치:`, location);
+                const response = await axios.get(url, {
                     params: {
                         latitude: location.latitude,
                         longitude: location.longitude,
-                        startDate: today, // 오늘 날짜로 설정
-                        endDate: today, // 현재는 오늘 날짜만 사용 추후 수정
-                    }
+                        startDate: today,
+                        endDate: today,
+                    },
                 });
-                console.log('API Response:', response.data);
+                console.log('별자리 데이터 응답:', response.data);
                 setConstellationData(response.data);
             } catch (err) {
                 setError(err);
-                console.error('Error fetching constellation data:', err);
+                console.error('별자리 데이터 가져오기 오류:', err);
             }
         };
 
-        fetchData().then(() => {
-            console.log('데이터 요청 완료');
-        });
+        fetchData();
     }, [location, isLoading]);
 
+    // 아래는 완전 화면
 
-    ////////////////
     const closePopup = () => {
         setPopupInfo({ isVisible: false, constellationId: '', position: { x: 0, y: 0 } });
     };
@@ -104,7 +107,6 @@ function StarMap() {
             return () => clearTimeout(timer);
         }
     }, [popupInfo.isVisible, newSelection]);
-
 
     return (
         <>

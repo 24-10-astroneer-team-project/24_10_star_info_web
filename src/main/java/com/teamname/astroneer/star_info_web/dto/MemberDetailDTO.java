@@ -4,6 +4,7 @@ import com.teamname.astroneer.star_info_web.entity.Location;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -15,6 +16,8 @@ public class MemberDetailDTO {
     private String email;
     private String preferredTime;
     private boolean alertEnabled;
-    private Integer favoriteLocationId;
+    private Long favoriteLocationId;
     private List<Location> locations;
+    private LocalDateTime updateDate;
+    private String googleLoginId;
 }

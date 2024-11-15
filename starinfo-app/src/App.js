@@ -1,8 +1,7 @@
 import React from 'react';
-
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import {AuthProvider} from "./services/AuthProvider";
-import {ToastContainer} from "react-toastify";
+import { BrowserRouter as Router, Route, Routes, Link, useLocation } from 'react-router-dom';
+import { AuthProvider } from "./services/AuthProvider";
+import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import NotFoundPage from './components/NotFoundPage';
 import StarMap from "./components/StarMap/StarMap";
@@ -15,7 +14,6 @@ import MapComponent from "./components/API/MapComponents";
 import Gps from "./components/StarMap/Gps";
 import MemberDetail from "./components/member/MemberDetail";
 import PrivateRoute from "./components/member/PrivateRoute";
-
 
 function App() {
     return (
@@ -37,14 +35,14 @@ function App() {
                         }
                     /> {/* 유저 상세 보기 페이지 라우팅 (보호된 경로) */}
                     <Route path="/react/head" element={<Head/>}/> {/* 헤더 페이지로 라우팅 */}
-                    <Route path="/react/foot" element={<Foot/>}/> {/* 헤더 페이지로 라우팅 */}
+                    <Route path="/react/foot" element={<Foot/>}/> {/* 푸터 페이지로 라우팅 */}
                     <Route path="*" element={<NotFoundPage/>}/> {/* 404 처리 */}
                 </Routes>
+
             </Router>
             <ToastContainer />
         </AuthProvider>
     );
 }
-
 
 export default App;

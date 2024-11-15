@@ -8,17 +8,16 @@ const AuthContext = createContext();
 
 // AuthProvider 컴포넌트 정의
 export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [user, setUser] = useState(null); // 사용자 정보 상태 추가
+    const [isAuthenticated, setIsAuthenticated] = useState(undefined); // 초기값 undefined로 설정
+    const [user, setUser] = useState(null);
+    const [isAuthLoading, setIsAuthLoading] = useState(true);
 
-    // 로그인 상태 확인 (백엔드와 연동)
     useEffect(() => {
-        // 페이지 로드 시 로그인 상태 확인
         axios.get("/api/member/me")
             .then(response => {
                 if (response.data) {
                     setIsAuthenticated(true);
-                    setUser(response.data); // 사용자 정보 설정
+                    setUser(response.data);
                     console.log("User data set:", response.data);
                 } else {
                     setIsAuthenticated(false);
@@ -30,8 +29,12 @@ export const AuthProvider = ({ children }) => {
                 setIsAuthenticated(false);
                 setUser(null);
                 console.log("Failed to fetch user data.");
+            })
+            .finally(() => {
+                setIsAuthLoading(false); // 인증 상태 확인 완료 후 로딩 상태 변경
             });
     }, []);
+
 
     // 로그인 함수 (백엔드와 연동)
     const login = async (credentials) => {
@@ -58,7 +61,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, user, isAuthLoading, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
