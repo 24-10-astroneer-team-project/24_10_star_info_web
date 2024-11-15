@@ -14,6 +14,7 @@ import MainPage from "./components/main/MainPage";
 import MapComponent from "./components/API/MapComponents";
 import Gps from "./components/StarMap/Gps";
 import MemberDetail from "./components/member/MemberDetail";
+import PrivateRoute from "./components/member/PrivateRoute";
 
 
 function App() {
@@ -27,7 +28,14 @@ function App() {
                     <Route path="/react/gps" element={<Gps/>}/> {/* 헤더 페이지로 라우팅 */}
                     <Route path="/react/starmap" element={<StarMap/>}/>
                     <Route path="/react/planet" element={<PlanetPage/>}/>
-                    <Route path="/react/member/:userId" element={<MemberDetail />} /> {/* 유저 상세 보기 페이지 라우팅 */}
+                    <Route
+                        path="/react/member/:userId"
+                        element={
+                            <PrivateRoute>
+                                <MemberDetail />
+                            </PrivateRoute>
+                        }
+                    /> {/* 유저 상세 보기 페이지 라우팅 (보호된 경로) */}
                     <Route path="/react/head" element={<Head/>}/> {/* 헤더 페이지로 라우팅 */}
                     <Route path="/react/foot" element={<Foot/>}/> {/* 헤더 페이지로 라우팅 */}
                     <Route path="*" element={<NotFoundPage/>}/> {/* 404 처리 */}

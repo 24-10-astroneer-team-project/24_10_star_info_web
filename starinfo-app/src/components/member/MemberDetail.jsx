@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './css/MemberDetail.css';
+import { toast, ToastContainer } from 'react-toastify'; // Toastify import
+import 'react-toastify/dist/ReactToastify.css'; // Toastify CSS import
 
 function MemberDetail() {
     const { userId } = useParams(); // useParams 훅을 사용해서 URL 파라미터에서 userId 가져오기
@@ -42,10 +44,10 @@ function MemberDetail() {
     const handleUpdateFavoriteLocation = async (locationId) => {
         try {
             await axios.post(`/api/member/${userId}/favorite-location/${locationId}`);
-            alert('즐겨찾기 위치가 업데이트되었습니다.');
+            toast.success('즐겨찾기 위치가 업데이트되었습니다.'); // 토스트 알림 성공 메시지
         } catch (err) {
             console.error('Error updating favorite location:', err);
-            alert('즐겨찾기 위치 업데이트에 실패했습니다.');
+            toast.error('즐겨찾기 위치 업데이트에 실패했습니다.'); // 토스트 알림 에러 메시지
         }
     };
 
@@ -55,7 +57,7 @@ function MemberDetail() {
             await axios.patch(`/api/member/location/${locationId}/description`, {
                 description: description,
             });
-            alert('위치 설명이 업데이트되었습니다.');
+            toast.success('위치 설명이 업데이트되었습니다.'); // 토스트 알림 성공 메시지
             setDescriptions((prevDescriptions) => ({
                 ...prevDescriptions,
                 [locationId]: '', // 설명 입력 필드를 초기화
@@ -65,7 +67,7 @@ function MemberDetail() {
             setMemberDetail(response.data);
         } catch (err) {
             console.error('Error updating location description:', err);
-            alert('위치 설명 업데이트에 실패했습니다.');
+            toast.error('위치 설명 업데이트에 실패했습니다.'); // 토스트 알림 에러 메시지
         }
     };
 
@@ -78,6 +80,7 @@ function MemberDetail() {
 
     return (
         <div className="member-detail">
+            <ToastContainer /> {/* ToastContainer 추가 */}
             <h2>사용자 상세 정보</h2>
             {memberDetail && (
                 <>
