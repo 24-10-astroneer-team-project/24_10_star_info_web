@@ -65,6 +65,6 @@ public class CustomOAuth2User implements OAuth2User, UserDetails {
         return member.getEmail();
     }
 
-    public int getUserId() { return member.getId();
+    public long getUserId() { return member.getId();
     }
 }

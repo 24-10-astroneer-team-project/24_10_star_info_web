@@ -9,8 +9,8 @@ import java.util.List;
 @Getter
 @Setter
 public class MemberDetailDTO {
-    private int userId;
-    private String userName;
+    private long userId;
+    private String uName;
     private String nickname;
     private String email;
     private String preferredTime;

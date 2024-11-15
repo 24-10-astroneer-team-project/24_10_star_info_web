@@ -19,8 +19,13 @@ import java.io.BufferedReader;
 @RestController
 @RequestMapping("/api/location")
 public class LocationController {
+
+    private final LocationService locationService;
+
     @Autowired
-    private LocationService locationService;
+    public LocationController(LocationService locationService) {
+        this.locationService = locationService;
+    }
 
     @PostMapping("/save")
     public ResponseEntity<?> saveUserLocation(@RequestBody LocationDTO locationDTO, @AuthenticationPrincipal CustomOAuth2User customOAuth2User) {

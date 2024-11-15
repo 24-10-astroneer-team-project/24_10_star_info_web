@@ -20,10 +20,14 @@ import java.util.Optional;
 @Service
 public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
+    private final MemberRepository memberRepository;
     private LocationService locationService;
+
+    @Autowired
+    public MemberService(MemberRepository memberRepository, LocationService locationService) {
+        this.memberRepository = memberRepository;
+        this.locationService = locationService;
+    }
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -39,14 +43,12 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
         Member member;
         if (memberOptional.isPresent()) {
             member = memberOptional.get();
-            member.setEmail(email);
-            member.setUName(name);
         } else {
             member = new Member();
             member.setGoogleLoginId(googleId);
-            member.setEmail(email);
-            member.setUName(name);
         }
+        member.setEmail(email);
+        member.setUName(name);
         memberRepository.save(member);
 
         return new DefaultOAuth2User(
@@ -61,13 +63,13 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
         return memberRepository.findByEmail(email).orElse(null);
     }
 
-    public MemberDetailDTO getMemberDetail(int userId) {
+    public MemberDetailDTO getMemberDetail(long userId) {
         Optional<Member> userOptional = memberRepository.findById(userId);
         if (userOptional.isPresent()) {
             Member member = userOptional.get();
             MemberDetailDTO memberDetailDTO = new MemberDetailDTO();
             memberDetailDTO.setUserId(member.getId());
-            memberDetailDTO.setUserName(member.getUName());
+            memberDetailDTO.setUName(member.getUName());
             memberDetailDTO.setNickname(member.getNickname());
             memberDetailDTO.setEmail(member.getEmail());
             memberDetailDTO.setPreferredTime(member.getPreferredTime());
@@ -75,7 +77,7 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
             memberDetailDTO.setFavoriteLocationId((int) member.getFavoriteLocationId());
 
             // 필요한 경우 사용자가 저장한 위치 목록을 추가로 조회
-            List<Location> locations = locationService.findLocationsByUserId(userId);
+            List<Location> locations = locationService.findLocationsByUserId((int) userId);
             memberDetailDTO.setLocations(locations);
 
             return memberDetailDTO;
@@ -83,6 +85,21 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
         return null;
     }
 
-    public void updateFavoriteLocation(int userId, int locationId) {
+    // 즐겨찾기 위치 설정
+    public void updateFavoriteLocation(long userId, long locationId) {
+        Optional<Member> memberOptional = memberRepository.findById(userId);
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+            member.setFavoriteLocationId(locationId);  // 즐겨찾기 위치 설정
+            memberRepository.save(member);
+        } else {
+            throw new IllegalArgumentException("User not found");
+        }
     }
+
+    // 위치 설명 업데이트
+    public void updateLocationDescription(long locationId, String description) {
+        locationService.updateLocationDescription(locationId, description);
+    }
+
 }

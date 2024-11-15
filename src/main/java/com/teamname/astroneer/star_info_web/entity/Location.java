@@ -14,7 +14,7 @@ public class Location {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;  // id의 타입을 Long으로 변경
+    private long id;  // id의 타입을 Long으로 변경
 
     @Column(nullable = false)
     private double latitude;  // 위도

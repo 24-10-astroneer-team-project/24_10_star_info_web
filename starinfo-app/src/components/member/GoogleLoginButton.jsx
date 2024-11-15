@@ -1,6 +1,7 @@
+// GoogleLoginButton.jsx
 
 import React from "react";
-import "./GoogleLoginButton.css";
+import "./css/GoogleLoginButton.css";
 import {motion} from "framer-motion";
 
 const GoogleLoginButton = () => {

@@ -18,7 +18,7 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // Primary Key 자동 생성
     @Column(name = "user_id")
-    private int id;
+    private long id;
 
     @Column(name = "u_name", nullable = false, length = 100) // 사용자 이름
     private String uName;

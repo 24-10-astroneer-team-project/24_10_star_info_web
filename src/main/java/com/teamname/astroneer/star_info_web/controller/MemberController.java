@@ -17,15 +17,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/member")
 public class MemberController {
 
-    @Autowired
-    private MemberService memberService;
+    private final MemberService memberService;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
+    }
 
     // OAuth2 로그인 후 사용자 정보 확인 API
     @GetMapping("/me")
@@ -43,7 +46,7 @@ public class MemberController {
 
     // 사용자 상세 정보 조회
     @GetMapping("/{userId}")
-    public ResponseEntity<MemberDetailDTO> getUserDetail(@PathVariable int userId) {
+    public ResponseEntity<MemberDetailDTO> getUserDetail(@PathVariable long userId) {
         MemberDetailDTO userDetail = memberService.getMemberDetail(userId);
         if (userDetail == null) {
             return ResponseEntity.notFound().build();
@@ -54,10 +57,23 @@ public class MemberController {
     // 즐겨찾기 위치 설정
     @PostMapping("/{userId}/favorite-location/{locationId}")
     public ResponseEntity<String> updateFavoriteLocation(
-            @PathVariable int userId,
-            @PathVariable int locationId) {
+            @PathVariable long userId,
+            @PathVariable long locationId) {
         memberService.updateFavoriteLocation(userId, locationId);
         return ResponseEntity.ok("즐겨찾기 위치가 업데이트되었습니다.");
+    }
+
+    // 위치 설명 업데이트
+    @PatchMapping("/location/{locationId}/description")
+    public ResponseEntity<String> updateLocationDescription(
+            @PathVariable long locationId,
+            @RequestBody Map<String, String> body) {
+        String description = body.get("description");
+
+        System.out.println("Received description: " + description);
+
+        memberService.updateLocationDescription(locationId, description);
+        return ResponseEntity.ok("위치 설명이 업데이트되었습니다.");
     }
 
     // 로그인 상태 확인 API
@@ -78,6 +94,6 @@ public class MemberController {
         // SecurityContext도 초기화 (선택사항)
         SecurityContextHolder.clearContext();
 
-        return "로그아웃 성공";
+        return "dd";
     }
 }
