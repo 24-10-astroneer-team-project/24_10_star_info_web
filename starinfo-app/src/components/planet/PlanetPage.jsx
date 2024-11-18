@@ -4,21 +4,47 @@ import SolarSystem from './SolarSystem';
 import './Planet.css';
 
 const planets = [
-    { id: '1', name: 'Mercury', diameter: '3,031.67 mi', moons: 'none', desc: 'Mercury is the closest planet to the Sun. Due to its proximity, it\'s not easily seen except during twilight. For every two orbits of the Sun, Mercury completes three rotations about its axis. Up until 1965 it was thought that the same side of Mercury constantly faced the Sun.', url: 'img/mercury.jpg' },
-    { id: '2', name: 'Venus', diameter: '7,521 mi', moons: 'none', desc: 'Venus is the second planet from the Sun and is the second brightest object in the night sky after the Moon. Venus is the second largest terrestrial planet and is sometimes referred to as the Earth’s sister planet due the their similar size and mass.', url: 'img/venus.jpg' },
-    { id: '3', name: 'Earth', diameter: '7,917.5 mi', moons: '1', desc: 'Earth is the third planet from the Sun and is the largest of the terrestrial planets. The Earth is the only planet in our solar system not to be named after a Greek or Roman deity. The Earth was formed approximately 4.54 billion years ago and is the only known planet to support life.', url: 'img/earth.jpg' },
-    { id: '4', name: 'Mars', diameter: '4,212 mi', moons: '2', desc: 'The fourth planet from the Sun and the second smallest planet in the solar system. Mars is often described as the "Red Planet" due to its reddish appearance. It\'s a terrestrial planet with a thin atmosphere composed primarily of carbon dioxide.', url: 'img/mars.jpg' },
-    { id: '5', name: 'Jupiter', diameter: '86,881.4 mi', moons: '79', desc: 'The planet Jupiter is the fifth planet out from the Sun, and is two and a half times more massive than all the other planets in the solar system combined. It is made primarily of gases and is therefore known as a "gas giant".', url: 'img/jupiter.jpg' },
-    { id: '6', name: 'Saturn', diameter: '72,367.4 mi', moons: '62', desc: 'Saturn is the sixth planet from the Sun and the most distant that can be seen with the naked eye. Saturn is the second largest planet and is best known for its fabulous ring system that was first observed in 1610 by the astronomer Galileo Galilei.', url: 'img/saturn.jpg' },
-    { id: '7', name: 'Uranus', diameter: '31,518 mi', moons: '27', desc: 'Uranus is the seventh planet from the Sun. While being visible to the naked eye, it was not recognised as a planet due to its dimness and slow orbit. Uranus became the first planet discovered with the use of a telescope.', url: 'img/uranus.jpg' },
-    { id: '8', name: 'Neptune', diameter: '30,599 mi', moons: '14', desc: 'Neptune is the eighth planet from the Sun making it the most distant in the solar system. This gas giant planet may have formed much closer to the Sun in early solar system history before migrating to its present position.', url: 'img/neptune.jpg' }
+    { id: '1', name: 'Mercury', diameter: '3,031.67 mi', moons: 'none', desc: 'Mercury is the closest planet to the Sun. Due to its proximity, it\'s not easily seen except during twilight. For every two orbits of the Sun, Mercury completes three rotations about its axis. Up until 1965 it was thought that the same side of Mercury constantly faced the Sun.', url: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/332937/mercury2.jpg', color: '#999999', tilt: '0.034deg' },
+    { id: '2', name: 'Venus', diameter: '7,521 mi', moons: 'none', desc: 'Venus is the second planet from the Sun and is the second brightest object in the night sky after the Moon. Venus is the second largest terrestrial planet and is sometimes referred to as the Earth’s sister planet due the their similar size and mass.', url: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/332937/venus2.jpg', color: '#e8cda2', tilt: '177.3deg' },
+    { id: '3', name: 'Earth', diameter: '7,917.5 mi', moons: '1', desc: 'Earth is the third planet from the Sun and is the largest of the terrestrial planets. The Earth is the only planet in our solar system not to be named after a Greek or Roman deity. The Earth was formed approximately 4.54 billion years ago and is the only known planet to support life.', url: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/332937/earth.jpg', color: '#b3caff', tilt: '23.26deg' },
+    { id: '4', name: 'Mars', diameter: '4,212 mi', moons: '2', desc: 'The fourth planet from the Sun and the second smallest planet in the solar system. Mars is often described as the "Red Planet" due to its reddish appearance. It\'s a terrestrial planet with a thin atmosphere composed primarily of carbon dioxide.', url: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/332937/mars.jpg', color: '#c07158', tilt: '25.2deg' },
+    { id: '5', name: 'Jupiter', diameter: '86,881.4 mi', moons: '79', desc: 'The planet Jupiter is the fifth planet out from the Sun, and is two and a half times more massive than all the other planets in the solar system combined. It is made primarily of gases and is therefore known as a "gas giant".', url: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/332937/jupiter.jpg', color: '#c9b5a4', tilt: '3.1deg' },
+    { id: '6', name: 'Saturn', diameter: '72,367.4 mi', moons: '62', desc: 'Saturn is the sixth planet from the Sun and the most distant that can be seen with the naked eye. Saturn is the second largest planet and is best known for its fabulous ring system that was first observed in 1610 by the astronomer Galileo Galilei.', url: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/332937/saturn.jpg', color: '#f0e2c4', tilt: '26.7deg' },
+    { id: '7', name: 'Uranus', diameter: '31,518 mi', moons: '27', desc: 'Uranus is the seventh planet from the Sun. While being visible to the naked eye, it was not recognised as a planet due to its dimness and slow orbit. Uranus became the first planet discovered with the use of a telescope.', url: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/332937/uranus2.jpg', color: '#b8d8e1', tilt: '97.8deg' },
+    { id: '8', name: 'Neptune', diameter: '30,599 mi', moons: '14', desc: 'Neptune is the eighth planet from the Sun making it the most distant in the solar system. This gas giant planet may have formed much closer to the Sun in early solar system history before migrating to its present position.', url: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/332937/neptune.jpg', color: '#5e73bb', tilt: '28.3deg' }
 ];
 
 // PlanetCard 컴포넌트 정의 (카드 형태의 정보 표시)
-const PlanetCard = ({ name, diameter, moons, desc, url }) => (
+const PlanetCard = ({ name, diameter, moons, desc, url, color, tilt }) => (
     <div className="card">
-        <div>
-            <img src={url} alt={`${name} image`} />
+        <div className="card__planet">
+            {/* 행성 축 */}
+            <div
+                className="planet-axis"
+                style={{
+                    transform: `rotate(${tilt})`, // 축 기울기
+                    borderLeft: `1px dashed ${color}`,
+                    height: '100%', // 부모와 동일한 높이
+                }}
+            />
+            {/* 행성 대기 */}
+            <div
+                className="planet__atmosphere"
+                style={{
+                    boxShadow: `inset 10px 0px 12px -2px rgba(255, 255, 255, 0.2), inset -30px 0px 50px 0px black, -5px 0px 10px -4px ${color}`,
+                }}
+            >
+                {/* 행성 표면 */}
+                <div
+                    className="planet__surface"
+                    style={{
+                        backgroundImage: `url(${url})`,
+                        transform: 'scale(1.2)', // 크기 조정
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'left center', // 가로 이미지의 왼쪽 활용
+                    }}
+                />
+            </div>
         </div>
         <h2>{name}</h2>
         <p>{desc}</p>
@@ -197,20 +223,11 @@ const PlanetPage = () => {
                             moons={selectedPlanet.moons}
                             desc={selectedPlanet.desc}
                             url={selectedPlanet.url}
+                            tilt={selectedPlanet.tilt}
+                            color={selectedPlanet.color}
+
                         />
                         {/*<button className="popup-close-button" onClick={closePlanetPopup}>닫기</button>*/}
-                    </div>
-                </div>
-            )}
-            {/* 팝업 창 조건부 렌더링 */}
-            {isPlanetPopupOpen && (
-                <div className="planet-popup-bc" onClick={closePlanetPopup}>
-                    <div className="planet-popup" onClick={(e) => e.stopPropagation()}>
-                        <div className="popup-content">
-                            <h2>{solarSystemClass} 정보</h2>
-                            <p>{solarSystemClass}에 대한 자세한 내용을 여기에 표시합니다.</p>
-                            <button className="popup-close-button" onClick={closePlanetPopup}>닫기</button>
-                        </div>
                     </div>
                 </div>
             )}

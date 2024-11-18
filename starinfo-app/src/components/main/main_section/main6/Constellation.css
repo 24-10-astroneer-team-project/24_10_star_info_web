@@ -1,0 +1,19 @@
+/* 5번째 섹션 컨테이너 */
+.rotating-polygon-section {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: black; /* 배경을 검은색으로 설정 */
+    z-index: 0;
+}
+
+/* 캔버스 배경 역할 */
+.rotating-polygon-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* 다른 요소보다 뒤에 위치 */
+}
