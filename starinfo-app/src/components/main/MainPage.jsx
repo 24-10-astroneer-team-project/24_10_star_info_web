@@ -1,11 +1,12 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './MainPage.css';
 import stylesFirst from './main_section/main1/firstSection.module.css';
 import WeatherPage from "./main_section/main2/WeatherPage";
 import styleThird from './main_section/main3/ThirdSection.css';
 import SolarSystem_main from "./main_section/main3/SolarSystem_main";
 import WaveCanvas from "./main_section/main4/WaveCanvas";
-import ConstellationSection from "./main_section/main5/ConstellationSection";
+import MoonPhase from "./main_section/main5/MoonPhase";
+import RotatingPolygonSection from "./main_section/main6/Constellation";
 import Head from "../layout/Head";
 import Foot from "../layout/Foot";
 
@@ -71,8 +72,12 @@ function MainPage() {
                     <div ref={(el) => (sections.current[3] = el)} style={{ height: '100vh', backgroundColor: 'black' }}>
                         <WaveCanvas />
                     </div>
-                    <div ref={(el) => (sections.current[4] = el)} style={{ height: '100vh', position: 'relative' }}>
-                        <ConstellationSection />
+                    {/* MoonPhase 섹션 */}
+                    <div ref={(el) => (sections.current[4] = el)} style={{ height: '100vh', backgroundColor: 'black' }}>
+                        <MoonPhase />
+                    </div>
+                    <div ref={(el) => (sections.current[5] = el)} style={{ height: '100vh', position: 'relative' }}>
+                        <RotatingPolygonSection />
                         {/* 푸터는 마지막 섹션 하단에 고정 */}
                         <div style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                             <Foot />
