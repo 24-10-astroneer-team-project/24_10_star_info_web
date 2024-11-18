@@ -14,6 +14,7 @@ import MapComponent from "./components/API/MapComponents";
 import Gps from "./components/StarMap/Gps";
 import MemberDetail from "./components/member/MemberDetail";
 import PrivateRoute from "./components/member/PrivateRoute";
+// import LoadingSpinner from "./components/ui/LoadingSpinner";
 
 function App() {
     return (
@@ -37,6 +38,7 @@ function App() {
                     <Route path="/react/head" element={<Head/>}/> {/* 헤더 페이지로 라우팅 */}
                     <Route path="/react/foot" element={<Foot/>}/> {/* 푸터 페이지로 라우팅 */}
                     <Route path="*" element={<NotFoundPage/>}/> {/* 404 처리 */}
+                    {/*<Route path="/Loding" element={<LoadingSpinner />}/> /!*임시 로딩 페이지*!/*/}
                 </Routes>
 
             </Router>

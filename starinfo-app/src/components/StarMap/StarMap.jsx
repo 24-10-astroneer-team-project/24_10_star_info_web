@@ -62,7 +62,7 @@ function StarMap() {
                         latitude: location.latitude,
                         longitude: location.longitude,
                         startDate: today,
-                        endDate: today, //oneMonthLater,
+                        endDate: oneMonthLater, //today,
                         // 한달 요청으로 바꾸려면 위의 endDate를 바꾸세요.
                     },
                 });
