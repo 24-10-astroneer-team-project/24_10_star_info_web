@@ -1,10 +1,15 @@
 package com.teamname.astroneer.star_info_web.service;
 
+import com.teamname.astroneer.star_info_web.dto.LocationDTO;
 import com.teamname.astroneer.star_info_web.dto.MemberDetailDTO;
 import com.teamname.astroneer.star_info_web.entity.Location;
 import com.teamname.astroneer.star_info_web.entity.Member;
+import com.teamname.astroneer.star_info_web.mapper.LocationMapper;
+import com.teamname.astroneer.star_info_web.mapper.MemberMapper;
 import com.teamname.astroneer.star_info_web.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -18,12 +23,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
-    private LocationService locationService;
+    private final MemberRepository memberRepository;
+    private final LocationService locationService;
+    private final LocationMapper locationMapper;
+    private final MemberMapper memberMapper;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -39,14 +45,12 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
         Member member;
         if (memberOptional.isPresent()) {
             member = memberOptional.get();
-            member.setEmail(email);
-            member.setUName(name);
         } else {
             member = new Member();
             member.setGoogleLoginId(googleId);
-            member.setEmail(email);
-            member.setUName(name);
         }
+        member.setEmail(email);
+        member.setUName(name);
         memberRepository.save(member);
 
         return new DefaultOAuth2User(
@@ -61,28 +65,55 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
         return memberRepository.findByEmail(email).orElse(null);
     }
 
-    public MemberDetailDTO getMemberDetail(int userId) {
+    public MemberDetailDTO getMemberDetail(long userId) {
         Optional<Member> userOptional = memberRepository.findById(userId);
+
         if (userOptional.isPresent()) {
             Member member = userOptional.get();
-            MemberDetailDTO memberDetailDTO = new MemberDetailDTO();
-            memberDetailDTO.setUserId(member.getId());
-            memberDetailDTO.setUserName(member.getUName());
-            memberDetailDTO.setNickname(member.getNickname());
-            memberDetailDTO.setEmail(member.getEmail());
-            memberDetailDTO.setPreferredTime(member.getPreferredTime());
-            memberDetailDTO.setAlertEnabled(member.isAlertEnabled());
-            memberDetailDTO.setFavoriteLocationId((int) member.getFavoriteLocationId());
 
-            // 필요한 경우 사용자가 저장한 위치 목록을 추가로 조회
+            // 사용자가 저장한 위치 목록을 추가로 조회
             List<Location> locations = locationService.findLocationsByUserId(userId);
-            memberDetailDTO.setLocations(locations);
+            member.setLocations(locations); // Member 객체에 위치 목록 설정
+
+            // 매퍼를 사용하여 Member -> MemberDetailDTO로 변환
+            MemberDetailDTO memberDetailDTO = memberMapper.toMemberDetailDTO(member);
 
             return memberDetailDTO;
         }
         return null;
     }
 
-    public void updateFavoriteLocation(int userId, int locationId) {
+    // 즐겨찾기 위치 설정
+    public void updateFavoriteLocation(long userId, long locationId) {
+        Optional<Member> memberOptional = memberRepository.findById(userId);
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+            member.setFavoriteLocationId(locationId);  // 즐겨찾기 위치 설정
+            memberRepository.save(member);
+        } else {
+            throw new IllegalArgumentException("User not found");
+        }
+    }
+
+    // 위치 설명 업데이트
+    public void updateLocationDescription(long locationId, String description) {
+        locationService.updateLocationDescription(locationId, description);
+    }
+
+    public long getUserIdByLocationId(long locationId) {
+        Location location = locationService.findById(locationId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 위치 정보를 찾을 수 없습니다."));
+
+        // Location을 LocationDTO로 변환하고 DTO에서 userId를 반환
+        LocationDTO locationDTO = locationMapper.toLocationDTO(location);
+        return locationDTO.getUserId();
+    }
+
+    public Optional<Member> findByEmail(Object sub) {
+        return memberRepository.findByEmail(sub.toString());
+    }
+
+    public Optional<Member> findByGoogleLoginId(String googleLoginId) {
+        return memberRepository.findByGoogleLoginId(googleLoginId);
     }
 }
