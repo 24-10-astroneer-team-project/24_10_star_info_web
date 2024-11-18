@@ -10,7 +10,7 @@ build/
 
 # Node 모듈과 정적 파일들
 node_modules/
-src/main/resources/static/*a
+src/main/resources/static/*
 
 # STS 관련 파일들
 .apt_generated

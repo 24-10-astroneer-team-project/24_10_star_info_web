@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class ConstellationService {
 
-    private final RestTemplate restTemplate = new RestTemplate();;
+    private final RestTemplate restTemplate;
 
     public String getConstellationData(double latitude, double longitude, String startDate, String endDate) {
         // 외부 API 호출을 위한 URL 생성
@@ -20,7 +20,7 @@ public class ConstellationService {
                 latitude, longitude, startDate, endDate
         );
 
-        log.info("Request URL: {}", url);  // 요청 URL 로그 출력
+        log.debug("Request URL: {}", url);  // 요청 URL 로그 출력
 
         try {
             // RestTemplate을 사용해서 GET 요청
