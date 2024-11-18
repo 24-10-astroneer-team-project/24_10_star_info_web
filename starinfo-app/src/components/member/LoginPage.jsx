@@ -1,3 +1,5 @@
+// LoginPage.jsx
+
 import React, {useEffect} from "react";
 import GoogleLoginButton from "./GoogleLoginButton";
 import { useNavigate } from 'react-router-dom';

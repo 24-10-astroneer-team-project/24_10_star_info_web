@@ -1,18 +1,17 @@
 package com.teamname.astroneer.star_info_web.astroEvent.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class ConstellationService {
 
     private final RestTemplate restTemplate;
-
-    public ConstellationService() {
-        this.restTemplate = new RestTemplate();  // RestTemplate 초기화
-    }
 
     public String getConstellationData(double latitude, double longitude, String startDate, String endDate) {
         // 외부 API 호출을 위한 URL 생성
@@ -21,7 +20,7 @@ public class ConstellationService {
                 latitude, longitude, startDate, endDate
         );
 
-        log.info("Request URL: {}", url);  // 요청 URL 로그 출력
+        log.debug("Request URL: {}", url);  // 요청 URL 로그 출력
 
         try {
             // RestTemplate을 사용해서 GET 요청
