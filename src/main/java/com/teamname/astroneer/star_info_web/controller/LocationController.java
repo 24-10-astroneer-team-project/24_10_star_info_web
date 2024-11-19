@@ -5,6 +5,7 @@ import com.teamname.astroneer.star_info_web.exception.InvalidLocationException;
 import com.teamname.astroneer.star_info_web.security.CustomOAuth2User;
 import com.teamname.astroneer.star_info_web.service.LocationService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,10 @@ import java.io.BufferedReader;
 
 @RestController
 @RequestMapping("/api/location")
+@RequiredArgsConstructor
 public class LocationController {
-    @Autowired
-    private LocationService locationService;
+
+    private final LocationService locationService;
 
     @PostMapping("/save")
     public ResponseEntity<?> saveUserLocation(@RequestBody LocationDTO locationDTO, @AuthenticationPrincipal CustomOAuth2User customOAuth2User) {

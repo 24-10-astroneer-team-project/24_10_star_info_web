@@ -3,20 +3,23 @@ package com.teamname.astroneer.star_info_web.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")  // DB의 테이블 이름과 매핑
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // Primary Key 자동 생성
     @Column(name = "user_id")
-    private int id;
+    private long id;
 
     @Column(name = "u_name", nullable = false, length = 100) // 사용자 이름
     private String uName;
@@ -45,7 +48,7 @@ public class Member {
     @Column(name = "update_date", nullable = false) // 업데이트 시각
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    @Column(name = "auth_level", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1") //권한레벨
+    @Column(name = "auth_level", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1") // 권한 레벨
     private int authLevel;
 
     @Column(name = "del_status", nullable = false) // 탈퇴 여부
@@ -53,6 +56,9 @@ public class Member {
 
     @Column(name = "del_date") // 탈퇴 날짜
     private LocalDateTime delDate;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY) // Member와 Location의 관계 설정
+    private List<Location> locations;
 
     @PrePersist
     protected void onCreate() {
@@ -63,5 +69,9 @@ public class Member {
     @PreUpdate
     protected void onUpdate() {
         this.updateDate = LocalDateTime.now();
+    }
+
+    public boolean isAlertEnabled() {
+        return alertEnabled;
     }
 }

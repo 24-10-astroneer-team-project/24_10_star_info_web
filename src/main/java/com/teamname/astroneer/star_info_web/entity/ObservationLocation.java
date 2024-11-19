@@ -17,7 +17,7 @@ public class ObservationLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // Primary Key 자동 생성
     @Column(name = "loc_id")
-    private int id;
+    private long id;
 
     @Column(name = "loc_name", length = 100)
     private String LocName;

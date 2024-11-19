@@ -1,6 +1,7 @@
 // Head.js
 import React, { useState } from 'react';
 import './Head.css';
+import ProfileButton from "../member/MemberProfileButton";
 
 function Head() {
     const [isMenuVisible, setMenuVisible] = useState(false);
@@ -30,6 +31,7 @@ function Head() {
                     <li><a href="https://naver.com">궤도계산</a></li>
                     <li><a href="./gps">위치 입력(임시)</a></li>
                     <li><a href="./login">로그인</a></li>
+                    <li><ProfileButton></ProfileButton></li>
                 </ul>
             </div>
         </nav>
