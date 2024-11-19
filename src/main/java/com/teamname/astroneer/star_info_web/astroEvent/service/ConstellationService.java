@@ -3,6 +3,7 @@ package com.teamname.astroneer.star_info_web.astroEvent.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,6 +14,7 @@ public class ConstellationService {
 
     private final RestTemplate restTemplate;
 
+    @Cacheable(value = "constellations", key = "#latitude + '-' + #longitude + '-' + #startDate + '-' + #endDate")
     public String getConstellationData(double latitude, double longitude, String startDate, String endDate) {
         // 외부 API 호출을 위한 URL 생성
         String url = String.format(
