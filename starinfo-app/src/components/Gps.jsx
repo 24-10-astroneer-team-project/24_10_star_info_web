@@ -79,7 +79,6 @@ function Gps() {
                         <p>경도: {savedCoordinates.longitude}</p>
                     </div>
                 )}
-                <Main_Button/>
             </div>
             <Foot />
         </>

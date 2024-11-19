@@ -39,7 +39,6 @@
     clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%);
     border-radius: 0 0 70px 70px;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
-    z-index: 1005;
     white-space: nowrap;
     opacity: 0;
     transition: opacity 0.4s ease, transform 0.4s ease;

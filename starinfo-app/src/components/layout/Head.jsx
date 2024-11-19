@@ -26,7 +26,7 @@ function Head() {
                 <ul className="navbar">
                     <li><a href="./main">메인화면</a></li>
                     <li><a href="./starmap">별보기</a></li>
-                    <li><a href="https://naver.com">천체탐구</a></li>
+                    <li><a href="./planet">천체탐구</a></li>
                     <li><a href="https://naver.com">궤도계산</a></li>
                     <li><a href="./gps">위치 입력(임시)</a></li>
                     <li><a href="./login">로그인</a></li>
