@@ -26,7 +26,7 @@ public class CacheConfig {
 
         // 행성 가시성 데이터 캐시 - TTL: 10분
         cacheConfigurations.put("planetVisibility",
-                RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(10)));
+                RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(30)));
 
         // 기타 캐시 데이터 - TTL: 1시간
         cacheConfigurations.put("generalData",

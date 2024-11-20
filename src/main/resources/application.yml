@@ -1,4 +1,7 @@
 spring:
+#  devtools:
+#    restart:
+#      enabled: false
   application:
     name: star_info_web
   config:
@@ -59,10 +62,14 @@ logging:
         web: DEBUG
         security.oauth2: DEBUG
         security.web.authentication: DEBUG
+        data:
+          redis: DEBUG
       hibernate:
         SQL: DEBUG
         type:
           descriptor:
             sql:
               BasicBinder: TRACE
-debug: true
+    io:
+      lettuce:
+        core: DEBUG

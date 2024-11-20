@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link, useLocation } from 'react
 import { AuthProvider } from "./services/AuthProvider";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import NotFoundPage from './components/NotFoundPage';
+import NotFoundPage from './components/NotFound/NotFoundPage';
 import StarMap from "./components/StarMap/StarMap";
 import Head from "./components/layout/Head";
 import Foot from "./components/layout/Foot";
@@ -37,6 +37,7 @@ function App() {
                     /> {/* 유저 상세 보기 페이지 라우팅 (보호된 경로) */}
                     <Route path="/react/head" element={<Head/>}/> {/* 헤더 페이지로 라우팅 */}
                     <Route path="/react/foot" element={<Foot/>}/> {/* 푸터 페이지로 라우팅 */}
+                    <Route path="/react/404" element={<NotFoundPage/>}/> {/* 404 처리 */}
                     <Route path="*" element={<NotFoundPage/>}/> {/* 404 처리 */}
                     {/*<Route path="/Loding" element={<LoadingSpinner />}/> /!*임시 로딩 페이지*!/*/}
                 </Routes>
