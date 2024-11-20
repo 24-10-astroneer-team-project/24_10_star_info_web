@@ -9,12 +9,45 @@ import MoonPhase from "./main_section/main5/MoonPhase";
 import RotatingPolygonSection from "./main_section/main6/Constellation";
 import Head from "../layout/Head";
 import Foot from "../layout/Foot";
+import {toast} from "react-toastify";
+import {useAuth} from "../../services/AuthProvider";
+import LogoutButton from "../member/LogoutButton";
+import {useLocation, useNavigate} from "react-router-dom";
 
 function MainPage() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const sections = useRef([]);
     const isScrolling = useRef(false);
     const containerRef = useRef(null);
+    const { isAuthenticated } = useAuth();
+    const routerLocation = useLocation();
+    const navigate = useNavigate();
+
+    // 로그인 메시지 표시
+    useEffect(() => {
+        const hasShownLoginToast = sessionStorage.getItem("hasShownLoginSuccess");
+
+        if (isAuthenticated && !hasShownLoginToast) {
+            toast.success("로그인에 성공했습니다!", {
+                position: "top-center",
+                autoClose: 2000, // 2초 후 닫힘
+            });
+            sessionStorage.setItem("hasShownLoginSuccess", "true"); // 메시지가 출력되었음을 기록
+        }
+    }, [isAuthenticated]);
+
+    // 로그아웃 메시지 표시
+    useEffect(() => {
+        if (routerLocation.state?.fromLogout) {
+            toast.info("로그아웃 되었습니다.", {
+                position: "top-center",
+                autoClose: 2000,
+            });
+
+            // 메시지를 한 번만 표시하고 상태를 초기화
+            navigate('/react/main', { replace: true, state: {} });
+        }
+    }, [routerLocation, navigate]);
 
     useEffect(() => {
         const handleScroll = (event) => {
@@ -62,6 +95,9 @@ function MainPage() {
                     {/* 각 섹션 */}
                     <div ref={(el) => (sections.current[0] = el)} className={stylesFirst.firstSection} style={{ height: '100vh' }}>
                         <div className={stylesFirst.firstSectionText}>Hello earthling</div>
+                        <div>
+                            <LogoutButton />
+                        </div>
                     </div>
                     <div ref={(el) => (sections.current[1] = el)} style={{ height: '100vh' }}>
                         <WeatherPage />
