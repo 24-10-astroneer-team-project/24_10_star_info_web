@@ -5,6 +5,9 @@ import {useAuth} from '../../services/AuthProvider'; // 인증 훅
 import useUserLocation from '../../hooks/useUserLocation'; // 위치 정보 훅
 import {sendLocationToServer} from '../../services/LocationService'; // 위치 저장 서비스
 import LoadingSpinner from '../ui/LoadingSpinner';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from 'react-router-dom';
 import './Planet.css';
 import axios from "axios";
 
@@ -144,6 +147,8 @@ const PlanetPage = () => {
     const [isPlanetPopupOpen, setPlanetPopupOpen] = useState(false);
     const [scaleFactor, setScaleFactor] = useState(1);
 
+    const navigate = useNavigate();
+
     const [locationSaved, setLocationSaved] = useState(false);
     const [saveError, setSaveError] = useState(null);
 
@@ -156,7 +161,6 @@ const PlanetPage = () => {
 
     const planetsApi = ["Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"];
 
-    // 모든 행성 데이터를 가져오기
     useEffect(() => {
         console.log('PlanetPage - useEffect 실행됨. isLoading 상태:', isLoading);
         if (isLoading || !location) {
@@ -182,29 +186,35 @@ const PlanetPage = () => {
                             })
                             .then((response) => {
                                 console.log(`Planet ${planet} response:`, response.data);
-                                return {planet, data: response.data};
+                                return { planet, data: response.data };
                             })
                             .catch((error) => {
                                 console.error(`Error fetching data for ${planet}:`, error);
-                                return {planet, error};
+                                throw error; // 에러를 상위 try-catch로 전달
                             })
                     )
                 );
 
                 const allData = {};
-                responses.forEach(({planet, data, error}) => {
+                responses.forEach(({ planet, data }) => {
                     if (data) {
                         allData[planet] = data;
-                    }
-                    if (error) {
-                        console.error(`Error with ${planet}:`, error);
                     }
                 });
 
                 setPlanetData(allData);
             } catch (error) {
                 console.error("Error fetching all planet data:", error);
-                setFetchError(error);
+
+                // Toast 메시지와 리다이렉트 처리
+                toast.error("행성 데이터를 가져오는 중 오류가 발생했습니다. 404 페이지로 이동합니다...", {
+                    position: "top-center",
+                    autoClose: 3000,
+                });
+
+                setTimeout(() => {
+                    navigate('/react/404');
+                }, 3000); // 3초 후 리다이렉트
             } finally {
                 setDataLoading(false);
                 console.log("Finished fetching planet data.");
@@ -214,7 +224,7 @@ const PlanetPage = () => {
         fetchAllPlanets();
     }, [location, isLoading]);
 
-    // 위치 데이터 서버로 전송
+// 위치 데이터 서버로 전송
     useEffect(() => {
         const saveLocation = async () => {
             if (!isAuthenticated || !location || locationSaved) return;
@@ -230,71 +240,137 @@ const PlanetPage = () => {
                 setLocationSaved(true);
             } catch (error) {
                 console.error("Error saving location:", error);
-                setSaveError(error);
+
+                // Toast 메시지 출력
+                toast.error("위치 데이터를 저장하는 중 오류가 발생했습니다. 나중에 다시 시도해주세요.", {
+                    position: "top-center",
+                    autoClose: 3000,
+                });
+
+                // 에러 코드에 따라 404 또는 다른 페이지로 리다이렉트
+                if (error.response && error.response.status === 404) {
+                    // 404 에러인 경우 리다이렉트
+                    setTimeout(() => {
+                        navigate('/react/404');
+                    }, 3000); // 3초 후 리다이렉트
+                } else {
+                    // 기타 에러 처리
+                    toast.error("알 수 없는 오류가 발생했습니다.", {
+                        position: "top-center",
+                        autoClose: 3000,
+                    });
+                }
             }
         };
 
         saveLocation();
-    }, [isAuthenticated, location, locationSaved, user]);
+    }, [isAuthenticated, location, locationSaved, user, navigate]);
 
-    // 행성 클릭 이벤트 핸들러
+    useEffect(() => {
+        const NEPTUNE_ORBIT_SIZE = 1500; // 기본 Neptune 궤도 크기 (예시 값)
+
+        const init = () => {
+            setTimeout(() => {
+                setBodyClass('view-3D set-speed');
+                // 화면 크기에 따라 처음 데이터 패널 열기 설정
+                setIsDataOpen(window.innerWidth >= 1000); // 화면 크기가 1000 이상일 때, Data 패널 Open
+
+                anime({
+                    targets: '#solar-system .planet',
+                    translateX: (el) => el.dataset.x,
+                    translateY: (el) => el.dataset.y,
+                    easing: 'easeInOutQuad',
+                    duration: 2000,
+                });
+            }, 2000);
+        };
+        init();
+
+        // 윈도우 resize 이벤트 핸들러 추가
+        const handleResize = () => {
+            const availableWidth = window.innerWidth * 0.7; // 창 너비의 70%를 활용 (패딩 고려)
+            const scale = (availableWidth / NEPTUNE_ORBIT_SIZE);
+
+            // 화면이 충분히 작을 때만 scaleFactor 조정
+            setScaleFactor(scale < 1 ? scale : 1);
+            setIsDataOpen(window.innerWidth >= 1000); // 화면 크기가 1000 이상일 때, Data 패널 Open
+        };
+
+        window.addEventListener('resize', handleResize);  // 리사이즈 이벤트 감지
+        handleResize();  // 초기 크기 설정
+
+        // 컴포넌트가 unmount 될 때 이벤트 리스너를 제거
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     const handlePlanetClick = (planetClass) => {
+        // 이전에 클릭된 행성이 있고, 애니메이션이 아직 완료되지 않은 경우 중복 실행 방지
         if (previousPlanet && previousPlanet === planetClass) {
-            return;
+            return; // 이미 클릭된 행성이면 중복으로 크기 조정하지 않음
         }
 
+        // 이전에 클릭된 행성이 있다면 그 행성 크기를 원래대로 돌리기
         if (previousPlanet) {
             anime({
                 targets: `#solar-system .planet[data-planet="${previousPlanet}"]`,
-                scale: [1.3, 1],
+                scale: [1.3, 1],  // 이전에 클릭된 행성을 원래 크기로
                 duration: 1000,
-                easing: "easeInOutQuad",
+                easing: 'easeInOutQuad',
             });
         }
 
+        // 현재 클릭된 행성만 확대
         anime({
             targets: `#solar-system .planet[data-planet="${planetClass}"]`,
-            scale: [1, 1.3],
+            scale: [1, 1.3],  // 클릭한 행성만 확대
             duration: 1000,
-            easing: "easeInOutQuad",
+            easing: 'easeInOutQuad',
             complete: () => {
+                // 팝업 창을 띄우는 로직 추가 (애니메이션이 완료된 후)
                 setTimeout(() => {
-                    openPlanetPopup(planetClass);
+                    openPlanetPopup(planetClass);  // 팝업을 여는 함수 실행
                 }, 500);
-            },
+            }
         });
 
-        setPreviousPlanet(planetClass);
+        setPreviousPlanet(planetClass);  // 현재 클릭된 행성을 상태로 저장
         setSolarSystemClass(planetClass);
     };
 
+    // 임시
     const openPlanetPopup = (planetClass) => {
-        setPlanetPopupOpen(true);
+        setPlanetPopupOpen(true);  // 팝업을 열림 상태로 변경
+
+        // 팝업 애니메이션 적용 (팝업이 열릴 때)
         setTimeout(() => {
             anime({
-                targets: ".planet-popup",
+                targets: '.planet-popup',
                 scale: [0.5, 1],
                 opacity: [0, 1],
                 duration: 600,
-                easing: "easeOutBack",
+                easing: 'easeOutBack',
             });
         }, 0);
     };
 
     const closePlanetPopup = () => {
+        // 이전에 클릭된 행성의 크기를 줄이는 애니메이션
         if (previousPlanet) {
             anime({
                 targets: `#solar-system .planet[data-planet="${previousPlanet}"]`,
                 scale: [1.3, 1],
                 duration: 1000,
-                easing: "easeInOutQuad",
+                easing: 'easeInOutQuad',
                 complete: () => {
-                    setPreviousPlanet(null);
-                },
+                    setPreviousPlanet(null); // 팝업이 닫힌 후 previousPlanet 초기화
+                }
             });
         }
 
-        setPlanetPopupOpen(false);
+        setPlanetPopupOpen(false); // 팝업 닫기
     };
 
     // 로딩 및 에러 처리
@@ -316,72 +392,61 @@ const PlanetPage = () => {
         return <div>Error fetching planet data: {fetchError.message}</div>;
     }
 
-    const selectedPlanet = solarSystemClass && planetData ? planetData[solarSystemClass] : null;
+    // 클릭된 행성 데이터 필터링
+    const selectedPlanet = planets.find(planet => planet.name.toLowerCase() === solarSystemClass.toLowerCase());
 
     return (
-        <>
-            <div id="planet-page" className={`planet-container ${bodyClass}`}>
-                <div id="navbar">
-                    <a id="toggle-data" href="#data" onClick={(e) => {
-                        e.preventDefault();
-                        setIsDataOpen(!isDataOpen);
-                    }}>Data</a>
-                </div>
-
-                {isDataOpen && (
-                    <div id="data">
-                        <a className={`sun ${solarSystemClass === 'sun' ? 'active' : ''}`}
-                           onClick={() => handlePlanetClick('sun')} href="#sunspeed">Sun</a>
-                        <a className={`mercury ${solarSystemClass === 'mercury' ? 'active' : ''}`}
-                           onClick={() => handlePlanetClick('mercury')} href="#mercuryspeed">Mercury</a>
-                        <a className={`venus ${solarSystemClass === 'venus' ? 'active' : ''}`}
-                           onClick={() => handlePlanetClick('venus')} href="#venusspeed">Venus</a>
-                        <a className={`earth ${solarSystemClass === 'earth' ? 'active' : ''}`}
-                           onClick={() => handlePlanetClick('earth')} href="#earthspeed">Earth</a>
-                        <a className={`mars ${solarSystemClass === 'mars' ? 'active' : ''}`}
-                           onClick={() => handlePlanetClick('mars')} href="#marsspeed">Mars</a>
-                        <a className={`jupiter ${solarSystemClass === 'jupiter' ? 'active' : ''}`}
-                           onClick={() => handlePlanetClick('jupiter')} href="#jupiterspeed">Jupiter</a>
-                        <a className={`saturn ${solarSystemClass === 'saturn' ? 'active' : ''}`}
-                           onClick={() => handlePlanetClick('saturn')} href="#saturnspeed">Saturn</a>
-                        <a className={`uranus ${solarSystemClass === 'uranus' ? 'active' : ''}`}
-                           onClick={() => handlePlanetClick('uranus')} href="#uranusspeed">Uranus</a>
-                        <a className={`neptune ${solarSystemClass === 'neptune' ? 'active' : ''}`}
-                           onClick={() => handlePlanetClick('neptune')} href="#neptunespeed">Neptune</a>
-                    </div>
-                )}
-
-
-                <div id="universe" className="scale-stretched">
-                    <div id="galaxy" style={{transform: `scale(${scaleFactor})`}}>
-                        <SolarSystem solarSystemClass={solarSystemClass} handlePlanetClick={handlePlanetClick}/>
-                    </div>
-                </div>
-
-                {/* PlanetCard를 팝업 형태로 렌더링 */}
-                {isPlanetPopupOpen && selectedPlanet && (
-                    <div id="planetPopup" className="planet-popup-bc" onClick={closePlanetPopup}>
-                        <div className="planet-popup" onClick={(e) => e.stopPropagation()}>
-                            <PlanetCard
-                                name={selectedPlanet.name}
-                                diameter={selectedPlanet.diameter}
-                                moons={selectedPlanet.moons}
-                                desc={selectedPlanet.desc}
-                                url={selectedPlanet.url}
-                                tilt={selectedPlanet.tilt}
-                                color={selectedPlanet.color}
-
-                            />
-                            {/*<button className="popup-close-button" onClick={closePlanetPopup}>닫기</button>*/}
-                        </div>
-                    </div>
-                )}
-
+        <div id="planet-page" className={`planet-container ${bodyClass}`}>
+            <div id="navbar">
+                <a id="toggle-data" href="#data" onClick={(e) => {
+                    e.preventDefault();
+                    setIsDataOpen(!isDataOpen);
+                }}>Data</a>
             </div>
-            )
-        </>
+
+            {isDataOpen && (
+                <div id="data">
+                    {planetsApi.map((planet) => (
+                        <a
+                            key={planet}
+                            className={`${planet.toLowerCase()} ${solarSystemClass === planet.toLowerCase() ? "active" : ""}`}
+                            onClick={() => handlePlanetClick(planet.toLowerCase())}
+                            href={`#${planet.toLowerCase()}speed`}
+                        >
+                            {planet}
+                        </a>
+                    ))}
+                </div>
+            )}
+
+
+            <div id="universe" className="scale-stretched">
+                <div id="galaxy" style={{transform: `scale(${scaleFactor})`}}>
+                    <SolarSystem solarSystemClass={solarSystemClass} handlePlanetClick={handlePlanetClick}/>
+                </div>
+            </div>
+
+            {/* PlanetCard를 팝업 형태로 렌더링 */}
+            {isPlanetPopupOpen && selectedPlanet && (
+                <div id="planetPopup" className="planet-popup-bc" onClick={closePlanetPopup}>
+                    <div className="planet-popup" onClick={(e) => e.stopPropagation()}>
+                    <PlanetCard
+                            name={selectedPlanet.name}
+                            diameter={selectedPlanet.diameter}
+                            moons={selectedPlanet.moons}
+                            desc={selectedPlanet.desc}
+                            url={selectedPlanet.url}
+                            tilt={selectedPlanet.tilt}
+                            color={selectedPlanet.color}
+
+                        />
+                        {/*<button className="popup-close-button" onClick={closePlanetPopup}>닫기</button>*/}
+                    </div>
+                </div>
+            )}
+
+        </div>
     );
 };
 
 export default PlanetPage;
-
