@@ -1,40 +1,31 @@
-/* ApiLLPopup.css */
-
 .api-ll-popup-container {
-    width: 35vw;
-    box-sizing: border-box;
-    max-width: 300px;
     position: absolute;
-    top: 40%; /* Match with ConstellationPopup */
-    left: 12%; /* Or adjust as needed */
     background: linear-gradient(#151829, #353A50);
     border: 0.5px solid rgba(255, 255, 255, 0.8);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
-    padding: 10px;
+    padding: clamp(10px, 2vw, 20px);
     color: #C7C7C7;
     font-family: 'Jaldi', sans-serif;
     font-style: normal;
     font-weight: 400;
     letter-spacing: -0.05em;
-    opacity: 0;
-    animation: fadeIn 0.3s ease forwards;
     text-align: center;
+    z-index: 9999;
 }
-
-.api-ll-popup-container .l_w {
-    font-size: 22px;
+.api-ll-popup-container h3 {
+    font-size: clamp(14px, 2vw, 20px);
     color: #98AED2;
-    margin: 10px 0;
+    margin-bottom: 10px;
 }
 
+.api-ll-popup-container .l_w,
 .api-ll-popup-container .l_g {
-    font-size: 22px;
+    font-size: clamp(12px, 1.5vw, 18px);
     color: #98AED2;
-    margin: 10px 0;
+    margin: 5px 0;
 }
 
-/* Fade-in animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -43,4 +34,3 @@
         opacity: 1;
     }
 }
-

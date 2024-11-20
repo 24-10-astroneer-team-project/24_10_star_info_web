@@ -19,7 +19,7 @@
 
 .popup-container {
     box-sizing: border-box;
-    width: 35vw; /* Use viewport width for immediate responsiveness */
+    width: 30vw; /* Use viewport width for immediate responsiveness */
     max-width: 490px; /* Maximum width constraint */
     max-height: 100%;
     position: absolute;
@@ -30,7 +30,7 @@
     border: 0.5px solid rgba(255, 255, 255, 0.8);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
-    padding: 1vw; /* Responsive padding */
+    padding: 0.8vw; /* Responsive padding */
     color: #C7C7C7;
     font-family: 'Jaldi', sans-serif;
     font-style: normal;
@@ -65,7 +65,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 1.5vw;
 }
 
 .detail_icon, .con_icon {
@@ -127,26 +127,6 @@ hr {
     animation: fadeOut 0.1s ease forwards;
 }
 
-/* Fade-in animation */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-/* Fade-out animation */
-@keyframes fadeOut {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
-}
-
 /* Tab button styles */
 .tab-buttons {
     display: flex;
@@ -170,15 +150,4 @@ hr {
     margin-left: 15px;
     max-height: 220px;
     overflow-y: auto;
-}
-
-/* Fade-in & Fade-out 애니메이션 */
-.fade-in {
-    opacity: 0;
-    animation: fadeIn 0.15s ease forwards;
-}
-
-.fade-out {
-    opacity: 1;
-    animation: fadeOut 0.15s ease forwards;
 }
