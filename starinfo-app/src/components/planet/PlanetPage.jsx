@@ -4,6 +4,9 @@ import SolarSystem from './SolarSystem';
 import {useAuth} from '../../services/AuthProvider'; // 인증 훅
 import useUserLocation from '../../hooks/useUserLocation'; // 위치 정보 훅
 import {sendLocationToServer} from '../../services/LocationService'; // 위치 저장 서비스
+import useSaveLocation from "../../hooks/useSaveLocation";
+import useFetchPlanets from "../../hooks/planets/useFetchPlanets";
+
 import LoadingSpinner from '../ui/LoadingSpinner';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -138,7 +141,9 @@ const PlanetCard = ({name, diameter, moons, desc, url, color, tilt}) => (
 
 const PlanetPage = () => {
     const { location, isLoading } = useUserLocation(); // 위치 정보
-    const {isAuthenticated, user, isAuthLoading} = useAuth(); // 인증 정보
+    const { isAuthenticated, user } = useAuth(); // 인증 정보
+    const { saveLocation, locationSaved } = useSaveLocation(); // 위치 저장 훅
+    const { planetData, dataLoading, fetchError } = useFetchPlanets(location, isLoading); // 행성 데이터 훅
 
     const [bodyClass, setBodyClass] = useState("opening hide-UI view-2D zoom-large data-close controls-close");
     const [solarSystemClass, setSolarSystemClass] = useState("earth");
@@ -149,122 +154,25 @@ const PlanetPage = () => {
 
     const navigate = useNavigate();
 
-    const [locationSaved, setLocationSaved] = useState(false);
     const [saveError, setSaveError] = useState(null);
 
-    const [planetData, setPlanetData] = useState({}); // 모든 행성 데이터를 저장
-    const [dataLoading, setDataLoading] = useState(true);
-    const [fetchError, setFetchError] = useState(null);
 
     const today = new Date().toISOString().split("T")[0];
-    const rangeDays = "7";
+    const rangeDays = "1";
 
-    const planetsApi = ["Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"];
-
+    // 위치 저장 로직
     useEffect(() => {
-        console.log('PlanetPage - useEffect 실행됨. isLoading 상태:', isLoading);
-        if (isLoading || !location) {
-            console.log('위치 정보가 아직 설정되지 않았거나 로딩 중입니다.');
-            return;
+        if (isAuthenticated && location && !locationSaved) {
+            saveLocation(user?.id, location);
         }
+    }, [isAuthenticated, location, locationSaved, saveLocation, user?.id]);
 
-        const fetchAllPlanets = async () => {
-            setDataLoading(true);
-            console.log("Fetching all planet data...");
-            try {
-                const responses = await Promise.all(
-                    planetsApi.map((planet) =>
-                        axios
-                            .get(`/planet/visibility`, {
-                                params: {
-                                    planetName: planet,
-                                    latitude: location.latitude,
-                                    longitude: location.longitude,
-                                    date: today,
-                                    rangeDays,
-                                },
-                            })
-                            .then((response) => {
-                                console.log(`Planet ${planet} response:`, response.data);
-                                return { planet, data: response.data };
-                            })
-                            .catch((error) => {
-                                console.error(`Error fetching data for ${planet}:`, error);
-                                throw error; // 에러를 상위 try-catch로 전달
-                            })
-                    )
-                );
-
-                const allData = {};
-                responses.forEach(({ planet, data }) => {
-                    if (data) {
-                        allData[planet] = data;
-                    }
-                });
-
-                setPlanetData(allData);
-            } catch (error) {
-                console.error("Error fetching all planet data:", error);
-
-                // Toast 메시지와 리다이렉트 처리
-                toast.error("행성 데이터를 가져오는 중 오류가 발생했습니다. 404 페이지로 이동합니다...", {
-                    position: "top-center",
-                    autoClose: 3000,
-                });
-
-                setTimeout(() => {
-                    navigate('/react/404');
-                }, 3000); // 3초 후 리다이렉트
-            } finally {
-                setDataLoading(false);
-                console.log("Finished fetching planet data.");
-            }
-        };
-
-        fetchAllPlanets();
-    }, [location, isLoading]);
-
-// 위치 데이터 서버로 전송
+    // planetData 로그 출력
     useEffect(() => {
-        const saveLocation = async () => {
-            if (!isAuthenticated || !location || locationSaved) return;
-
-            console.log("Saving location to server...");
-            try {
-                const response = await sendLocationToServer({
-                    userId: user.id,
-                    latitude: location.latitude,
-                    longitude: location.longitude,
-                });
-                console.log("Location saved successfully:", response);
-                setLocationSaved(true);
-            } catch (error) {
-                console.error("Error saving location:", error);
-
-                // Toast 메시지 출력
-                toast.error("위치 데이터를 저장하는 중 오류가 발생했습니다. 나중에 다시 시도해주세요.", {
-                    position: "top-center",
-                    autoClose: 3000,
-                });
-
-                // 에러 코드에 따라 404 또는 다른 페이지로 리다이렉트
-                if (error.response && error.response.status === 404) {
-                    // 404 에러인 경우 리다이렉트
-                    setTimeout(() => {
-                        navigate('/react/404');
-                    }, 3000); // 3초 후 리다이렉트
-                } else {
-                    // 기타 에러 처리
-                    toast.error("알 수 없는 오류가 발생했습니다.", {
-                        position: "top-center",
-                        autoClose: 3000,
-                    });
-                }
-            }
-        };
-
-        saveLocation();
-    }, [isAuthenticated, location, locationSaved, user, navigate]);
+        if (!dataLoading) {
+            console.log("Fetched Planet Data:", planetData);
+        }
+    }, [dataLoading, planetData]);
 
     useEffect(() => {
         const NEPTUNE_ORBIT_SIZE = 1500; // 기본 Neptune 궤도 크기 (예시 값)
@@ -374,22 +282,9 @@ const PlanetPage = () => {
     };
 
     // 로딩 및 에러 처리
-    if (isAuthLoading || isLoading || dataLoading) {
+    if (isLoading || dataLoading) {
         console.log("Loading state active. Waiting for data...");
-        console.log(`isAuthLoading: ${isAuthLoading}`);
-        console.log(`dataLoading: ${dataLoading}`);
-        console.log(`isLoading: ${isLoading}`);
         return <LoadingSpinner />;
-    }
-
-    if (saveError) {
-        console.error("Save error:", saveError.message);
-        return <div>Error saving location: {saveError.message}</div>;
-    }
-
-    if (fetchError) {
-        console.error("Fetch error:", fetchError.message);
-        return <div>Error fetching planet data: {fetchError.message}</div>;
     }
 
     // 클릭된 행성 데이터 필터링
@@ -406,19 +301,18 @@ const PlanetPage = () => {
 
             {isDataOpen && (
                 <div id="data">
-                    {planetsApi.map((planet) => (
+                    {planets.map((planet) => (
                         <a
-                            key={planet}
-                            className={`${planet.toLowerCase()} ${solarSystemClass === planet.toLowerCase() ? "active" : ""}`}
-                            onClick={() => handlePlanetClick(planet.toLowerCase())}
-                            href={`#${planet.toLowerCase()}speed`}
+                            key={planet.id}
+                            className={`${planet.name.toLowerCase()} ${solarSystemClass === planet.name.toLowerCase() ? 'active' : ''}`}
+                            onClick={() => handlePlanetClick(planet.name.toLowerCase())}
+                            href={`#${planet.name.toLowerCase()}speed`}
                         >
-                            {planet}
+                            {planet.name}
                         </a>
                     ))}
                 </div>
             )}
-
 
             <div id="universe" className="scale-stretched">
                 <div id="galaxy" style={{transform: `scale(${scaleFactor})`}}>
