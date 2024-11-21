@@ -32,10 +32,20 @@ function StarMap() {
         return `${year}-${month}-${day}`;
     };
 
-    // 한 달 후 날짜를 "YYYY-MM-DD" 형식으로 가져오는 함수
+    // 한달치 날짜를 "YYYY-MM-DD" 형식으로 가져오는 함수
     const getOneMonthLaterDate = () => {
         const today = new Date();
         today.setMonth(today.getMonth() + 1);
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    // 일주일치 날짜를 "YYYY-MM-DD" 형식으로 가져오는 함수
+    const getOneWeekLaterDate = () => {
+        const today = new Date();
+        today.setDate(today.getDate() + 6); // 7일 후 날짜 계산
         const year = today.getFullYear();
         const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
@@ -53,8 +63,9 @@ function StarMap() {
         const fetchData = async () => {
             try {
                 setDataLoading(true); // 데이터 로딩 시작
-                const today = getTodayDate();
-                const oneMonthLater = getOneMonthLaterDate();
+                const today = getTodayDate();ㄴㄴ
+                //const oneMonthLater = getOneMonthLaterDate(); // 한달치 날짜 계산
+                const oneWeekLater = getOneWeekLaterDate(); // 일주일치 날짜 계산
                 const url = `/constellations`;
                 console.log(`API 요청 경로: ${url}, 위치:`, location);
                 const response = await axios.get(url, {
@@ -62,8 +73,8 @@ function StarMap() {
                         latitude: location.latitude,
                         longitude: location.longitude,
                         startDate: today,
-                        endDate: oneMonthLater, //today,
-                        // 한달 요청으로 바꾸려면 위의 endDate를 바꾸세요.
+                        endDate: oneWeekLater, // today,
+                        // 한달 요청으로 바꾸려면 위의 endDate를 oneMonthLater로 바꾸기.
                     },
                 });
                 console.log('별자리 데이터 응답:', response.data);
