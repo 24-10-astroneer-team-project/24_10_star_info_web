@@ -29,8 +29,8 @@ function Head() {
                     <li><a href="./starmap">별보기</a></li>
                     <li><a href="./planet">천체탐구</a></li>
                     <li><a href="https://naver.com">궤도계산</a></li>
-                    <li><a href="./gps">위치 입력(임시)</a></li>
                     <li><a href="./login">로그인</a></li>
+                    <li><a href="./map">위치 입력</a></li>
                     <li><ProfileButton></ProfileButton></li>
                 </ul>
             </div>

@@ -92,8 +92,6 @@ function StarMap() {
                 drawdiagram(diagramOn, setDiagramOn);
                 setIsDiagramDrawn(true); // 다이어그램이 그려졌음을 표시
             });
-        } else if (!document.getElementById("star-container")) {
-            console.error("스타맵 컨테이너를 찾을 수 없습니다.");
         }
     }, [constellationData, isDiagramDrawn, diagramOn]);  // 별자리 데이터와 다이어그램 상태에 의존
 

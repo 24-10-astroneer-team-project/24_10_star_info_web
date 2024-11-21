@@ -62,8 +62,8 @@ const ApiLLPopup = ({ isVisible, coordinates, constellationName, closePopup, par
     return (
         <div className="api-ll-popup-container" style={positionStyle}>
             <h3>{constellationName}</h3>
-            <div className="l_w">위도: {coordinates.latitude}</div>
-            <div className="l_g">경도: {coordinates.longitude}</div>
+            <div className="l_w">위도: </div>
+            <div className="l_g">경도: </div>
             <hr />
         </div>
     );
