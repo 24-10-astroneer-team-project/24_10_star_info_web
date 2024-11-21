@@ -13,6 +13,7 @@ import MainPage from "./components/main/MainPage";
 import MapComponent from "./components/API/MapComponents";
 import MemberDetail from "./components/member/MemberDetail";
 import PrivateRoute from "./components/member/PrivateRoute";
+import MeteorPage from "./components/meteor/MeteorPage";
 // import LoadingSpinner from "./components/ui/LoadingSpinner";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
                     <Route path="/react/map" element={<MapComponent/>}/> {/* 지도 컴포넌트 라우트 추가 */}
                     <Route path="/react/starmap" element={<StarMap/>}/>
                     <Route path="/react/planet" element={<PlanetPage/>}/>
+                    <Route path="/react/meteor" element={<MeteorPage />} /> {/* 유성우 페이지 */}
                     <Route
                         path="/react/member/:userId"
                         element={

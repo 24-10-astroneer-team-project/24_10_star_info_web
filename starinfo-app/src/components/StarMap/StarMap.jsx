@@ -63,7 +63,7 @@ function StarMap() {
         const fetchData = async () => {
             try {
                 setDataLoading(true); // 데이터 로딩 시작
-                const today = getTodayDate();ㄴㄴ
+                const today = getTodayDate();
                 //const oneMonthLater = getOneMonthLaterDate(); // 한달치 날짜 계산
                 const oneWeekLater = getOneWeekLaterDate(); // 일주일치 날짜 계산
                 const url = `/constellations`;
