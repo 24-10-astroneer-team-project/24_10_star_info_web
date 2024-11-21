@@ -20,6 +20,8 @@ const weatherIcons = {
     Ash: "fa-smog",
     Squall: "fa-wind",
     Tornado: "fa-wind",
+    Hot: "fa-temperature-high",
+    Cold: "fa-temperature-low",
 };
 
 function WeatherCard({ weatherData, timezone, cityName }) {

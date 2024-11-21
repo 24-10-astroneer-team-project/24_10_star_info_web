@@ -14,6 +14,7 @@ import {useAuth} from "../../services/AuthProvider";
 import LogoutButton from "../member/LogoutButton";
 import {useLocation, useNavigate} from "react-router-dom";
 
+
 function MainPage() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const sections = useRef([]);
@@ -22,6 +23,8 @@ function MainPage() {
     const { isAuthenticated } = useAuth();
     const routerLocation = useLocation();
     const navigate = useNavigate();
+    const previousAuthState = useRef(isAuthenticated);
+    // const { location, locationLoading } = useUserLocation(); // 사용자 위치 가져오기
 
     // 로그인 메시지 표시
     useEffect(() => {
