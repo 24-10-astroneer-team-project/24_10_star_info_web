@@ -1,0 +1,46 @@
+// UserLocationButton.jsx
+
+import React from 'react';
+import './css/UserLocationButton.css';
+import { useAuth } from '../../services/AuthProvider';
+import useUserLocation from '../../hooks/useUserLocation';
+import useWeather from '../../hooks/weather/useWeather';
+
+function UserLocationButton() {
+    const { isAuthenticated, user } = useAuth();
+    const { location } = useUserLocation();
+    const { cityName } = useWeather(location, isAuthenticated); // cityName 가져오기
+
+    // 로그인 상태가 아닐 때
+    if (!isAuthenticated) {
+        return (
+            <div className="user-location-container">
+                <p className="login-message">로그인을 해주세요</p>
+            </div>
+        );
+    }
+    // 로그인 끊겨서 닉네임은 뜨는데 위도 경도는 서울일 때
+    else if (location.latitude === 37.5665 && location.longitude === 126.9780) {
+        return (
+            <div className="user-location-container">
+                <p className="login-message">로그인을 해주세요</p>
+            </div>
+        );
+    }
+
+    // 로그인 상태일 경우 즐겨찾기 위치 정보 및 사용자 닉네임 표시
+    return (
+        <div className="user-location-container">
+            <p className="user-info">
+                <strong>{user.nickname}</strong>님의 현재 선호 위치:
+            </p>
+            <div className="location-info">
+                <p>동네: {cityName || '정보 없음'}</p> {/* cityName 표시 */}
+                {location.description && <p>설명: {location.description}</p>}
+                <button className="go-button">→</button>
+            </div>
+        </div>
+    );
+}
+
+export default UserLocationButton;

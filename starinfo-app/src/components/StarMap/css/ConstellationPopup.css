@@ -22,7 +22,7 @@
     width: 30vw; /* Use viewport width for immediate responsiveness */
     max-width: 490px; /* Maximum width constraint */
     max-height: 100%;
-    position: absolute;
+    position: fixed;
     top: 50%;
     margin-left: -20%;
     transform: translate(-50%, -50%);

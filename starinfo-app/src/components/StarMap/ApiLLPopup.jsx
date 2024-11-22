@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './ApiLLPopup.css';
+import './css/ApiLLPopup.css';
 
 const ApiLLPopup = ({ isVisible, coordinates, constellationName, closePopup, parentRef }) => {
     const [positionStyle, setPositionStyle] = useState({});
