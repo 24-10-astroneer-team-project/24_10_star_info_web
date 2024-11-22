@@ -150,9 +150,13 @@ html, body {
     margin-bottom: 20px;
 }
 
+/* 카드 컨테이너가 배경 그라데이션 위로 오도록 z-index 설정 */
 .cardContainer {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     gap: 20px;
+    z-index: 3; /* 그라데이션보다 위 */
+    position: relative; /* z-index 활성화를 위해 position 추가 */
+    margin-top: 50px; /* 컨테이너를 50px 아래로 이동 */
 }

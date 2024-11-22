@@ -24,7 +24,8 @@ const MeteorPage = () => {
         background.height = terrain.height = height;
 
         // 엔티티(별, 유성우, 지형 등)를 저장할 배열
-        const entities = [];
+        let entities = [];
+        let terrainEntities = []; // 지형 엔티티를 별도로 저장
 
         // 지형을 생성하는 Terrain 클래스
         function Terrain(options) {
@@ -96,8 +97,8 @@ const MeteorPage = () => {
         Star.prototype.reset = function () {
             this.size = Math.random() * 2;
             this.speed = Math.random() * 0.05;
-            this.x = width;
-            this.y = Math.random() * height;
+            this.x = Math.random() * width; // 너비 변경에 따라 새로 계산
+            this.y = Math.random() * height; // 높이 변경에 따라 새로 계산
         };
 
         // 별 업데이트 메서드
@@ -110,54 +111,24 @@ const MeteorPage = () => {
             }
         };
 
-        // 유성우를 생성하는 ShootingStar 클래스
-        function ShootingStar() {
-            this.reset();
-        }
-
-        // 유성우 초기화 메서드
-        ShootingStar.prototype.reset = function () {
-            this.x = Math.random() * width; // 시작 위치
-            this.y = 0;
-            this.len = Math.random() * 80 + 10; // 유성 길이
-            this.speed = Math.random() * 10 + 6; // 유성 속도
-            this.size = Math.random() * 1 + 0.1; // 유성 크기
-            this.waitTime = new Date().getTime() + Math.random() * 3000 + 500; // 대기 시간
-            this.active = false;
-        };
-
-        // 유성우 업데이트 메서드
-        ShootingStar.prototype.update = function () {
-            if (this.active) {
-                this.x -= this.speed;
-                this.y += this.speed;
-                if (this.x < 0 || this.y >= height) {
-                    this.reset(); // 캔버스를 벗어나면 초기화
-                } else {
-                    bgCtx.lineWidth = this.size;
-                    bgCtx.beginPath();
-                    bgCtx.moveTo(this.x, this.y);
-                    bgCtx.lineTo(this.x + this.len, this.y - this.len);
-                    bgCtx.stroke();
-                }
-            } else {
-                if (this.waitTime < new Date().getTime()) {
-                    this.active = true; // 대기 후 활성화
-                }
+        // 별과 유성우 생성
+        const createEntities = () => {
+            entities = [];
+            for (let i = 0; i < height; i++) {
+                entities.push(new Star({ x: Math.random() * width, y: Math.random() * height }));
             }
         };
 
-        // 별과 유성우, 지형 생성 및 배열에 추가
-        for (let i = 0; i < height; i++) {
-            entities.push(new Star({ x: Math.random() * width, y: Math.random() * height }));
-        }
+        // 지형 생성
+        const createTerrain = () => {
+            terrainEntities = [];
+            terrainEntities.push(new Terrain({ mHeight: height / 2 - 120 }));
+            terrainEntities.push(new Terrain({ displacement: 120, scrollDelay: 50, fillStyle: "rgb(17,20,40)", mHeight: height / 2 - 60 }));
+            terrainEntities.push(new Terrain({ displacement: 100, scrollDelay: 20, fillStyle: "rgb(10,10,5)", mHeight: height / 2 }));
+        };
 
-        entities.push(new ShootingStar());
-        entities.push(new ShootingStar());
-
-        entities.push(new Terrain({ mHeight: height / 2 - 120 }));
-        entities.push(new Terrain({ displacement: 120, scrollDelay: 50, fillStyle: "rgb(17,20,40)", mHeight: height / 2 - 60 }));
-        entities.push(new Terrain({ displacement: 100, scrollDelay: 20, fillStyle: "rgb(10,10,5)", mHeight: height / 2 }));
+        createEntities(); // 초기 별 생성
+        createTerrain(); // 초기 지형 생성
 
         // 애니메이션 프레임 처리
         const animate = () => {
@@ -166,8 +137,12 @@ const MeteorPage = () => {
             bgCtx.fillStyle = "#ffffff";
             bgCtx.strokeStyle = "#ffffff";
 
-            // 각 엔티티 업데이트
+            // 별 업데이트
             entities.forEach((entity) => entity.update());
+
+            // 지형 업데이트
+            terrainEntities.forEach((terrain) => terrain.update());
+
             requestAnimationFrame(animate); // 다음 프레임 요청
         };
 
@@ -182,6 +157,9 @@ const MeteorPage = () => {
 
             background.width = terrain.width = width;
             background.height = terrain.height = height;
+
+            createEntities(); // 별 위치와 엔티티 재생성
+            createTerrain(); // 지형 재생성
         };
 
         window.addEventListener("resize", handleResize);

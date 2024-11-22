@@ -5,7 +5,6 @@ import styles from './WeatherPage.module.css';
 import useUserLocation from '../../../../hooks/useUserLocation'; // 위치 데이터 훅
 import useWeather from '../../../../hooks/weather/useWeather'; // 날씨 데이터 훅
 import { useAuth } from '../../../../services/AuthProvider'; // 인증 상태 훅
-import LoadingSpinner from "../../../ui/LoadingSpinner";
 import WeatherCard from './WeatherCard';
 
 function WeatherPage() {
@@ -22,7 +21,6 @@ function WeatherPage() {
     if (locationLoading || weatherLoading) {
         return (
             <div className={`${styles.bg} weather-page`}>
-                <LoadingSpinner />
             </div>
         );
     }
