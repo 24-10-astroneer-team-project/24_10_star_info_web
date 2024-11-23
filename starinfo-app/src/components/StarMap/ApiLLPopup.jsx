@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './css/ApiLLPopup.css';
 
 const ApiLLPopup = ({ isVisible, coordinates, constellationName, closePopup, parentRef }) => {
-    const [positionStyle, setPositionStyle] = useState({});
+   const [positionStyle, setPositionStyle] = useState({});
 
     const calculatePopupPosition = () => {
         if (parentRef?.current) {
