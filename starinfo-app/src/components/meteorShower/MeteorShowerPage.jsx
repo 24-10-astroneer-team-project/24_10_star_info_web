@@ -1,14 +1,67 @@
-import React, { useRef, useEffect } from "react";
+// MeteorShowerPage.jsx
+
+import React, {useRef, useEffect, useState} from "react";
 import Head from "../layout/Head";
 import Foot from "../layout/Foot";
-import "./MeteorPage.css";
+import useMeteorShowerGeneralService from "../../hooks/meteorShower/useMeteorShowerGeneralService"; // 서비스 훅 가져오기
+import useMeteorShowerService from "../../hooks/meteorShower/useMeteorShowerService";
+import MeteorShowerCardPage from "./MeteorShowerCardPage";
+import "./MeteorShowerPage.css";
+import LoadingSpinner from "../ui/LoadingSpinner";
+import useUserLocation from "../../hooks/useUserLocation";
+import {useAuth} from "../../services/AuthProvider";
 
-const MeteorPage = () => {
+const MeteorShowerPage = () => {
     // Canvas 요소의 참조를 저장하기 위한 useRef 훅
     const bgCanvasRef = useRef(null); // 배경 캔버스
     const terrainCanvasRef = useRef(null); // 지형 캔버스
 
+    // 사용자 위치 정보 및 인증 정보
+    const { location, isLoading } = useUserLocation();
+    const { isAuthenticated, user } = useAuth();
+
+    // useMeteorShowerGeneralService 호출하여 데이터를 먼저 로드
+    const { generalMeteorData, dataLoading, fetchError } = useMeteorShowerGeneralService();
+    const [selectedMeteor, setSelectedMeteor] = useState(null);
+    const { meteorData, dataLoading: detailLoading, fetchError: detailError, fetchMeteorData } = useMeteorShowerService();
+
+    // 위치 저장 로직
     useEffect(() => {
+        if (isAuthenticated && location) {
+            // 사용자가 로그인한 상태에서 위치 정보가 있다면 해당 위치를 저장
+            console.log("사용자 위치 저장 로직 실행", location);
+            // saveLocation(user?.id, location); // saveLocation은 적절히 정의된 위치 저장 훅
+        }
+    }, [isAuthenticated, location]);
+
+    // 상세보기 요청 함수
+    const handleShowDetails = (meteorName) => {
+        if (!location) {
+            console.warn("위치 정보가 필요합니다. 위치가 확인되지 않았습니다.");
+            return;
+        }
+        setSelectedMeteor(meteorName);
+        fetchMeteorData(meteorName, location); // 특정 유성우의 상세 정보 요청
+    };
+
+
+    // 상세보기 요청 로깅
+    useEffect(() => {
+        if (selectedMeteor) {
+            console.log("상세 정보 요청 - 유성우 이름:", selectedMeteor);
+        }
+    }, [selectedMeteor]);
+
+    // 상세 유성우 데이터 로깅
+    useEffect(() => {
+        if (!detailLoading && meteorData) {
+            console.log("상세 유성우 데이터:", meteorData);
+        }
+    }, [detailLoading, meteorData]);
+
+    useEffect(() => {
+        if (dataLoading) return; // 로딩 중이면 캔버스를 초기화하지 않음
+
         // Canvas 요소와 2D 컨텍스트 가져오기
         const background = bgCanvasRef.current;
         const bgCtx = background.getContext("2d");
@@ -121,7 +174,7 @@ const MeteorPage = () => {
             this.y = 0;
             this.len = Math.random() * 80 + 10; // 유성 길이
             this.speed = Math.random() * 10 + 6; // 유성 속도
-            this.size = Math.random() * 1 + 0.1; // 유성 크기
+            this.size = Math.random() + 0.1; // 유성 크기
             this.waitTime = new Date().getTime() + Math.random() * 3000 + 500; // 대기 시간
             this.active = false;
         };
@@ -188,8 +241,15 @@ const MeteorPage = () => {
         return () => {
             window.removeEventListener("resize", handleResize);
         };
-    }, []);
+    }, [dataLoading]);
 
+    // 로딩 중인 경우 로딩 스피너만 표시
+    if (dataLoading) {
+        console.log("Loading state active. Waiting for data...");
+        return <LoadingSpinner />;
+    }
+
+    // 기존 화면 로직 유지, 데이터를 다 불러온 후에 렌더링
     return (
         <div className="meteor-page">
             {/* 헤더 영역 */}
@@ -198,9 +258,38 @@ const MeteorPage = () => {
                 <canvas ref={bgCanvasRef}></canvas> {/* 배경 캔버스 */}
                 <canvas ref={terrainCanvasRef}></canvas> {/* 지형 캔버스 */}
                 <div className="popup">
-                    <h1>유성우</h1>
-                    <p>유성우 관련 내용들</p>
+                    {/*<h1>유성우</h1>*/}
+                    {/*<p>유성우 관련 내용들</p>*/}
                 </div>
+                {dataLoading ? (
+                    <LoadingSpinner />
+                ) : fetchError ? (
+                    <div>Error loading meteor shower information...</div>
+                ) : generalMeteorData && generalMeteorData.length > 0 ? (
+                    <MeteorShowerCardPage
+                        generalMeteorData={generalMeteorData}
+                        onShowDetails={handleShowDetails} // 상세보기 함수 전달
+                    />
+                ) : (
+                    <div>No meteor shower information available</div>
+                )}
+
+                {/* 상세 정보 표시 */}
+                {selectedMeteor && (
+                    <div className="meteor-details-popup">
+                        {detailLoading ? null : detailError ? (
+                            <div>Error loading meteor shower details...</div>
+                        ) : meteorData && meteorData.name ? (
+                            <div>
+                                <h2>{meteorData.name} 상세 정보</h2>
+                                <p>{meteorData.description || "No description available."}</p>
+                                {/* 추가 정보를 여기 표시 */}
+                            </div>
+                        ) : (
+                            <div>No details available for the selected meteor shower.</div>
+                        )}
+                    </div>
+                )}
             </div>
             {/* 푸터 영역 */}
             <Foot />
@@ -208,4 +297,4 @@ const MeteorPage = () => {
     );
 };
 
-export default MeteorPage;
+export default MeteorShowerPage;

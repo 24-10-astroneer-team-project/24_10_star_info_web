@@ -14,7 +14,7 @@ import MapComponent from "./components/API/MapComponents";
 import Gps from "./components/StarMap/Gps";
 import MemberDetail from "./components/member/MemberDetail";
 import PrivateRoute from "./components/member/PrivateRoute";
-import MeteorPage from "./components/meteor/MeteorPage";
+import MeteorShowerPage from "./components/meteorShower/MeteorShowerPage";
 // import LoadingSpinner from "./components/ui/LoadingSpinner";
 
 function App() {
@@ -28,7 +28,7 @@ function App() {
                     <Route path="/react/gps" element={<Gps/>}/> {/* 헤더 페이지로 라우팅 */}
                     <Route path="/react/starmap" element={<StarMap/>}/>
                     <Route path="/react/planet" element={<PlanetPage/>}/>
-                    <Route path="/react/meteor" element={<MeteorPage />} /> {/* 유성우 페이지 */}
+                    <Route path="/react/meteor" element={<MeteorShowerPage />} /> {/* 유성우 페이지 */}
                     <Route
                         path="/react/member/:userId"
                         element={
