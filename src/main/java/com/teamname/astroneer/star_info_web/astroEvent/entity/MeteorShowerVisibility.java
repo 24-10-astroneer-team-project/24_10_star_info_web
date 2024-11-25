@@ -8,19 +8,23 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
-@SuperBuilder
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "meteor_shower_visibility")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MeteorShowerVisibility extends AstronomicalEvent {
+@SuperBuilder
+@EqualsAndHashCode(callSuper = false)
+public class MeteorShowerVisibility {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "visibility_id")
     private Long visibilityId;
+
+    @ManyToOne
+    @JoinColumn(name = "event_id", nullable = false)
+    private AstronomicalEvent astronomicalEvent;
 
     @Column(name = "comet_name", nullable = false)
     private String cometName;

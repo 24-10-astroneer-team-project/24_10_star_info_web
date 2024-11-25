@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamname.astroneer.star_info_web.astroEvent.data.MeteorShowerData;
 import com.teamname.astroneer.star_info_web.astroEvent.dto.meteorShower.CoordinatesDTO;
 import com.teamname.astroneer.star_info_web.astroEvent.dto.meteorShower.MeteorShowerVisibilityDTO;
+import com.teamname.astroneer.star_info_web.astroEvent.entity.AstronomicalEvent;
 import com.teamname.astroneer.star_info_web.astroEvent.entity.MeteorShowerVisibility;
 import com.teamname.astroneer.star_info_web.astroEvent.mapper.MeteorShowerVisibilityMapper;
+import com.teamname.astroneer.star_info_web.astroEvent.repository.AstronomicalEventRepository;
 import com.teamname.astroneer.star_info_web.astroEvent.repository.MeteorShowerVisibilityRepository;
 import com.teamname.astroneer.star_info_web.astroEvent.util.Util;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
@@ -25,8 +30,9 @@ import java.util.Optional;
 @Slf4j
 public class MeteorShowerService {
     private final RestTemplate restTemplate;
-    private final MeteorShowerVisibilityRepository meteorShowerVisibilityRepository;
     private final Util util;
+    private final MeteorShowerVisibilityRepository meteorShowerVisibilityRepository;
+    private final AstronomicalEventRepository astronomicalEventRepository;
 
     @Cacheable(value = "meteorShowerVisibility", key = "#cometName + '-' + #startDate")
     public String getMeteorShowerData(String cometName, String startDate) {
@@ -49,8 +55,8 @@ public class MeteorShowerService {
         }
     }
 
-    //    @Cacheable(value = "meteorShowerVisibility", key = "#meteorShowerName + '-' + #year + '-' + #latitude + '-' + #longitude")
-    //    @Retryable(value = {RestClientException.class}, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+    @Cacheable(value = "meteorShowerVisibility", key = "#meteorShowerName + '-' + #year + '-' + #latitude + '-' + #longitude")
+    @Retryable(value = {RestClientException.class}, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public String getMeteorShowerVisibilityData(String meteorShowerName, int year, double latitude, double longitude) {
         try {
             // Step 1: DB에서 데이터 조회
@@ -129,7 +135,7 @@ public class MeteorShowerService {
         // DB에서 저장된 데이터를 다시 조회
         Optional<MeteorShowerVisibility> savedVisibility = getVisibilityFromDB(meteorShowerName, year, latitude, longitude);
         if (savedVisibility.isPresent()) {
-            return savedVisibility.get().toString();  // 저장된 데이터를 반환
+            return getMeteorShowerVisibilityData(meteorShowerName, year, latitude, longitude);
         } else {
             log.error("Failed to retrieve saved meteor shower visibility data for meteorShowerName: {}, year: {}, latitude: {}, longitude: {}",
                     meteorShowerName, year, latitude, longitude);
@@ -143,22 +149,17 @@ public class MeteorShowerService {
 
         // Step 1: JSON 응답 파싱하여 DTO 리스트로 변환
         List<MeteorShowerVisibilityDTO> dtoList = util.parseVisibilityData(response);
-//        log.debug("Parsed visibility data into DTO list: {}", dtoList);
 
         for (MeteorShowerVisibilityDTO dto : dtoList) {
             // Step 2: 추가적인 파라미터로 받은 정보 설정
-//            log.debug("Setting additional parameters for DTO before saving to DB...");
-
-            dto.setMeteorShowerName(meteorShowerName);  // 유성우 이름 설정
-//            log.debug("Meteor Shower Name set: {}", meteorShowerName);
+            dto.setMeteorShowerName(meteorShowerName);
 
             // Coordinates 객체가 null인지 확인 후 설정
             if (dto.getCoordinates() != null) {
-                dto.getCoordinates().setLatitude(latitude);  // 위도 설정
-                dto.getCoordinates().setLongitude(longitude);  // 경도 설정
+                dto.getCoordinates().setLatitude(latitude);
+                dto.getCoordinates().setLongitude(longitude);
                 log.debug("Coordinates set in DTO: {}", dto.getCoordinates());
             } else {
-                // Coordinates 객체가 null이라면 새로운 객체를 생성해서 설정
                 CoordinatesDTO coordinates = new CoordinatesDTO();
                 coordinates.setLatitude(latitude);
                 coordinates.setLongitude(longitude);
@@ -170,14 +171,12 @@ public class MeteorShowerService {
             if (dto.getPeakDates() != null) {
                 if (dto.getPeakDates().getStart() != null) {
                     dto.setPeakStartDate(dto.getPeakDates().getStart());
-//                    log.debug("Peak start date set: {}", dto.getPeakDates().getStart());
                 } else {
                     log.warn("Start date not found in PeakDates for meteor shower: {}", meteorShowerName);
                 }
 
                 if (dto.getPeakDates().getEnd() != null) {
                     dto.setPeakEndDate(dto.getPeakDates().getEnd());
-//                    log.debug("Peak end date set: {}", dto.getPeakDates().getEnd());
                 } else {
                     log.warn("End date not found in PeakDates for meteor shower: {}", meteorShowerName);
                 }
@@ -190,19 +189,22 @@ public class MeteorShowerService {
             MeteorShowerVisibility visibility = mapper.toEntity(dto);
 
             // 부모 클래스의 필드 설정 (eventName, eventType)
-            visibility.setEventName(meteorShowerName);
-            visibility.setEventType("meteor_shower");
-//            log.debug("DTO mapped to entity with additional event details: {}", visibility);
+            AstronomicalEvent event = AstronomicalEvent.builder()
+                    .eventName(meteorShowerName)
+                    .eventType("meteor_shower")
+                    .build();
 
-            // Step 4: 저장 전 로그로 데이터 상태 확인
-//            log.debug("Saving meteor shower visibility entity to DB: {}", visibility);
-
-            // Step 5: DB에 엔티티 저장
+            // Step 4: 부모 클래스 저장
             try {
+                AstronomicalEvent savedEvent = astronomicalEventRepository.save(event);
+                visibility.setAstronomicalEvent(savedEvent); // 부모의 이벤트 ID 설정
+                log.info("AstronomicalEvent saved to DB with eventId: {}", savedEvent.getId());
+
+                // Step 5: 자식 클래스 저장
                 MeteorShowerVisibility savedEntity = meteorShowerVisibilityRepository.save(visibility);
-//                log.info("Data saved to DB for meteorShowerName: {}, year: {}, latitude: {}, longitude: {}",
-//                        meteorShowerName, year, latitude, longitude);
-//                log.debug("Saved entity: {}", savedEntity);
+                log.info("MeteorShowerVisibility saved to DB for meteorShowerName: {}, year: {}, latitude: {}, longitude: {}",
+                        meteorShowerName, year, latitude, longitude);
+                log.debug("Saved entity: {}", savedEntity);
             } catch (DataIntegrityViolationException e) {
                 log.error("Failed to save data to DB due to integrity violation for meteorShowerName: {}, year: {}, latitude: {}, longitude: {}",
                         meteorShowerName, year, latitude, longitude, e);
@@ -212,4 +214,5 @@ public class MeteorShowerService {
             }
         }
     }
+
 }

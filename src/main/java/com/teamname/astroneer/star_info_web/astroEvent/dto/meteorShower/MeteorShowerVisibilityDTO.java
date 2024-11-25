@@ -39,5 +39,4 @@ public class MeteorShowerVisibilityDTO {
     // 추가된 필드들
     private LocalDate peakStartDate;  // PeakDates의 시작 날짜
     private LocalDate peakEndDate;    // PeakDates의 종료 날짜
-
 }
