@@ -1,21 +1,4 @@
 /* ConstellationPopup.css */
-.tooltip {
-    position: absolute;
-    top: 30px; /* 아이콘 아래로 30px */
-    left: 30px; /* 아이콘 오른쪽으로 30px */
-    background-color: rgba(0, 0, 0, 0.8);
-    color: #ffffff;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.9em;
-    white-space: nowrap;
-    z-index: 10;
-    opacity: 0;
-}
-
-.icon-container:hover .tooltip {
-    opacity: 1;
-}
 
 .popup-container {
     box-sizing: border-box;
@@ -84,10 +67,6 @@
     transition: background-color 0.3s;
 }
 
-.detail_icon:hover {
-    cursor: pointer;
-}
-
 /* name 및 name_k 텍스트 스타일 */
 .name {
     font-size: clamp(16px, 2vw, 24px);
@@ -150,4 +129,13 @@ hr {
     margin-left: 15px;
     max-height: 220px;
     overflow-y: auto;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

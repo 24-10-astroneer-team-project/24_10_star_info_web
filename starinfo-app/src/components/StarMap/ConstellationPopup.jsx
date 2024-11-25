@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './css/ConstellationPopup.css';
 import deimg from '../layout/con_icon/detail.png';
-import ApiLLPopup from './ApiLLPopup';
 import { loadCoordinates } from '../storage';
 
 const icons = require.context('../layout/con_icon', false, /\.png$/);
@@ -240,9 +239,7 @@ const constellationDescriptions = {
 const ConstellationPopup = ({ constellationId, isVisible, closePopup }) => {
     const [activeTab, setActiveTab] = useState('legend');
     const [fade, setFade] = useState(false);
-    const [showApiLLPopup, setShowApiLLPopup] = useState(false);
     const popupRef = useRef(null);
-    const [popupStyle, setPopupStyle] = useState({}); // 위치 조정을 위한 스타일 상태
 
     const {
         name = '',
@@ -264,34 +261,7 @@ const ConstellationPopup = ({ constellationId, isVisible, closePopup }) => {
         }
     };
 
-    const handleIconClick = () => {
-        setShowApiLLPopup(!showApiLLPopup);
-    };
-
-    const closeApiLLPopup = () => {
-        setShowApiLLPopup(false);
-    };
-
     const coordinates = loadCoordinates();
-
-    useEffect(() => {
-        if (popupRef.current && showApiLLPopup) {
-            const rect = popupRef.current.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-
-            setPopupStyle({
-                top: `${centerY}px`,
-                left: `${centerX}px`,
-                transform: 'translate(-50%, -50%)',
-            });
-        }
-    }, [showApiLLPopup]);
-
-    const [showTooltip, setShowTooltip] = useState(false);
-
-    const handleMouseEnter = () => setShowTooltip(true);
-    const handleMouseLeave = () => setShowTooltip(false);
 
     // Add event listener for Esc key to close the popup
     useEffect(() => {
@@ -316,13 +286,8 @@ const ConstellationPopup = ({ constellationId, isVisible, closePopup }) => {
             <div className="popup-container" ref={popupRef}>
                 <div className="name">{name}</div>
                 <div className="header-popup">
-                    <div className="icon-container" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                        <img src={deimg} alt="detail icon" className="detail_icon" onClick={handleIconClick} />
-                        {showTooltip && (
-                            <div className="tooltip">
-                                입력한 선호 위치에 따른 별자리 관측 정보를 볼 수 있습니다.
-                            </div>
-                        )}
+                    <div className="icon-container">
+                        <img src={deimg} alt="detail icon" className="detail_icon" />
                     </div>
                     <div className="name_k">{name_k}</div>
                     {rightIconPath && <img src={rightIconPath} alt={`${name} icon`} className="con_icon" />}
@@ -371,18 +336,6 @@ const ConstellationPopup = ({ constellationId, isVisible, closePopup }) => {
                     )}
                 </div>
             </div>
-
-            {/* ApiLL Popup */}
-            {showApiLLPopup && (
-                <ApiLLPopup
-                    isVisible={showApiLLPopup}
-                    coordinates={coordinates}
-                    constellationName={name_k}
-                    closePopup={closeApiLLPopup}
-                    parentRef={popupRef}
-                    style={popupStyle} // 전달된 스타일 적용
-                />
-            )}
         </>
     ) : null;
 };
