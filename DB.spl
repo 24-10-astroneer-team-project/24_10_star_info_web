@@ -44,32 +44,36 @@ CREATE TABLE `observation_location` (
 );
 
 -- astronomical_event 테이블
-CREATE TABLE `astronomical_event` (
-                                      `event_id` INT NOT NULL AUTO_INCREMENT COMMENT '고유 천문 현상 ID (Primary Key)',
-                                      `event_type` VARCHAR(50) NOT NULL COMMENT '천문 현상 종류 (예: 별자리, 일출/일몰, 행성 대접근 등)',
-                                      `event_name` VARCHAR(100) NOT NULL COMMENT '천문 현상 이름',
-                                      `start_date` DATE NOT NULL COMMENT '천문 현상 시작 날짜',
-                                      `end_date` DATE NULL COMMENT '천문 현상 종료 날짜 (없을 수 있음)',
-                                      `event_reg_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '천문 현상 등록 시간',
-                                      PRIMARY KEY (`event_id`)
+CREATE TABLE astronomical_event (
+                                    event_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                    event_name VARCHAR(100) NOT NULL,
+                                    event_type VARCHAR(50) NOT NULL,
+                                    event_reg_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 -- astronomical_event 의 자식 meteor_shower_visibility 테이블
-CREATE TABLE `meteor_shower_visibility` (
-                                            `event_id` INT NOT NULL COMMENT '천문 현상 ID (Foreign Key)',
-                                            `comet_name` VARCHAR(100) NOT NULL COMMENT '관련 혜성 이름',
-                                            `altitude` DOUBLE NOT NULL COMMENT '고도',
-                                            `direction` VARCHAR(50) NOT NULL COMMENT '방위각',
-                                            `distance` DOUBLE NOT NULL COMMENT '거리',
-                                            `illumination` DOUBLE NOT NULL COMMENT '달빛 비율',
-                                            `moon_phase` DOUBLE NOT NULL COMMENT '달의 위상',
-                                            `phase_description` VARCHAR(100) NOT NULL COMMENT '달 위상 설명',
-                                            `visibility_message` VARCHAR(255) NOT NULL COMMENT '가시성 메시지',
-                                            `conditions_status` VARCHAR(50) NOT NULL COMMENT '혜성 상태 (closing 등)',
-                                            `peak_start_date` DATE NOT NULL COMMENT '피크 기간 시작일',
-                                            `peak_end_date` DATE NOT NULL COMMENT '피크 기간 종료일',
-                                            PRIMARY KEY (`event_id`),
-                                            FOREIGN KEY (`event_id`) REFERENCES `astronomical_event` (`event_id`)
+CREATE TABLE meteor_shower_visibility (
+                                          event_id BIGINT PRIMARY KEY,
+                                          comet_name VARCHAR(255) NOT NULL,
+                                          comet_approaching VARCHAR(255) NOT NULL,
+                                          meteor_shower_name VARCHAR(255) NOT NULL,
+                                          altitude DOUBLE NOT NULL,
+                                          direction VARCHAR(255) NOT NULL,
+                                          illumination DOUBLE NOT NULL,
+                                          moon_phase DOUBLE NOT NULL,
+                                          phase_description VARCHAR(255) NOT NULL,
+                                          latitude DOUBLE NOT NULL,
+                                          longitude DOUBLE NOT NULL,
+                                          sunrise_time TIMESTAMP WITH TIME ZONE NOT NULL,
+                                          sunset_time TIMESTAMP WITH TIME ZONE NOT NULL,
+                                          time_zone_id VARCHAR(255) NOT NULL,
+                                          visibility_message VARCHAR(255) NOT NULL,
+                                          peak_start DATE NOT NULL,
+                                          peak_end DATE NOT NULL,
+                                          best_peak_datetime TIMESTAMP NOT NULL,
+                                          visibility_rating VARCHAR(255) NOT NULL,
+                                          CONSTRAINT fk_event FOREIGN KEY (event_id) REFERENCES astronomical_event (event_id)
 );
+
 
 -- ObservationRecommendation 테이블
 CREATE TABLE `observation_recommendation` (
@@ -120,3 +124,4 @@ SELECT * FROM observation_location;
 
 -- astronomical_event table 조회
 SELECT * FROM astronomical_event;
+SELECT * FROM meteor_shower_visibility;

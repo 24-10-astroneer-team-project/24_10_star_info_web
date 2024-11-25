@@ -1,0 +1,50 @@
+/* MeteorShowerCardPage.css */
+
+.meteor-shower-cards {
+    display: flex; /* 카드들을 가로로 배치 */
+    flex-wrap: wrap; /* 화면이 작아지면 다음 줄로 카드 이동 */
+    justify-content: center; /* 카드들이 중앙에 배치되도록 */
+    gap: 20px; /* 카드 사이의 간격 */
+    padding: 20px; /* 외곽 여백 */
+    margin-top: 30px; /* 상단 여백 */
+    z-index: 10; /* 카드들이 다른 요소들보다 위에 보이도록 */
+    position: relative; /* z-index 적용을 위해 position 추가 */
+}
+
+.meteor-shower-card {
+    background-color: #1e1e2e; /* 카드 배경색 - 어두운 톤 */
+    color: #ffffff; /* 글씨 색상 - 흰색 */
+    border-radius: 10px; /* 둥근 모서리 */
+    width: 300px; /* 카드의 너비 */
+    padding: 20px; /* 내부 여백 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 카드 그림자 */
+    transition: transform 0.2s, box-shadow 0.2s; /* 애니메이션 효과 */
+}
+
+.meteor-shower-card:hover {
+    transform: translateY(-10px); /* 마우스를 올렸을 때 카드가 살짝 올라가는 효과 */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* 마우스를 올렸을 때 그림자 강화 */
+}
+
+.meteor-shower-card h2,
+.meteor-shower-card h3 {
+    font-size: 1.5em; /* 제목 폰트 크기 */
+    margin-bottom: 15px; /* 제목과 내용 사이 간격 */
+}
+
+.meteor-shower-card p {
+    line-height: 1.6; /* 텍스트 간격 */
+    font-size: 1em; /* 본문 폰트 크기 */
+}
+
+.meteor-shower-card .date {
+    font-size: 0.9em; /* 날짜 폰트 크기 */
+    color: #b0b0b0; /* 날짜 색상 - 밝은 회색 */
+    margin-top: 10px; /* 상단 여백 */
+}
+
+.meteor-shower-card .conditions {
+    margin-top: 15px; /* 조건 정보 상단 여백 */
+    font-weight: bold; /* 굵은 글씨로 강조 */
+    color: #80cbc4; /* 조건 글씨 색상 - 부드러운 청록색 */
+}
