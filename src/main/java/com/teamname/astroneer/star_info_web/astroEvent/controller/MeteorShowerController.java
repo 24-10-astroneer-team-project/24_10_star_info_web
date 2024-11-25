@@ -23,7 +23,7 @@ public class MeteorShowerController {
     }
 
     @GetMapping("/visibility")
-    public String getVisibilityData(@RequestParam String meteorShowerName, @RequestParam String year, @RequestParam double latitude, @RequestParam double longitude) {
+    public String getVisibilityData(@RequestParam String meteorShowerName, @RequestParam int year, @RequestParam double latitude, @RequestParam double longitude) {
         log.info("================meteorShower/visibility Get 요청 받음===================");
 
         String decodedMeteorShowerName = meteorShowerName.replace("+", "%20");

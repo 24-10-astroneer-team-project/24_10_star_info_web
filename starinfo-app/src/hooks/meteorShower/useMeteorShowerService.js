@@ -18,12 +18,16 @@ function useMeteorShowerService() {
         try {
             const currentYear = new Date().getFullYear();
 
+            // 위도와 경도를 1도 간격으로 반올림 처리
+            const roundedLatitude = Math.round(location.latitude);
+            const roundedLongitude = Math.round(location.longitude);
+
             const response = await axios.get(`/meteorShower/visibility`, {
                 params: {
                     meteorShowerName: meteorName,
                     year: currentYear,
-                    latitude: location.latitude,
-                    longitude: location.longitude,
+                    latitude: roundedLatitude,
+                    longitude: roundedLongitude,
                 },
             });
 

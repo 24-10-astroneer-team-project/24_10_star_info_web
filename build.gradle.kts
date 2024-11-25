@@ -57,6 +57,9 @@ dependencies {
     // spring Retry
     implementation ("org.springframework.retry:spring-retry:1.3.4")
     implementation ("org.springframework:spring-aspects:6.1.13")
+
+    // Jackson, JAVA LocalDateTime module add
+    implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 }
 
 tasks.withType<Test> {
