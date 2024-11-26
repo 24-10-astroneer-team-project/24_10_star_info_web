@@ -98,6 +98,37 @@
     width: 100%;
 }
 
+/* 프로필 버튼 스타일 */
+.navbar li .menu-item {
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+    position: relative;
+    transition: color 0.3s;
+}
+
+/* 프로필 버튼 호버 효과 */
+.navbar li .menu-item:hover {
+    color: #858585;
+}
+
+/* 프로필 버튼 밑줄 효과 */
+.navbar li .menu-item::after {
+    content: "";
+    width: 0;
+    height: 3px;
+    background-color: #858585;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    transition: width 0.3s;
+}
+
+.navbar li .menu-item:hover::after {
+    width: 100%;
+}
+
 /* 반응형 스타일 */
 @media (max-width: 1024px) {
     .astro-logo {

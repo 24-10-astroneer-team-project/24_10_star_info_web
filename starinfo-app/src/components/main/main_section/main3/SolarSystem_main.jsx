@@ -1,8 +1,12 @@
 import React from 'react';
 import styles from './SolarSystem.module.scss'; // SCSS 모듈을 임포트합니다.
 import './ThirdSection.css'; // 새로 만든 CSS 파일 임포트
+import Main_Button from '../../../../components/layout/Main_Button'; // Main_Button 컴포넌트 임포트
 
 const SolarSystem_main = () => {
+    const handleButtonClick = () => {
+        window.location.href = '/react/planet'; // 행성 페이지로 리디렉션
+    };
     return (
         <div className={`${styles.solarSystemContainer} thirdSectionContainer`}>
 
@@ -306,6 +310,17 @@ const SolarSystem_main = () => {
                         </div>
                         <div className={`${styles.overlay} thirdSectionOverlay`}></div>
                     </div>
+                </div>
+                {/* 버튼 추가 */}
+                <div
+                    style={{
+                        position: 'absolute',
+                        zIndex: 10,
+                        bottom: '50px', // 버튼을 하단에서 50px 위로 배치
+                        left: '230px',   // 버튼을 왼쪽에서 30px 오른쪽으로 배치
+                    }}
+                >
+                    <Main_Button onClick={handleButtonClick} label="행성 정보 보러가기" />
                 </div>
             </div>
         </div>
