@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import anime from 'animejs/lib/anime.es.js';
 import SolarSystem from './SolarSystem';
+import Head from "../layout/Head";
+import Foot from "../layout/Foot";
+
 import {useAuth} from '../../services/AuthProvider'; // 인증 훅
 import useUserLocation from '../../hooks/useUserLocation'; // 위치 정보 훅
 import {sendLocationToServer} from '../../services/LocationService'; // 위치 저장 서비스
@@ -106,15 +109,18 @@ const PlanetCard = ({name, diameter, moons, desc, url, color, tilt}) => (
                 className="planet-axis"
                 style={{
                     transform: `rotate(${tilt})`, // 축 기울기
-                    borderLeft: `1px dashed ${color}`,
-                    height: '100%', // 부모와 동일한 높이
+                    borderLeft: `1px dashed ${color}`, // 축 색상
                 }}
             />
             {/* 행성 대기 */}
             <div
                 className="planet__atmosphere"
                 style={{
-                    boxShadow: `inset 10px 0px 12px -2px rgba(255, 255, 255, 0.2), inset -30px 0px 50px 0px black, -5px 0px 10px -4px ${color}`,
+                    boxShadow: `
+                        inset 10px 0px 12px -2px rgba(255, 255, 255, 0.2),
+                        inset -30px 0px 50px 0px black,
+                        -5px 0px 10px -4px ${color}
+                    `
                 }}
             >
                 {/* 행성 표면 */}
@@ -122,9 +128,7 @@ const PlanetCard = ({name, diameter, moons, desc, url, color, tilt}) => (
                     className="planet__surface"
                     style={{
                         backgroundImage: `url(${url})`,
-                        transform: 'scale(1.2)', // 크기 조정
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'left center', // 가로 이미지의 왼쪽 활용
+                        transform: `rotate(${tilt}) scale(1.2)`,
                     }}
                 />
             </div>
@@ -148,6 +152,7 @@ const PlanetPage = () => {
     const [bodyClass, setBodyClass] = useState("opening hide-UI view-2D zoom-large data-close controls-close");
     const [solarSystemClass, setSolarSystemClass] = useState("earth");
     const [isDataOpen, setIsDataOpen] = useState(false);
+    const [isManuallyOpened, setIsManuallyOpened] = useState(false); // 수동으로 열렸는지 여부
     const [previousPlanet, setPreviousPlanet] = useState(null);
     const [isPlanetPopupOpen, setPlanetPopupOpen] = useState(false);
     const [scaleFactor, setScaleFactor] = useState(1);
@@ -180,8 +185,14 @@ const PlanetPage = () => {
         const init = () => {
             setTimeout(() => {
                 setBodyClass('view-3D set-speed');
-                // 화면 크기에 따라 처음 데이터 패널 열기 설정
-                setIsDataOpen(window.innerWidth >= 1000); // 화면 크기가 1000 이상일 때, Data 패널 Open
+
+                // 초기 상태 설정
+                if (isManuallyOpened) {
+                    setIsDataOpen(window.innerWidth >= 1000);
+                }
+
+                // // 화면 크기에 따라 처음 데이터 패널 열기 설정
+                // setIsDataOpen(window.innerWidth >= 1000); // 화면 크기가 1000 이상일 때, Data 패널 Open
 
                 anime({
                     targets: '#solar-system .planet',
@@ -192,20 +203,24 @@ const PlanetPage = () => {
                 });
             }, 2000);
         };
-        init();
 
         // 윈도우 resize 이벤트 핸들러 추가
         const handleResize = () => {
-            const availableWidth = window.innerWidth * 0.7; // 창 너비의 70%를 활용 (패딩 고려)
+            const availableWidth = window.innerWidth * 0.65; // 창 너비의 65%를 활용 (패딩 고려)
             const scale = (availableWidth / NEPTUNE_ORBIT_SIZE);
 
             // 화면이 충분히 작을 때만 scaleFactor 조정
             setScaleFactor(scale < 1 ? scale : 1);
-            setIsDataOpen(window.innerWidth >= 1000); // 화면 크기가 1000 이상일 때, Data 패널 Open
+
+            // 수동으로 열었을 경우 상태를 변경하지 않음
+            if (!isManuallyOpened) {
+                setIsDataOpen(window.innerWidth >= 1000);
+            }
         };
 
         window.addEventListener('resize', handleResize);  // 리사이즈 이벤트 감지
         handleResize();  // 초기 크기 설정
+        init();
 
         // 컴포넌트가 unmount 될 때 이벤트 리스너를 제거
 
@@ -213,6 +228,15 @@ const PlanetPage = () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
+
+    // Data 창 열기/닫기 토글 함수
+    const handleToggleData = (e) => {
+        e.preventDefault();
+
+        // 사용자가 수동으로 열었음을 표시
+        setIsManuallyOpened((prev) => !prev);
+        setIsDataOpen((prev) => !prev);
+    };
 
     const handlePlanetClick = (planetClass) => {
         // 이전에 클릭된 행성이 있고, 애니메이션이 아직 완료되지 않은 경우 중복 실행 방지
@@ -291,55 +315,64 @@ const PlanetPage = () => {
     const selectedPlanet = planets.find(planet => planet.name.toLowerCase() === solarSystemClass.toLowerCase());
 
     return (
-        <div id="planet-page" className={`planet-container ${bodyClass}`}>
-            <div id="navbar">
-                <a id="toggle-data" href="#data" onClick={(e) => {
-                    e.preventDefault();
-                    setIsDataOpen(!isDataOpen);
-                }}>Data</a>
+        <>
+            <div className="header">
+                <Head/>
             </div>
 
-            {isDataOpen && (
-                <div id="data">
-                    {planets.map((planet) => (
-                        <a
-                            key={planet.id}
-                            className={`${planet.name.toLowerCase()} ${solarSystemClass === planet.name.toLowerCase() ? 'active' : ''}`}
-                            onClick={() => handlePlanetClick(planet.name.toLowerCase())}
-                            href={`#${planet.name.toLowerCase()}speed`}
-                        >
-                            {planet.name}
-                        </a>
-                    ))}
+            <div id="planet-page" className={`planet-container ${bodyClass}`}>
+                <div id="navbar">
+                    <a id="toggle-data" href="#data" onClick={handleToggleData}>
+                        Data
+                    </a>
                 </div>
-            )}
 
-            <div id="universe" className="scale-stretched">
-                <div id="galaxy" style={{transform: `scale(${scaleFactor})`}}>
-                    <SolarSystem solarSystemClass={solarSystemClass} handlePlanetClick={handlePlanetClick}/>
-                </div>
-            </div>
+                {isDataOpen && (
+                    <div id="data">
+                        {planets.map((planet) => (
+                            <a
+                                key={planet.id}
+                                className={`${planet.name.toLowerCase()} ${solarSystemClass === planet.name.toLowerCase() ? 'active' : ''}`}
+                                onClick={() => handlePlanetClick(planet.name.toLowerCase())}
+                                href={`#${planet.name.toLowerCase()}speed`}
+                            >
+                                {planet.name}
+                            </a>
+                        ))}
+                    </div>
+                )}
 
-            {/* PlanetCard를 팝업 형태로 렌더링 */}
-            {isPlanetPopupOpen && selectedPlanet && (
-                <div id="planetPopup" className="planet-popup-bc" onClick={closePlanetPopup}>
-                    <div className="planet-popup" onClick={(e) => e.stopPropagation()}>
-                    <PlanetCard
-                            name={selectedPlanet.name}
-                            diameter={selectedPlanet.diameter}
-                            moons={selectedPlanet.moons}
-                            desc={selectedPlanet.desc}
-                            url={selectedPlanet.url}
-                            tilt={selectedPlanet.tilt}
-                            color={selectedPlanet.color}
-
-                        />
-                        {/*<button className="popup-close-button" onClick={closePlanetPopup}>닫기</button>*/}
+                <div id="universe" className="scale-stretched">
+                    <div id="galaxy" style={{transform: `scale(${scaleFactor})`}}>
+                        <SolarSystem solarSystemClass={solarSystemClass} handlePlanetClick={handlePlanetClick}/>
                     </div>
                 </div>
-            )}
 
-        </div>
+                {/* PlanetCard를 팝업 형태로 렌더링 */}
+                {isPlanetPopupOpen && selectedPlanet && (
+                    <div id="planetPopup" className="planet-popup-bc" onClick={closePlanetPopup}>
+                        <div className="planet-popup" onClick={(e) => e.stopPropagation()}>
+                            <PlanetCard
+                                name={selectedPlanet.name}
+                                diameter={selectedPlanet.diameter}
+                                moons={selectedPlanet.moons}
+                                desc={selectedPlanet.desc}
+                                url={selectedPlanet.url}
+                                tilt={selectedPlanet.tilt}
+                                color={selectedPlanet.color}
+
+                            />
+                            {/*<button className="popup-close-button" onClick={closePlanetPopup}>닫기</button>*/}
+                        </div>
+                    </div>
+                )}
+
+            </div>
+
+            <div className="footer">
+                <Foot/>
+            </div>
+        </>
     );
 };
 
