@@ -20,7 +20,10 @@ export const getUserLocationFromProfile = async (userId) => {
             console.log('Favorite Location:', favoriteLocation);
 
             if (favoriteLocation) {
-                return { latitude: favoriteLocation.latitude, longitude: favoriteLocation.longitude };
+                return { latitude: favoriteLocation.latitude,
+                    longitude: favoriteLocation.longitude,
+                    description: favoriteLocation.description
+                };
             }
         }
 

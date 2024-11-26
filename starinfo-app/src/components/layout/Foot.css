@@ -7,7 +7,9 @@
 
 .footer {
     background-color: black;
+    bottom:0;
 }
+
 .sb_footer{
     display: flex;
     flex-direction: column;

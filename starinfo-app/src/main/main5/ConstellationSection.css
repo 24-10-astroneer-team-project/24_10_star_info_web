@@ -1,0 +1,32 @@
+/* src/main/main5/ConstellationSection.css */
+#svg {
+    background: radial-gradient(circle at bottom, #23435c, #070d12);
+}
+
+text {
+    font-family: 'Space Mono';
+    opacity: 0.8;
+    fill: #fff;
+    cursor: pointer;
+}
+
+.list-item {
+    font-size: calc(20px + (32 - 20) * (100vw - 600px) / (1700 - 600));
+}
+
+.animate {
+    animation: starFlash 3s linear infinite;
+    box-shadow: 0px 0px 5px #fff;
+}
+
+@keyframes dash {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes starFlash {
+    0% { r: 2.5; }
+    50% { r: 0.5; }
+    100% { r: 1.5; }
+}

@@ -11,7 +11,6 @@ import Head from "../layout/Head";
 import Foot from "../layout/Foot";
 import {toast} from "react-toastify";
 import {useAuth} from "../../services/AuthProvider";
-import LogoutButton from "../member/LogoutButton";
 import {useLocation, useNavigate} from "react-router-dom";
 
 
@@ -98,9 +97,7 @@ function MainPage() {
                     {/* 각 섹션 */}
                     <div ref={(el) => (sections.current[0] = el)} className={stylesFirst.firstSection} style={{ height: '100vh' }}>
                         <div className={stylesFirst.firstSectionText}>Hello earthling</div>
-                        <div>
-                            <LogoutButton />
-                        </div>
+                        <div> </div>
                     </div>
                     <div ref={(el) => (sections.current[1] = el)} style={{ height: '100vh' }}>
                         <WeatherPage />
@@ -108,8 +105,9 @@ function MainPage() {
                     <div ref={(el) => (sections.current[2] = el)} className={styleThird.solarSystemSection} style={{ height: '100vh' }}>
                         <SolarSystem_main />
                     </div>
-                    <div ref={(el) => (sections.current[3] = el)} style={{ height: '100vh', backgroundColor: 'black' }}>
-                        <WaveCanvas />
+                    <div ref={(el) => (sections.current[3] = el)} style={{height: '100vh', backgroundColor: 'black'}}>
+                        <WaveCanvas/>
+
                     </div>
                     {/* MoonPhase 섹션 */}
                     <div ref={(el) => (sections.current[4] = el)} style={{ height: '100vh', backgroundColor: 'black' }}>

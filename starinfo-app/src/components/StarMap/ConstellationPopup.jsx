@@ -1,8 +1,7 @@
-import React, {useState, useEffect, useRef} from 'react';
-import './ConstellationPopup.css';
+import React, { useState, useEffect, useRef } from 'react';
+import './css/ConstellationPopup.css';
 import deimg from '../layout/con_icon/detail.png';
-import ApiLLPopup from './ApiLLPopup';
-import {loadCoordinates} from '../storage';
+import { loadCoordinates } from '../storage';
 
 const icons = require.context('../layout/con_icon', false, /\.png$/);
 const constellationImages = require.context('../layout/con_img', false, /\.png$/);
@@ -236,11 +235,10 @@ const constellationDescriptions = {
     },
 };
 
-const ConstellationPopup = ({constellationId, isVisible, closePopup}) => {
+
+const ConstellationPopup = ({ constellationId, isVisible, closePopup }) => {
     const [activeTab, setActiveTab] = useState('legend');
     const [fade, setFade] = useState(false);
-    const [showApiLLPopup, setShowApiLLPopup] = useState(false);
-    const [popupTopPosition, setPopupTopPosition] = useState(0);
     const popupRef = useRef(null);
 
     const {
@@ -263,27 +261,7 @@ const ConstellationPopup = ({constellationId, isVisible, closePopup}) => {
         }
     };
 
-    const handleIconClick = () => {
-        setShowApiLLPopup(!showApiLLPopup);
-    };
-
-    const closeApiLLPopup = () => {
-        setShowApiLLPopup(false);
-    };
-
     const coordinates = loadCoordinates();
-
-    useEffect(() => {
-        if (popupRef.current && isVisible) {
-            const rect = popupRef.current.getBoundingClientRect();
-            setPopupTopPosition(rect.top);
-        }
-    }, [activeTab, isVisible, showApiLLPopup]);
-
-    const [showTooltip, setShowTooltip] = useState(false);
-
-    const handleMouseEnter = () => setShowTooltip(true);
-    const handleMouseLeave = () => setShowTooltip(false);
 
     // Add event listener for Esc key to close the popup
     useEffect(() => {
@@ -308,18 +286,13 @@ const ConstellationPopup = ({constellationId, isVisible, closePopup}) => {
             <div className="popup-container" ref={popupRef}>
                 <div className="name">{name}</div>
                 <div className="header-popup">
-                    <div className="icon-container" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                        <img src={deimg} alt="detail icon" className="detail_icon" onClick={handleIconClick}/>
-                        {showTooltip && (
-                            <div className="tooltip">
-                                입력한 선호 위치에 따른 별자리 관측 정보를 볼 수 있습니다.
-                            </div>
-                        )}
+                    <div className="icon-container">
+                        <img src={deimg} alt="detail icon" className="detail_icon" />
                     </div>
                     <div className="name_k">{name_k}</div>
-                    {rightIconPath && <img src={rightIconPath} alt={`${name} icon`} className="con_icon"/>}
+                    {rightIconPath && <img src={rightIconPath} alt={`${name} icon`} className="con_icon" />}
                 </div>
-                <hr/>
+                <hr />
                 <div className="tab-buttons">
                     <button
                         className={activeTab === 'legend' ? 'active' : ''}
@@ -339,8 +312,7 @@ const ConstellationPopup = ({constellationId, isVisible, closePopup}) => {
                         <>
                             <div className="image-container">
                                 {constellationImagePath && (
-                                    <img src={constellationImagePath} alt={`${name} constellation`}
-                                         className="con_image"/>
+                                    <img src={constellationImagePath} alt={`${name} constellation`} className="con_image" />
                                 )}
                             </div>
                             <div className="text_constellation">{text_constellation}</div>
@@ -349,8 +321,7 @@ const ConstellationPopup = ({constellationId, isVisible, closePopup}) => {
                         <>
                             <div className="image-container">
                                 {constellationInfoImagePath && (
-                                    <img src={constellationInfoImagePath} alt={`${name} constellation map`}
-                                         className="con_image"/>
+                                    <img src={constellationInfoImagePath} alt={`${name} constellation map`} className="con_image" />
                                 )}
                             </div>
                             <div className="constellation-info">
@@ -365,17 +336,7 @@ const ConstellationPopup = ({constellationId, isVisible, closePopup}) => {
                     )}
                 </div>
             </div>
-
-            {/* ApiLL Popup */}
-            <ApiLLPopup
-                isVisible={showApiLLPopup}
-                coordinates={coordinates}
-                topPosition={popupTopPosition}
-                constellationName={name_k} // name_k 전달
-                closePopup={closeApiLLPopup} // esc키로 종료
-            />
         </>
-
     ) : null;
 };
 
