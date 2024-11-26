@@ -7,7 +7,7 @@ function WaveCanvas() {
     const starsCanvasRef = useRef(null);  // 별 배경 캔버스
     const waveGroupRef = useRef(null);
     const handleButtonClick = () => {
-        window.location.href = 'https://www.google.com/'; // Naver로 리디렉션
+        window.location.href = '/react/meteor'; // 유성 페이지로 리디렉션
     };
 
     useEffect(() => {
@@ -122,9 +122,24 @@ function WaveCanvas() {
 
     return (
         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+            {/* 별 배경 캔버스 */}
             <canvas ref={starsCanvasRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
+
+            {/* 물결 애니메이션 캔버스 */}
             <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
             <Main_Button onClick={handleButtonClick}/>
+
+            {/* 버튼 */}
+            <div
+                style={{
+                    position: 'absolute',
+                    zIndex: 10,
+                    bottom: '100px', // 버튼을 하단에서 50px 위로 배치
+                    left: '200px',   // 버튼을 왼쪽에서 30px 오른쪽으로 배치
+                }}
+            >
+                <Main_Button onClick={handleButtonClick} label="유성우 정보 보러가기" />
+            </div>
         </div>
 
     );

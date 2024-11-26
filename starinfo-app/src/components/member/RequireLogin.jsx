@@ -22,9 +22,14 @@ const RequireLogin = () => {
     }, [navigate]);
 
     return (
-        <div style={{ position: 'relative', width: '100%', height: '100vh' }}>
+        <div style={{
+            position: 'relative',
+            width: '100%',
+            height: '100vh',
+            overflow: 'hidden', // 스크롤바 제거
+        }}>
             {/* AstroAnimation을 배경으로 설정 */}
-            <AstroAnimation />
+            <AstroAnimation/>
 
             {/* 로그인 요청 메시지 */}
             <div style={{

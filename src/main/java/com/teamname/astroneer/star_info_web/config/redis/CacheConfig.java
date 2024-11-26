@@ -28,6 +28,10 @@ public class CacheConfig {
         cacheConfigurations.put("planetVisibility",
                 RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(30)));
 
+        //유성우 가시성 데이터 캐시 - TTL: 7일
+        cacheConfigurations.put("meteorShowerVisibility",
+                RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofDays(7)));
+
         // 기타 캐시 데이터 - TTL: 1시간
         cacheConfigurations.put("generalData",
                 RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofHours(1)));

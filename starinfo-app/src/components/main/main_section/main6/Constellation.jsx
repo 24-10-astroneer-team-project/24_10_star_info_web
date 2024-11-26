@@ -1,6 +1,6 @@
-// Constellation.jsx
 import React, { useEffect, useRef } from 'react';
 import { Polygon } from './Polygon';
+import Main_Button from '../../../../components/layout/Main_Button'; // Main_Button 컴포넌트 임포트
 import './Constellation.css';
 
 const Constellation = () => {
@@ -8,6 +8,10 @@ const Constellation = () => {
     const pixelRatio = window.devicePixelRatio > 1 ? 2 : 1;
     let polygon, moveX = 0, isDown = false, offsetX = 0;
     let stars = []; // 별 데이터를 저장할 배열
+
+    const handleButtonClick = () => {
+        window.location.href = '/react/meteor'; // 버튼 클릭 시 이동할 경로
+    };
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -102,8 +106,22 @@ const Constellation = () => {
     }, [pixelRatio]);
 
     return (
-        <div className="rotating-polygon-section">
+        <div className="rotating-polygon-section" style={{ position: 'relative' }}>
             <canvas ref={canvasRef} className="rotating-polygon-canvas"></canvas>
+            {/* 버튼 추가 */}
+            <div
+                style={{
+                    position: 'absolute',
+                    zIndex: 10,
+                    bottom: '300px', // 하단에서 20px 위로 배치
+                    left: '250px', // 오른쪽에서 30px 안쪽으로 배치
+                }}
+            >
+                <Main_Button
+                    onClick={handleButtonClick}
+                    label="별자리 정보 보러가기"
+                />
+            </div>
         </div>
     );
 };
