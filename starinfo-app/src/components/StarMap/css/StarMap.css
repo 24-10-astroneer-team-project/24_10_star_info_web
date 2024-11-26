@@ -8,7 +8,7 @@
 
 .header, .footer {
     position: relative;
-    z-index: 1; /* Bring header to the front */
+    z-index: 2; /* Bring header to the front */
 }
 
 .footer {
@@ -24,10 +24,13 @@
     width: 50%; /* Adjust this percentage as needed */
     display: block;
 }
+
 .stars-container {
     width: 100%;
     max-width: 1001px;
-    margin-left: 35%;
+    position: relative;
+    left: 35%;
+    transform: translateX(-35%);
 }
 
 .stars-background {
@@ -36,7 +39,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: radial-gradient(circle, #082551, #062044, #051b38, #06162c, #040f20);
+    background-image: radial-gradient(circle, #061c3d, #041833, #04142a, #041021, #030b18);
 }
 
 .subtitle {
