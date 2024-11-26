@@ -28,9 +28,8 @@ src/main/resources/static/js
 .env
 starinfo-app/.env
 
-# Firebase API KEY
+# Firebase API KEY # Google API KEY
 /src/main/resources/teamastroneerstarinfo-firebase-adminsdk-l8qw1-62cdf88ebf.json
-# Google API KEY
 src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
 
 # 프로퍼티 파일

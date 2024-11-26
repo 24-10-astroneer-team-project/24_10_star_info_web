@@ -57,6 +57,7 @@ public class SecurityConfig {
                                 .requestMatchers("/constellations", "/constellations/**").permitAll() // 별자리 경로
                                 .requestMatchers("/planet/**", "/planet/visibility", "/planet/opposition").permitAll() // 행성 경로
                                 .requestMatchers("/meteorShower", "/meteorShower/general", "/meteorShower/**").permitAll() // 유성우 경로
+                                .requestMatchers("/public/calendar/**").permitAll() // 공용 캘린더 경로
                                 .requestMatchers("/static/**","/media/**","/js/**", "/css/**", "/img/**", "/fontawesome-free-6.5.1-web/**", "/particle.png").permitAll()
                                 .requestMatchers("/api/location/save").authenticated()
                                 .anyRequest().authenticated()
