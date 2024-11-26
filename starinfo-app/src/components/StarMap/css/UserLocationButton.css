@@ -1,0 +1,54 @@
+/* UserLocationButton.css */
+
+.user-location-container {
+    font-family: 'Jaldi', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: -0.05em;
+    position: absolute;
+    left: 20px;
+    color: #B2CDF8;
+    border:0.5px whitesmoke solid;
+    border-radius: 8px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 18px;
+    z-index: 1000;
+    background: linear-gradient(#151829, #353A50);
+    padding: clamp(10px, 2vw, 20px);
+}
+
+.user-info {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.location-info {
+    line-height: 1.6;
+}
+
+.login-message {
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    color: red;
+}
+
+.go-button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    font-size: 14px;
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.go-button:hover {
+    transform: scale(1.1);
+}
+
+.go-button:active {
+    transform: scale(1.05);
+}

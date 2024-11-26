@@ -18,9 +18,9 @@ function ProfileButton() {
     };
 
     return (
-        <button onClick={goToProfile}>
+        <a href="#" onClick={goToProfile} className="menu-item">
             내 프로필 보기
-        </button>
+        </a>
     );
 }
 

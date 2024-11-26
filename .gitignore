@@ -29,6 +29,7 @@ starinfo-app/.env
 
 # Firebase API KEY
 /src/main/resources/teamastroneerstarinfo-firebase-adminsdk-l8qw1-62cdf88ebf.json
+/src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
 
 # 프로퍼티 파일
 /src/main/resources/application-DB.properties
@@ -59,3 +60,6 @@ package-lock.json
 
 # VS Code 관련 파일들
 .vscode/
+
+# Redis 관련 파일
+Redis-x64-3.0.504/
