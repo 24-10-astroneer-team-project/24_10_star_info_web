@@ -24,15 +24,9 @@ function UserLocationButton({ constellationData }) {
         return (
             <div className="user-location-container">
                 <p className="login-message">로그인을 해주세요</p>
+<button className="go-button" onClick={handleOpenPopup}>→</button>
             </div>
-        );
-    }
-    // 로그인 끊겨서 닉네임은 뜨는데 위도 경도는 서울일 때
-    else if (location.latitude === 37.5665 && location.longitude === 126.9780) {
-        return (
-            <div className="user-location-container">
-                <p className="login-message">로그인을 해주세요</p>
-            </div>
+	
         );
     }
 

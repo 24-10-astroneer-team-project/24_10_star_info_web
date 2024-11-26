@@ -47,7 +47,7 @@ function StarMap() {
     // 일주일치 날짜를 "YYYY-MM-DD" 형식으로 가져오는 함수
     const getOneWeekLaterDate = () => {
         const today = new Date();
-        today.setDate(today.getDate() + 3); // 7일 후 날짜 계산
+        today.setDate(today.getDate() + 6); // 7일 후 날짜 계산
         const year = today.getFullYear();
         const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
