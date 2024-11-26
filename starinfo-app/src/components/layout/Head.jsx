@@ -1,13 +1,28 @@
-// Head.js
 import React, { useState } from 'react';
+import { useAuth } from "../../services/AuthProvider"; // 로그인 상태 확인용
 import './Head.css';
 import ProfileButton from "../member/MemberProfileButton";
+import { toast } from "react-toastify"; // 토스트 알람
 
 function Head() {
     const [isMenuVisible, setMenuVisible] = useState(false);
+    const { isAuthenticated, logout } = useAuth(); // 로그인 상태와 로그아웃 메서드 가져오기
 
     const handleMouseEnter = () => setMenuVisible(true);
     const handleMouseLeave = () => setMenuVisible(false);
+
+    const handleLogout = () => {
+        logout(); // 상태를 업데이트하여 로그아웃 처리
+        toast.success("로그아웃 되었습니다.", {
+            position: "top-center",
+            autoClose: 2000, // 2초 후 자동 닫힘
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+        });
+    };
 
     return (
         <nav className="nav_header">
@@ -17,7 +32,6 @@ function Head() {
                 onMouseLeave={handleMouseLeave}
             >
                 <a href="./main">ASTRO</a>
-
             </div>
             <div
                 className={`menu-container ${isMenuVisible ? 'active' : ''}`}
@@ -25,13 +39,36 @@ function Head() {
                 onMouseLeave={handleMouseLeave}
             >
                 <ul className="navbar">
-                    <li><a href="./main">메인화면</a></li>
+                    <li><a href="./main">일정관리</a></li>
                     <li><a href="./starmap">별보기</a></li>
-                    <li><a href="https://naver.com">천체탐구</a></li>
-                    <li><a href="https://naver.com">궤도계산</a></li>
-                    <li><a href="./gps">위치 입력(임시)</a></li>
-                    <li><a href="./login">로그인</a></li>
-                    <li><ProfileButton></ProfileButton></li>
+                    <li><a href="./planet">행성</a></li>
+                    <li><a href="./meteor">유성우</a></li>
+                    <li><a href="./map">위치 입력(임시)</a></li>
+                    {/* 로그인 상태에 따라 다른 링크 또는 메뉴 표시 */}
+                    {isAuthenticated ? (
+                        <>
+                            <li>
+                                <a
+                                    href="#"
+                                    onClick={(e) => {
+                                        e.preventDefault(); // 링크 기본 동작 방지
+                                        handleLogout();
+                                    }}
+                                    className="menu-item logout"
+                                >
+                                    로그아웃
+                                </a>
+                            </li>
+                            <li className="menu-item">
+                                {/* 프로필 버튼: 로그인 상태에서만 표시 */}
+                                <ProfileButton />
+                            </li>
+                        </>
+                    ) : (
+                        <li>
+                            <a href="./login">로그인</a>
+                        </li>
+                    )}
                 </ul>
             </div>
         </nav>

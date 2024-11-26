@@ -1,14 +1,51 @@
 // src/main2/WeatherPage.js
-import React from 'react';
+
+import React, {useEffect, useState} from 'react';
 import styles from './WeatherPage.module.css';
-import Main_Button from "../../../layout/Main_Button";
+import useUserLocation from '../../../../hooks/useUserLocation'; // 위치 데이터 훅
+import useWeather from '../../../../hooks/weather/useWeather'; // 날씨 데이터 훅
+import { useAuth } from '../../../../services/AuthProvider'; // 인증 상태 훅
+import WeatherCard from './WeatherCard';
 
 function WeatherPage() {
+    const { location, locationLoading } = useUserLocation();
+    const { isAuthenticated } = useAuth(); // 인증 상태 가져오기
+    const { weatherData, weatherLoading, weatherError, cityName } = useWeather(location, isAuthenticated); // cityName 추가
+    const [renderKey, setRenderKey] = useState(0); // 강제 재렌더링 키
+
+    useEffect(() => {
+        // 로그인 상태가 변경되면 강제 재렌더링
+        setRenderKey((prevKey) => prevKey + 1);
+    }, [isAuthenticated]);
+
+    if (locationLoading || weatherLoading) {
+        return (
+            <div className={`${styles.bg} weather-page`}>
+            </div>
+        );
+    }
+
+    if (weatherError) {
+        return (
+            <div className={`${styles.bg} weather-page`}>
+                <p>날씨 데이터를 가져오는 데 문제가 발생했습니다.</p>
+            </div>
+        );
+    }
+
     return (
-        <div className={styles.bg}>
-            {/* 상단의 'Local Weather App' 텍스트만 표시 */}
-            <h1 className={styles.textCenter}>Local Weather App</h1>
-            <Main_Button/>
+        <div className={`${styles.bg} weather-page`}>
+            <h1 className={styles.title}>7-Day Weather Forecast for {cityName}</h1> {/* 도시 이름 표시 */}
+            <div className={styles.cardContainer}>
+                {weatherData.daily.slice(0, 7).map((day, index) => (
+                    <WeatherCard
+                        key={index}
+                        weatherData={day}
+                        timezone={weatherData.timezone}
+                        cityName={cityName} // 도시 이름 전달
+                    />
+                ))}
+            </div>
         </div>
     );
 }
