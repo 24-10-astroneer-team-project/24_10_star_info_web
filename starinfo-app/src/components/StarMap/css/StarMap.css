@@ -11,6 +11,10 @@
     z-index: 1; /* Bring header to the front */
 }
 
+.footer {
+    flex-shrink: 0;
+}
+
 .stars-container svg {
     font-family: 'Open sans', sans-serif;
     text-transform: uppercase;
