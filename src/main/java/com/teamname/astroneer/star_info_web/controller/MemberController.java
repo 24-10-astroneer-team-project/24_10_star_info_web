@@ -93,6 +93,8 @@ public class MemberController {
         return ResponseEntity.ok(updatedUserDetail);
     }
 
+
+
     // 로그인 상태 확인 API
     @GetMapping("/check-auth")
     public boolean checkAuthenticated(Authentication authentication) {

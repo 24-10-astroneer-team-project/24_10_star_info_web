@@ -16,14 +16,14 @@ public class PlanetController {
     private final PlanetService planetService;
 
     @GetMapping("/visibility")
-    public String getPlanetData(@RequestParam String planetName, @RequestParam double latitude, @RequestParam double longitude, @RequestParam String startDate, @RequestParam String rangeDays) {
-        log.debug("==========================핼성의 가시성 데이터 요청==============================");
-        return planetService.getPlanetData(planetName, longitude, latitude, startDate, rangeDays);
+    public String getPlanetData(@RequestParam String planetName, @RequestParam double latitude, @RequestParam double longitude, @RequestParam String date, @RequestParam String rangeDays) {
+        log.info("==========================핼성의 가시성 데이터 요청==============================");
+        return planetService.getPlanetData(planetName, longitude, latitude, date, rangeDays);
     }
 
     @GetMapping("/opposition")
     public String getOppositionData(@RequestParam String planetName, @RequestParam String year) {
-        log.debug("=============================행성 대접근 데이터 요청=================================");
+        log.info("=============================행성 대접근 데이터 요청=================================");
         return planetService.getOppositionData(planetName, year);
     }
 }
