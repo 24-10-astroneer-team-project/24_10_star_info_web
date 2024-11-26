@@ -1,28 +1,11 @@
 /* ConstellationPopup.css */
-.tooltip {
-    position: absolute;
-    top: 30px; /* 아이콘 아래로 30px */
-    left: 30px; /* 아이콘 오른쪽으로 30px */
-    background-color: rgba(0, 0, 0, 0.8);
-    color: #ffffff;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.9em;
-    white-space: nowrap;
-    z-index: 10;
-    opacity: 0;
-}
-
-.icon-container:hover .tooltip {
-    opacity: 1;
-}
 
 .popup-container {
     box-sizing: border-box;
-    width: 35vw; /* Use viewport width for immediate responsiveness */
+    width: 30vw; /* Use viewport width for immediate responsiveness */
     max-width: 490px; /* Maximum width constraint */
     max-height: 100%;
-    position: absolute;
+    position: fixed;
     top: 50%;
     margin-left: -20%;
     transform: translate(-50%, -50%);
@@ -30,7 +13,7 @@
     border: 0.5px solid rgba(255, 255, 255, 0.8);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
-    padding: 1vw; /* Responsive padding */
+    padding: 0.8vw; /* Responsive padding */
     color: #C7C7C7;
     font-family: 'Jaldi', sans-serif;
     font-style: normal;
@@ -65,7 +48,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 1.5vw;
 }
 
 .detail_icon, .con_icon {
@@ -82,10 +65,6 @@
     padding: 5px 15px;
     cursor: pointer;
     transition: background-color 0.3s;
-}
-
-.detail_icon:hover {
-    cursor: pointer;
 }
 
 /* name 및 name_k 텍스트 스타일 */
@@ -127,26 +106,6 @@ hr {
     animation: fadeOut 0.1s ease forwards;
 }
 
-/* Fade-in animation */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-/* Fade-out animation */
-@keyframes fadeOut {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
-}
-
 /* Tab button styles */
 .tab-buttons {
     display: flex;
@@ -172,13 +131,11 @@ hr {
     overflow-y: auto;
 }
 
-/* Fade-in & Fade-out 애니메이션 */
-.fade-in {
-    opacity: 0;
-    animation: fadeIn 0.15s ease forwards;
-}
-
-.fade-out {
-    opacity: 1;
-    animation: fadeOut 0.15s ease forwards;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

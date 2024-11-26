@@ -127,6 +127,7 @@ function WaveCanvas() {
 
             {/* 물결 애니메이션 캔버스 */}
             <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
+            <Main_Button onClick={handleButtonClick}/>
 
             {/* 버튼 */}
             <div
@@ -140,6 +141,7 @@ function WaveCanvas() {
                 <Main_Button onClick={handleButtonClick} label="유성우 정보 보러가기" />
             </div>
         </div>
+
     );
 }
 

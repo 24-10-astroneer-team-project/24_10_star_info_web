@@ -42,11 +42,21 @@
 .month {
     font-size: 12px;
     font-weight: normal;
+    fill-opacity: 0;
+}
+
+.subtitle {
+    fill-opacity: 0;
+}
+
+.title {
+    font-size: 20px;
+    animation: fillPath_title 0.8s linear forwards 0.8s; /* 2초 지연 후 2초에 걸쳐 나타남 */
+    fill-opacity: 0; /* 기본 투명도 */
 }
 
 .month, .title, .subtitle {
     fill: white;
-    fill-opacity: 0;
     filter: drop-shadow(0 0 1rem black);
 }
 
@@ -76,10 +86,9 @@
     stroke: white;
     stroke-width: 1;
     fill: none;
-    filter: url(#glow) drop-shadow(0 0 2rem black);
+    filter: url(#glow) drop-shadow(0 0 2rem black) ;
     stroke-dasharray: 550;
     stroke-dashoffset: 550;
-    cursor: pointer;
     pointer-events: all;
 }
 
@@ -90,13 +99,14 @@
 
 .constellation:hover text,
 .drawConstellation text {
+    font-size: 24px;
     animation: fillPath 1s linear forwards;
 }
 
 .diagram path {
     fill: none;
     stroke: white;
-    stroke-width: 0.5;
+    stroke-width: 0.7;
     stroke-dasharray: 4000;
     stroke-dashoffset: 4000;
 }
@@ -112,6 +122,13 @@
     }
 }
 
+@keyframes fillPath_title {
+    to {
+        fill-opacity: 0.5;
+    }
+}
+
+
 @keyframes drawPath {
     to {
         stroke-dashoffset: 0;
@@ -124,10 +141,9 @@
     stroke-dashoffset: 4000;
 }
 
-
 .drawDiagram path,
 .drawMonths path {
-    animation: drawPath 5s linear forwards;
+    animation: drawPath 4s linear forwards;
 }
 
 .drawDiagram text,
@@ -136,7 +152,7 @@
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .stars-container {
         width: 100%;
         margin-left: 0; /* Center the SVG by removing the left margin */

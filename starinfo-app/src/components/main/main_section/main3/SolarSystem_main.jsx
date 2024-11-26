@@ -305,7 +305,8 @@ const SolarSystem_main = () => {
                             <h2>Dwarf planet</h2>
                             <h1>Pluto</h1>
                             <p>
-                                "한때 아홉 번째 행성이었던 명왕성은 이제 우리 태양계에서 가장 큰 왜소 행성으로 <br/>분류됩니다."
+                                "한때 아홉 번째 행성이었
+                                던 명왕성은 이제 우리 태양계에서 가장 큰 왜소 행성으로 <br/>분류됩니다."
                             </p>
                         </div>
                         <div className={`${styles.overlay} thirdSectionOverlay`}></div>
