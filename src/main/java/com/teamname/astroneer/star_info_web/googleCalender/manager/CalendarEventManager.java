@@ -17,8 +17,8 @@ public class CalendarEventManager {
 
     private final Calendar service;
 
-    public void addEvent(String summary, String location, String description,
-                         String startDateTimeStr, String endDateTimeStr, String timeZone) throws IOException {
+    public Event addEvent(String summary, String location, String description,
+                          String startDateTimeStr, String endDateTimeStr, String timeZone) throws IOException {
         Event event = new Event()
                 .setSummary(summary)
                 .setLocation(location)
@@ -40,11 +40,12 @@ public class CalendarEventManager {
         event = service.events().insert(calendarId, event).execute();
 
         System.out.printf("Event created: %s\n", event.getHtmlLink());
+        return event; // 생성된 Google Event 객체 반환
     }
 
-    public List<Event> getPublicEvents(String calendarId) throws IOException {
-        // Retrieve the next 10 upcoming events from the specified calendar.
-        Events events = service.events().list(calendarId)
+    public List<Event> getPublicEvents(String googleEventId) throws IOException {
+        // Retrieve events
+        Events events = service.events().list(googleEventId)
                 .setMaxResults(10)
                 .setOrderBy("startTime")
                 .setSingleEvents(true)
@@ -53,12 +54,11 @@ public class CalendarEventManager {
         return events.getItems();
     }
 
-    public void updateEvent(String calendarId, String eventId, String summary, String location, String description,
+    public void updateEvent(String calendarId, String googleEventId, String summary, String location, String description,
                             String startDateTimeStr, String endDateTimeStr, String timeZone) throws IOException {
-        // Retrieve the event to update
-        Event event = service.events().get(calendarId, eventId).execute();
+        // Retrieve and update event
+        Event event = service.events().get(calendarId, googleEventId).execute();  // calendarId 추가
 
-        // Update the event details
         event.setSummary(summary)
                 .setLocation(location)
                 .setDescription(description);
@@ -75,16 +75,16 @@ public class CalendarEventManager {
                 .setTimeZone(timeZone);
         event.setEnd(end);
 
-        // Update the event in the calendar
-        event = service.events().update(calendarId, eventId, event).execute();
+        // Update event
+        service.events().update(calendarId, googleEventId, event).execute();  // calendarId 추가
 
         System.out.printf("Event updated: %s\n", event.getHtmlLink());
     }
 
-    public void deleteEvent(String calendarId, String eventId) throws IOException {
-        // Delete the event from the specified calendar
-        service.events().delete(calendarId, eventId).execute();
+    public void deleteEvent(String calendarId, String googleEventId) throws IOException {
+        // Google Calendar에서 이벤트 삭제
+        service.events().delete(calendarId, googleEventId).execute();
 
-        System.out.printf("Event deleted: %s\n", eventId);
+        System.out.printf("Event deleted: %s\n", googleEventId);
     }
 }

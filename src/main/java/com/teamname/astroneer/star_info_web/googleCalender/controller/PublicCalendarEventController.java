@@ -1,6 +1,7 @@
 package com.teamname.astroneer.star_info_web.googleCalender.controller;
 
 import com.teamname.astroneer.star_info_web.googleCalender.dto.EventRequest;
+import com.teamname.astroneer.star_info_web.googleCalender.entity.PublicCalendar;
 import com.teamname.astroneer.star_info_web.googleCalender.service.PublicCalendarEventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,11 +41,24 @@ public class PublicCalendarEventController {
         }
     }
 
+    // Read All Events from DB
+    @GetMapping("/db/events")
+    public List<PublicCalendar> getAllEventsFromDB() {
+        return publicCalendarEventService.getAllEventsFromDB();
+    }
+
+    // Read Specific Event from DB by Google Event ID
+    @GetMapping("/db/event")
+    public PublicCalendar getEventByGoogleEventId(@RequestParam String googleEventId) {
+        return publicCalendarEventService.getEventByGoogleEventId(googleEventId);
+    }
+
     // Update Event
     @PutMapping("/update")
-    public String updateEvent(@RequestParam(defaultValue = "primary") String calendarId, @RequestParam String eventId, @RequestBody EventRequest request) {
+    public String updateEvent(@RequestParam(defaultValue = "primary") String calendarId, @RequestParam String googleEventId, @RequestBody EventRequest request) {
         try {
-            publicCalendarEventService.updateEvent(calendarId, eventId, request);
+            log.info("Updating event with ID: {}", googleEventId);
+            publicCalendarEventService.updateEvent(calendarId, googleEventId, request);
             return "Event updated successfully";
         } catch (IOException e) {
             log.error("Failed to update event", e);
@@ -54,9 +68,9 @@ public class PublicCalendarEventController {
 
     // Delete Event
     @DeleteMapping("/delete")
-    public String deleteEvent(@RequestParam(defaultValue = "primary") String calendarId, @RequestParam String eventId) {
+    public String deleteEvent(@RequestParam(defaultValue = "primary") String calendarId, @RequestParam String googleEventId) {
         try {
-            publicCalendarEventService.deleteEvent(calendarId, eventId);
+            publicCalendarEventService.deleteEvent(calendarId, googleEventId);
             return "Event deleted successfully";
         } catch (IOException e) {
             log.error("Failed to delete event", e);
