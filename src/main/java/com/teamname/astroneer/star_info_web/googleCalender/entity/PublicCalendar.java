@@ -1,5 +1,6 @@
 package com.teamname.astroneer.star_info_web.googleCalender.entity;
 
+import com.teamname.astroneer.star_info_web.googleCalender.dto.EventCategory;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,4 +41,8 @@ public class PublicCalendar {
 
     @Column(name = "created_by", nullable = false)
     private String createdBy;  // 이벤트 생성자 (서비스 계정 또는 사용자 ID)
+
+    @Column(name = "event_category", nullable = false)
+    @Enumerated(EnumType.STRING)  // Enum 값을 문자열로 저장
+    private EventCategory eventCategory;
 }
