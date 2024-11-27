@@ -69,6 +69,11 @@ dependencies {
     implementation ("com.google.auth:google-auth-library-oauth2-http:1.17.0")
 }
 
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-parameters")
+}
+
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }
