@@ -11,5 +11,5 @@ public class EventRequest {
     private String startDateTime;
     private String endDateTime;
     private String timeZone;
-//    private String createdBy;
+    private EventCategory eventCategory;
 }

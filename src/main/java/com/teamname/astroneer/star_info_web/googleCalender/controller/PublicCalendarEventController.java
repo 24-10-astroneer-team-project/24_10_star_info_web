@@ -47,18 +47,18 @@ public class PublicCalendarEventController {
         return publicCalendarEventService.getAllEventsFromDB();
     }
 
-    // Read Specific Event from DB by Google Event ID
+    // Read Specific Event from DB by Public Calendar ID
     @GetMapping("/db/event")
-    public PublicCalendar getEventByGoogleEventId(@RequestParam String googleEventId) {
-        return publicCalendarEventService.getEventByGoogleEventId(googleEventId);
+    public PublicCalendar getEventById(@RequestParam Long publicCalendarId) {
+        return publicCalendarEventService.getEventById(publicCalendarId);
     }
 
     // Update Event
     @PutMapping("/update")
-    public String updateEvent(@RequestParam(defaultValue = "primary") String calendarId, @RequestParam String googleEventId, @RequestBody EventRequest request) {
+    public String updateEvent(@RequestParam Long publicCalendarId, @RequestBody EventRequest request) {
         try {
-            log.info("Updating event with ID: {}", googleEventId);
-            publicCalendarEventService.updateEvent(calendarId, googleEventId, request);
+            log.info("Updating event with ID: {}", publicCalendarId);
+            publicCalendarEventService.updateEvent(publicCalendarId, request);
             return "Event updated successfully";
         } catch (IOException e) {
             log.error("Failed to update event", e);
@@ -68,14 +68,15 @@ public class PublicCalendarEventController {
 
     // Delete Event
     @DeleteMapping("/delete")
-    public String deleteEvent(@RequestParam(defaultValue = "primary") String calendarId, @RequestParam String googleEventId) {
+    public String deleteEvent(@RequestParam Long publicCalendarId) {
         try {
-            publicCalendarEventService.deleteEvent(calendarId, googleEventId);
+            publicCalendarEventService.deleteEvent(publicCalendarId);
             return "Event deleted successfully";
         } catch (IOException e) {
             log.error("Failed to delete event", e);
             return "Failed to delete event: " + e.getMessage();
         }
     }
+
 }
 
