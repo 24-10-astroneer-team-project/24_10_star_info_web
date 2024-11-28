@@ -140,3 +140,11 @@ SELECT * FROM astronomical_event;
 SELECT * FROM meteor_shower_visibility;
 
 SELECT * FROM public_calendar;
+
+
+
+
+
+
+
+drop table if exists public_calendar;

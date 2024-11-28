@@ -90,4 +90,16 @@ public class PublicCalendarEventController {
             return "Failed to sync events: " + e.getMessage();
         }
     }
+
+    // 캘린더 초기화 API
+    @DeleteMapping("/reset")
+    public String resetCalendar() {
+        try {
+            publicCalendarEventService.resetCalendar();
+            return "Calendar and DB reset successfully.";
+        } catch (IOException e) {
+            log.error("Failed to reset calendar", e);
+            return "Failed to reset calendar: " + e.getMessage();
+        }
+    }
 }
