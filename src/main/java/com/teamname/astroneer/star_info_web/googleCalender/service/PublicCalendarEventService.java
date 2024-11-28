@@ -1,5 +1,12 @@
 package com.teamname.astroneer.star_info_web.googleCalender.service;
 
+
+import com.google.api.client.googleapis.batch.BatchRequest;
+import com.google.api.client.googleapis.batch.json.JsonBatchCallback;
+import com.google.api.client.googleapis.json.GoogleJsonError;
+import com.google.api.client.googleapis.json.GoogleJsonErrorContainer;
+import com.google.api.client.http.HttpHeaders;
+import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 import com.teamname.astroneer.star_info_web.googleCalender.dto.EventCategory;
 import com.teamname.astroneer.star_info_web.googleCalender.dto.EventRequest;
@@ -13,19 +20,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PublicCalendarEventService {
+
     private final CalendarEventManager calendarEventManager;
     private final PublicCalendarRepository publicCalendarRepository;
 
     // Add Event
     @Transactional
     public void addEvent(EventRequest request) throws IOException {
-        // Google Calendar에 이벤트 추가하고, 생성된 이벤트 객체를 반환받음
+        // Google Calendar에 이벤트 추가
         Event event = calendarEventManager.addEvent(
                 request.getSummary(),
                 request.getLocation(),
@@ -38,9 +47,6 @@ public class PublicCalendarEventService {
         OffsetDateTime offsetDateTime = OffsetDateTime.parse(request.getStartDateTime());
         OffsetDateTime offsetEndDateTime = OffsetDateTime.parse(request.getEndDateTime());
 
-        // Google Calendar에서 반환된 이벤트의 `creator` 정보를 사용하여 createdBy 설정
-        String createdBy = event.getCreator().getEmail();
-
         // DB에 이벤트 추가
         PublicCalendar publicCalendar = new PublicCalendar();
         publicCalendar.setGoogleEventId(event.getId());
@@ -50,9 +56,9 @@ public class PublicCalendarEventService {
         publicCalendar.setStartDateTime(offsetDateTime.toLocalDateTime());
         publicCalendar.setEndDateTime(offsetEndDateTime.toLocalDateTime());
         publicCalendar.setTimeZone(request.getTimeZone());
-        publicCalendar.setCreatedBy(createdBy);
+        publicCalendar.setCreatedBy(event.getCreator().getEmail());
 
-        // EventCategory 설정
+        // EventCategory 설정 (DB에만 저장)
         publicCalendar.setEventCategory(
                 request.getEventCategory() != null ? request.getEventCategory() : EventCategory.GENERAL
         );
@@ -60,9 +66,12 @@ public class PublicCalendarEventService {
         publicCalendarRepository.save(publicCalendar); // DB 추가
     }
 
-    // Read (구글 캘린더 이벤트 조회)
+    // Read (Google Calendar에서 이벤트 조회, 항상 primary 사용)
     public List<Event> getPublicEvents(String calendarId) throws IOException {
-        return calendarEventManager.getPublicEvents(calendarId);
+        log.info("Fetching events from Google Calendar: {}", calendarId);
+
+        // primary 캘린더에서 모든 이벤트 조회
+        return calendarEventManager.getAllEvents(calendarId);
     }
 
     // Read (DB에서 모든 이벤트 조회)
@@ -84,21 +93,11 @@ public class PublicCalendarEventService {
                 .orElseThrow(() -> new IllegalArgumentException("Event not found: " + publicCalendarId));
         String googleEventId = publicCalendar.getGoogleEventId();
 
-        // eventCategory가 일치하는지 확인 (여기서는 Meteor와 Planet으로 구분하는 예시)
-        if ("Meteor".equals(publicCalendar.getEventCategory())) {
-            // 유성우 관련 로직
-            log.info("Updating a Meteor event with ID: {}", publicCalendarId);
-        } else if ("Planet".equals(publicCalendar.getEventCategory())) {
-            // 행성 대접근 관련 로직
-            log.info("Updating a Planet event with ID: {}", publicCalendarId);
-        } else {
-            // 일반 이벤트로 처리
-            log.info("Updating a General event with ID: {}", publicCalendarId);
-        }
+        log.info("Updating event in primary calendar, Event ID: {}", googleEventId);
 
         // Google Calendar에서 이벤트 업데이트
         calendarEventManager.updateEvent(
-                "primary",
+                "primary", // 항상 primary 캘린더
                 googleEventId,
                 request.getSummary(),
                 request.getLocation(),
@@ -119,7 +118,7 @@ public class PublicCalendarEventService {
         publicCalendar.setEndDateTime(offsetEndDateTime.toLocalDateTime());
         publicCalendar.setTimeZone(request.getTimeZone());
 
-        // EventCategory 업데이트
+        // EventCategory 업데이트 (DB에서만 관리)
         if (request.getEventCategory() != null) {
             publicCalendar.setEventCategory(request.getEventCategory());
         }
@@ -127,7 +126,7 @@ public class PublicCalendarEventService {
         publicCalendarRepository.save(publicCalendar); // DB 업데이트
     }
 
-    // Delete
+    // Delete Event
     @Transactional
     public void deleteEvent(Long publicCalendarId) throws IOException {
         // DB에서 Google Event ID를 가져옴
@@ -140,5 +139,53 @@ public class PublicCalendarEventService {
 
         // DB에서도 이벤트 삭제
         publicCalendarRepository.delete(publicCalendar);
+    }
+
+    // Batch Event Sync (Google Calendar와 DB 동기화)
+    @Transactional
+    public void syncAllEventsWithBatch(List<EventRequest> requests) throws IOException {
+        BatchRequest batch = calendarEventManager.getBatchRequest();
+
+        JsonBatchCallback<Event> callback = new JsonBatchCallback<>() {
+            @Override
+            public void onSuccess(Event event, HttpHeaders responseHeaders) {
+                log.info("Successfully added event to Google Calendar: {}", event.getId());
+
+                OffsetDateTime startDateTime = OffsetDateTime.parse(event.getStart().getDateTime().toStringRfc3339());
+                OffsetDateTime endDateTime = OffsetDateTime.parse(event.getEnd().getDateTime().toStringRfc3339());
+
+                PublicCalendar publicCalendar = new PublicCalendar();
+                publicCalendar.setGoogleEventId(event.getId());
+                publicCalendar.setSummary(event.getSummary());
+                publicCalendar.setLocation(event.getLocation());
+                publicCalendar.setDescription(event.getDescription());
+                publicCalendar.setStartDateTime(startDateTime.toLocalDateTime());
+                publicCalendar.setEndDateTime(endDateTime.toLocalDateTime());
+                publicCalendar.setTimeZone(event.getStart().getTimeZone());
+                publicCalendar.setCreatedBy(event.getCreator().getEmail());
+                publicCalendar.setEventCategory(EventCategory.GENERAL); // 기본 General 설정
+
+                publicCalendarRepository.save(publicCalendar);
+            }
+
+            @Override
+            public void onFailure(GoogleJsonError e, HttpHeaders responseHeaders) {
+                log.error("Failed to add event to Google Calendar: {}", e.getMessage());
+            }
+        };
+
+        for (EventRequest request : requests) {
+            Calendar.Events.Insert insertRequest = calendarEventManager.addEventRequest(
+                    request.getSummary(),
+                    request.getLocation(),
+                    request.getDescription(),
+                    request.getStartDateTime(),
+                    request.getEndDateTime(),
+                    request.getTimeZone()
+            );
+            insertRequest.queue(batch, callback);
+        }
+
+        batch.execute();
     }
 }

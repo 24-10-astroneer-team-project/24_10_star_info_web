@@ -1,5 +1,6 @@
 package com.teamname.astroneer.star_info_web.googleCalender.controller;
 
+import com.teamname.astroneer.star_info_web.googleCalender.dto.EventCategory;
 import com.teamname.astroneer.star_info_web.googleCalender.dto.EventRequest;
 import com.teamname.astroneer.star_info_web.googleCalender.entity.PublicCalendar;
 import com.teamname.astroneer.star_info_web.googleCalender.service.PublicCalendarEventService;
@@ -22,7 +23,7 @@ public class PublicCalendarEventController {
     @PostMapping("/add")
     public String addEvent(@RequestBody EventRequest request) {
         try {
-            publicCalendarEventService.addEvent(request);
+            publicCalendarEventService.addEvent(request); // DB에 EventCategory 저장
             return "Event added successfully";
         } catch (IOException e) {
             log.error("Failed to add event", e);
@@ -30,11 +31,11 @@ public class PublicCalendarEventController {
         }
     }
 
-    // Read Events
+    // Read Events from Google Calendar (always primary calendar)
     @GetMapping("/events")
-    public List<com.google.api.services.calendar.model.Event> getPublicEvents(@RequestParam(defaultValue = "primary") String calendarId) {
+    public List<com.google.api.services.calendar.model.Event> getPublicEvents() {
         try {
-            return publicCalendarEventService.getPublicEvents(calendarId);
+            return publicCalendarEventService.getPublicEvents("primary"); // Google Calendar에서 항상 primary 사용
         } catch (IOException e) {
             log.error("Failed to get events", e);
             return List.of();  // 빈 리스트 반환
@@ -44,13 +45,13 @@ public class PublicCalendarEventController {
     // Read All Events from DB
     @GetMapping("/db/events")
     public List<PublicCalendar> getAllEventsFromDB() {
-        return publicCalendarEventService.getAllEventsFromDB();
+        return publicCalendarEventService.getAllEventsFromDB(); // DB에 저장된 모든 이벤트 반환
     }
 
     // Read Specific Event from DB by Public Calendar ID
     @GetMapping("/db/event")
     public PublicCalendar getEventById(@RequestParam Long publicCalendarId) {
-        return publicCalendarEventService.getEventById(publicCalendarId);
+        return publicCalendarEventService.getEventById(publicCalendarId); // 특정 이벤트 반환
     }
 
     // Update Event
@@ -58,7 +59,7 @@ public class PublicCalendarEventController {
     public String updateEvent(@RequestParam Long publicCalendarId, @RequestBody EventRequest request) {
         try {
             log.info("Updating event with ID: {}", publicCalendarId);
-            publicCalendarEventService.updateEvent(publicCalendarId, request);
+            publicCalendarEventService.updateEvent(publicCalendarId, request); // primary 캘린더와 DB 업데이트
             return "Event updated successfully";
         } catch (IOException e) {
             log.error("Failed to update event", e);
@@ -70,7 +71,7 @@ public class PublicCalendarEventController {
     @DeleteMapping("/delete")
     public String deleteEvent(@RequestParam Long publicCalendarId) {
         try {
-            publicCalendarEventService.deleteEvent(publicCalendarId);
+            publicCalendarEventService.deleteEvent(publicCalendarId); // primary 캘린더와 DB에서 이벤트 삭제
             return "Event deleted successfully";
         } catch (IOException e) {
             log.error("Failed to delete event", e);
@@ -78,5 +79,15 @@ public class PublicCalendarEventController {
         }
     }
 
+    // Sync Events in Batch
+    @PostMapping("/sync/batch")
+    public String syncAllEventsWithBatch(@RequestBody List<EventRequest> requests) {
+        try {
+            publicCalendarEventService.syncAllEventsWithBatch(requests);
+            return "Events synced successfully";
+        } catch (IOException e) {
+            log.error("Failed to sync events in batch", e);
+            return "Failed to sync events: " + e.getMessage();
+        }
+    }
 }
-
