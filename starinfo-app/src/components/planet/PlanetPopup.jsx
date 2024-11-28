@@ -1,6 +1,6 @@
 import React from 'react';
 import anime from 'animejs/lib/anime.es.js';
-import './PlanetPage.css';
+import './PlanetPopup.css';
 
 // 행성 데이터 (Mercury, Neptune 등)
 const planets = [
