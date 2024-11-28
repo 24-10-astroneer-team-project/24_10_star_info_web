@@ -1,7 +1,6 @@
 /* 팝업 외부 영역 */
 .favorite-location-popup {
     position: fixed;
-    top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
