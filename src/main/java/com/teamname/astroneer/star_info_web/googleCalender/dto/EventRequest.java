@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class EventRequest {
+    private String calendarId;
     private String googleEventId;
     private String summary;
     private String location;
