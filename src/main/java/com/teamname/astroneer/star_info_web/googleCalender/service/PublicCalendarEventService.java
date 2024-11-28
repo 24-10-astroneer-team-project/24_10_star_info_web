@@ -141,7 +141,6 @@ public class PublicCalendarEventService {
         publicCalendarRepository.delete(publicCalendar);
     }
 
-    // Batch Event Sync (Google Calendar와 DB 동기화)
     @Transactional
     public void syncAllEventsWithBatch(List<EventRequest> requests) throws IOException {
         BatchRequest batch = calendarEventManager.getBatchRequest();
@@ -154,6 +153,12 @@ public class PublicCalendarEventService {
                 OffsetDateTime startDateTime = OffsetDateTime.parse(event.getStart().getDateTime().toStringRfc3339());
                 OffsetDateTime endDateTime = OffsetDateTime.parse(event.getEnd().getDateTime().toStringRfc3339());
 
+                // 요청과 매핑되는 EventRequest를 찾음
+                EventRequest matchedRequest = requests.stream()
+                        .filter(req -> req.getSummary().equals(event.getSummary()))
+                        .findFirst()
+                        .orElse(null);
+
                 PublicCalendar publicCalendar = new PublicCalendar();
                 publicCalendar.setGoogleEventId(event.getId());
                 publicCalendar.setSummary(event.getSummary());
@@ -163,8 +168,15 @@ public class PublicCalendarEventService {
                 publicCalendar.setEndDateTime(endDateTime.toLocalDateTime());
                 publicCalendar.setTimeZone(event.getStart().getTimeZone());
                 publicCalendar.setCreatedBy(event.getCreator().getEmail());
-                publicCalendar.setEventCategory(EventCategory.GENERAL); // 기본 General 설정
 
+                // EventCategory 설정
+                if (matchedRequest != null && matchedRequest.getEventCategory() != null) {
+                    publicCalendar.setEventCategory(matchedRequest.getEventCategory());
+                } else {
+                    publicCalendar.setEventCategory(EventCategory.GENERAL); // 기본값 설정
+                }
+
+                log.info("Saving PublicCalendar with EventCategory: {}", publicCalendar.getEventCategory());
                 publicCalendarRepository.save(publicCalendar);
             }
 
@@ -187,5 +199,27 @@ public class PublicCalendarEventService {
         }
 
         batch.execute();
+    }
+
+    @Transactional
+    public void resetCalendar() throws IOException {
+        log.info("Resetting Google Calendar and DB...");
+
+        // Step 1: Google Calendar 초기화
+        List<Event> events = calendarEventManager.getAllEvents("primary");
+        for (Event event : events) {
+            try {
+                calendarEventManager.deleteEvent("primary", event.getId());
+                log.info("Deleted event from Google Calendar: {}", event.getId());
+            } catch (IOException e) {
+                log.warn("Failed to delete event: {}", event.getId(), e);
+            }
+        }
+
+        // Step 2: DB 초기화
+        publicCalendarRepository.deleteAll();
+        log.info("Deleted all events from the database.");
+
+        log.info("Reset completed.");
     }
 }
