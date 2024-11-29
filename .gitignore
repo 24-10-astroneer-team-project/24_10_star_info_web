@@ -1,16 +1,21 @@
+# Git 관련 파일
 HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
+
+# 빌드 파일들
 !starinfo-app/src/main1/**/build/
 !**/src/test/**/build/
+
+# Node 모듈과 정적 파일들
 node_modules/
 src/main/resources/static/*
+src/main/resources/static/css
+src/main/resources/static/js
 
-src/main/resources/static
 
-
-### STS ###
+# STS 관련 파일들
 .apt_generated
 .classpath
 .factorypath
@@ -18,20 +23,24 @@ src/main/resources/static
 .settings
 .springBeans
 .sts4-cache
-# Spring .env
+
+# 환경 변수 파일들
 .env
-# React .env
 starinfo-app/.env
-starinfo-app/node_modules
-starinfo-app/.gitignore
-#firebase API KEY
+
+# Firebase API KEY # Google API KEY
 /src/main/resources/teamastroneerstarinfo-firebase-adminsdk-l8qw1-62cdf88ebf.json
-bin/
+src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
+
+# 프로퍼티 파일
 /src/main/resources/application-DB.properties
+
+# 바이너리 파일들
+bin/
 !starinfo-app/src/main1/**/bin/
 !**/src/test/**/bin/
 
-### IntelliJ IDEA ###
+# IntelliJ IDEA 관련 파일들
 .idea
 *.iws
 *.iml
@@ -40,12 +49,18 @@ out/
 !starinfo-app/src/main1/**/out/
 !**/src/test/**/out/
 
-### NetBeans ###
+# NPM 잠금 파일
+package-lock.json
+
+# NetBeans 관련 파일들
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
+# VS Code 관련 파일들
 .vscode/
+
+# Redis 관련 파일
+Redis-x64-3.0.504/
