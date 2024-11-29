@@ -1,0 +1,172 @@
+.content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    position: relative;
+}
+
+.header, .footer {
+    position: relative;
+    z-index: 2; /* Bring header to the front */
+}
+
+.footer {
+    flex-shrink: 0;
+}
+
+.stars-container svg {
+    font-family: 'Open sans', sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 18px;
+    margin: 20px 0;
+    width: 50%; /* Adjust this percentage as needed */
+    display: block;
+}
+
+.stars-container {
+    width: 100%;
+    max-width: 1001px;
+    position: relative;
+    left: 35%;
+    transform: translateX(-35%);
+}
+
+.stars-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, #061c3d, #041833, #04142a, #041021, #030b18);
+}
+
+.subtitle {
+    font-size: 15px;
+}
+
+.month {
+    font-size: 12px;
+    font-weight: normal;
+    fill-opacity: 0;
+}
+
+.subtitle {
+    fill-opacity: 0;
+}
+
+.title {
+    font-size: 20px;
+    animation: fillPath_title 0.8s linear forwards 0.8s; /* 2초 지연 후 2초에 걸쳐 나타남 */
+    fill-opacity: 0; /* 기본 투명도 */
+}
+
+.month, .title, .subtitle {
+    fill: white;
+    filter: drop-shadow(0 0 1rem black);
+}
+
+
+.stars path {
+    fill: white;
+    fill-opacity: 0;
+    transform-origin: 0 0;
+    stroke: #F2E2A2;
+    stroke-width: 0;
+    filter: url("#glow");
+    animation: fillPath 5s linear forwards, pulseStars 3s 5s linear infinite;
+}
+
+@keyframes pulseStars {
+    0% {
+        stroke-width: 0;
+    }
+    50% {
+        stroke-width: 2;
+    }
+    100% {
+        stroke-width: 0;
+    }
+}
+.constellation path {
+    stroke: white;
+    stroke-width: 1;
+    fill: none;
+    filter: url(#glow) drop-shadow(0 0 2rem black) ;
+    stroke-dasharray: 550;
+    stroke-dashoffset: 550;
+    pointer-events: all;
+}
+
+.constellation:hover path,
+.drawConstellation path {
+    animation: drawPath 1s linear forwards;
+}
+
+.constellation:hover text,
+.drawConstellation text {
+    font-size: 24px;
+    animation: fillPath 1s linear forwards;
+}
+
+.diagram path {
+    fill: none;
+    stroke: white;
+    stroke-width: 0.7;
+    stroke-dasharray: 4000;
+    stroke-dashoffset: 4000;
+}
+
+.milkyway path {
+    filter: url("#glow");
+    fill: rgba(255,255,255,0.03);
+}
+
+@keyframes fillPath {
+    to {
+        fill-opacity: 1;
+    }
+}
+
+@keyframes fillPath_title {
+    to {
+        fill-opacity: 0.5;
+    }
+}
+
+
+@keyframes drawPath {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.months path {
+    stroke: white;
+    stroke-dasharray: 4000;
+    stroke-dashoffset: 4000;
+}
+
+.drawDiagram path,
+.drawMonths path {
+    animation: drawPath 4s linear forwards;
+}
+
+.drawDiagram text,
+.drawMonths text {
+    animation: fillPath 2s linear forwards;
+}
+
+
+@media (max-width: 1024px) {
+    .stars-container {
+        width: 100%;
+        margin-left: 0; /* Center the SVG by removing the left margin */
+    }
+
+    .stars-container svg {
+        width: 100%; /* Make SVG fill the entire container width */
+        height: auto;
+    }
+}

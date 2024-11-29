@@ -1,0 +1,162 @@
+/* src/main2/WeatherPage.module.css */
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.bg {
+    position: relative;
+    background-image: url("https://images6.alphacoders.com/339/339532.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 60px;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* 그라데이션 오버레이 */
+.bg::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.9) 0%,         /* 위쪽은 매우 어둡게 시작 */
+            rgba(0, 0, 0, 0.4) 40%,        /* 중간에서 살짝 밝아짐 */
+            rgba(0, 0, 0, 0.4) 60%,        /* 중간 부분 유지 */
+            rgba(0, 0, 0, 0.9) 100%        /* 아래쪽은 매우 어둡게 끝남 */
+    );
+    z-index: 1;
+}
+
+/* 텍스트와 콘텐츠에 그라데이션 오버레이가 적용되지 않도록 z-index 설정 */
+.textCenter {
+    font-size: 56px;
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+    z-index: 2; /* 그라데이션 레이어 위에 위치 */
+}
+
+/* ============================================================= */
+
+.box {
+    width: 20vw;
+    height: 60vh;
+    border-radius: 5px;
+    box-shadow: 0 2px 30px rgba(0, 0, 0, 0.2);
+    background: #eff3f9;
+    position: relative;
+    overflow: hidden;
+    transform: translate3d(0, 0, 0);
+    min-width: 200px;
+    min-height: 350px;
+}
+
+.wave {
+    opacity: 0.3;
+    position: absolute;
+    top: 120%;
+    left: 50%;
+    background: white;
+    width: 500px;
+    height: 500px;
+    margin-left: -250px;
+    margin-top: -250px;
+    transform-origin: 50% 48%;
+    border-radius: 43%;
+    animation: drift 3000ms infinite linear;
+    z-index: 1;
+}
+
+.wave.-three {
+    animation: drift 5000ms infinite linear;
+    z-index: 2 !important;
+    opacity: 0.2;
+}
+
+.wave.-two {
+    animation: drift 7000ms infinite linear;
+    opacity: 0.1;
+    z-index: 3 !important;
+}
+
+.weathercon {
+    height: 55%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3em;
+}
+
+.info {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 45%;
+    z-index: 4;
+}
+
+.location {
+    text-align: center;
+    font-weight: 800;
+}
+
+.date {
+    text-align: center;
+    margin-top: 5%;
+    color: grey;
+    font-size: 70%;
+}
+
+.temp {
+    margin-top: 10%;
+    text-align: center;
+}
+
+.description {
+    text-align: center;
+    color: grey;
+    font-size: 0.8rem;
+}
+
+@keyframes drift {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.weather-page {
+    padding: 20px;
+    background: #f0f4f8;
+}
+
+.title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+/* 카드 컨테이너가 배경 그라데이션 위로 오도록 z-index 설정 */
+.cardContainer {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    z-index: 3; /* 그라데이션보다 위 */
+    position: relative; /* z-index 활성화를 위해 position 추가 */
+    margin-top: 50px; /* 컨테이너를 50px 아래로 이동 */
+}

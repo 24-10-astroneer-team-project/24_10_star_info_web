@@ -58,10 +58,13 @@ public class CustomOAuth2User implements OAuth2User, UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return Boolean.TRUE.equals(member.getDelStatus()); // 탈퇴 여부에 따라 계정 활성화 여부 결정
+        return !Boolean.TRUE.equals(member.getDelStatus()); // 탈퇴 여부가 false일 때 활성화
     }
 
     public String getEmail() {
         return member.getEmail();
+    }
+
+    public long getUserId() { return member.getId();
     }
 }

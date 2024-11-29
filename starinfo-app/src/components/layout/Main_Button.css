@@ -1,30 +1,59 @@
 .main_button {
-    bottom: 80px; /* Keep the position above the footer */
-    left: 20px;
+    position: absolute;
+    bottom: 7%; /* Keep the position above the footer */
+    left: 5%;
     padding: 15px 30px;
-    background-color: #000000; /* Dark background color */
+    background-color:transparent; /* Deep black with a slight gray tint */
     color: #ffffff; /* White text color */
-    border: none;
-    border-radius: 0; /* Remove rounded corners */
-    border: 0.5px white solid;
+    border: 1px solid rgba(255, 255, 255, 0.4); /* Subtle glowing white border */
+    border-radius: 10px; /* Rounded corners for a modern look */
     cursor: pointer;
-    font-size: 18px;
     font-weight: bold;
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
-    z-index: 9999; /* Ensure visibility */
-    transition: transform 0.2s ease, background-color 0.2s ease;
-    margin-top: 30%;
-    margin-left: -80%;
+    font-size: 1.2vw;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5), 0px 0px 15px rgba(255, 255, 255, 0.15); /* Glow with depth */
+    z-index: 9999;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 
-    /* Add polygonal shape */
-    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+    /* Starry galaxy gradient background */
+    background-image: radial-gradient(circle at center, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.8) 70%);
+    text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5); /* Enhanced text glow */
+    overflow: hidden; /* Prevent overflow of inner effects */
+}
+
+.main_button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
+    transform: scale(0.5);
+    opacity: 0;
+    transition: transform 1s ease, opacity 1s ease;
+    pointer-events: none;
+}
+
+.main_button:hover::before {
+    transform: scale(1.1);
+    opacity: 0.6;
 }
 
 .main_button:hover {
-    background-color: #333333; /* Slightly lighter dark color on hover */
-    transform: scale(1.1); /* Slightly enlarge on hover */
+    background-color: #1a1a1a; /* Slightly lighter on hover */
+    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.6), 0px 0px 20px rgba(255, 255, 255, 0.3); /* Brighter glow */
+    transform: scale(1.1); /* Gentle zoom effect */
 }
 
 .main_button:active {
-    transform: scale(1.05); /* Slightly shrink on click */
+    transform: scale(1.05); /* Slight compression effect */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.6), 0px 0px 10px rgba(255, 255, 255, 0.2); /* Reduced glow */
+}
+
+/* 화면 크기가 작아질 때 폰트 크기 줄어들기 */
+@media (max-width: 1024px) {
+    .main_button {
+        font-size: 1.5vw;
+        bottom: 12%;
+    }
 }
