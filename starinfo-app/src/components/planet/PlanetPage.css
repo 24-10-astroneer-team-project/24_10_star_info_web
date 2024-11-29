@@ -405,7 +405,8 @@
 #saturn .planet,
 #saturn.orbit,
 #saturn .ring {
-    animation-duration: 353.36998s;
+    /*animation-duration: 353.36998s;*/
+    animation-duration: 1.36998s;
 }
 
 #uranus .pos,
