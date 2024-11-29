@@ -68,7 +68,8 @@
     top: 50%;
     left: 50%;
     transform: translateY(-50%);
-    width: 525px;
+    width: auto;
+    margin:5%;
     font-family: 'Inter', sans-serif;
     font-size: 1.5vw;
     line-height: 1.5;

@@ -107,7 +107,6 @@ const planets = [
     }
 ];
 
-
 // PlanetCard 컴포넌트 정의
 const PlanetCard = ({ name, k_name, diameter, moons, desc, url }) => (
     <div>
