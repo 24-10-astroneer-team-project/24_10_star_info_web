@@ -313,16 +313,7 @@ const SolarSystem_main = () => {
                     </div>
                 </div>
                 {/* 버튼 추가 */}
-                <div
-                    style={{
-                        position: 'absolute',
-                        zIndex: 10,
-                        bottom: '50px', // 버튼을 하단에서 50px 위로 배치
-                        left: '230px',   // 버튼을 왼쪽에서 30px 오른쪽으로 배치
-                    }}
-                >
                     <Main_Button onClick={handleButtonClick} label="행성 정보 보러가기" />
-                </div>
             </div>
         </div>
     );

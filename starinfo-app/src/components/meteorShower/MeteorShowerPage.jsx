@@ -10,6 +10,7 @@ import "./MeteorShowerPage.css";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import useUserLocation from "../../hooks/useUserLocation";
 import {useAuth} from "../../services/AuthProvider";
+import MeteorShowerPopup from "./MeteorShowerPopup"; // 팝업 컴포넌트 추가
 
 const MeteorShowerPage = () => {
     // Canvas 요소의 참조를 저장하기 위한 useRef 훅
@@ -257,10 +258,6 @@ const MeteorShowerPage = () => {
                 <Head />
                 <canvas ref={bgCanvasRef}></canvas> {/* 배경 캔버스 */}
                 <canvas ref={terrainCanvasRef}></canvas> {/* 지형 캔버스 */}
-                <div className="popup">
-                    {/*<h1>유성우</h1>*/}
-                    {/*<p>유성우 관련 내용들</p>*/}
-                </div>
                 {dataLoading ? (
                     <LoadingSpinner />
                 ) : fetchError ? (
@@ -276,19 +273,11 @@ const MeteorShowerPage = () => {
 
                 {/* 상세 정보 표시 */}
                 {selectedMeteor && (
-                    <div className="meteor-details-popup">
-                        {detailLoading ? null : detailError ? (
-                            <div>Error loading meteor shower details...</div>
-                        ) : meteorData && meteorData.name ? (
-                            <div>
-                                <h2>{meteorData.name} 상세 정보</h2>
-                                <p>{meteorData.description || "No description available."}</p>
-                                {/* 추가 정보를 여기 표시 */}
-                            </div>
-                        ) : (
-                            <div>No details available for the selected meteor shower.</div>
-                        )}
-                    </div>
+                    <MeteorShowerPopup
+                        meteorData={meteorData}        // 유성우 상세 데이터
+                        isLoading={detailLoading}      // 로딩 상태 전달
+                        onClose={() => setSelectedMeteor(null)} // 팝업 닫기 핸들러
+                    />
                 )}
             </div>
             {/* 푸터 영역 */}
