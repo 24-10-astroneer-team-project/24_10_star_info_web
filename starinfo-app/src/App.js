@@ -14,6 +14,7 @@ import MapComponent from "./components/API/MapComponents";
 import MemberDetail from "./components/member/MemberDetail";
 import PrivateRoute from "./components/member/PrivateRoute";
 import MeteorShowerPage from "./components/meteorShower/MeteorShowerPage";
+import PublicCalendarPage from "./components/publicCalendar/publicCalendarPage";
 // import LoadingSpinner from "./components/ui/LoadingSpinner";
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
                     <Route path="/react/starmap" element={<StarMap/>}/>
                     <Route path="/react/planet" element={<PlanetPage/>}/>
                     <Route path="/react/meteor" element={<MeteorShowerPage />} /> {/* 유성우 페이지 */}
+                    <Route path="/react/publicCalendar" element={<PublicCalendarPage/>}/>
                     <Route
                         path="/react/member/:userId"
                         element={
