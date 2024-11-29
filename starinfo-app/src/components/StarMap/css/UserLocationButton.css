@@ -7,12 +7,13 @@
     letter-spacing: -0.05em;
     position: absolute;
     left: 20px;
+    top:14%;
     color: #B2CDF8;
     border:0.5px whitesmoke solid;
     border-radius: 8px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     font-size: 18px;
-    z-index: 1000;
+    z-index: 1;
     background: linear-gradient(#151829, #353A50);
     padding: clamp(10px, 2vw, 20px);
 }

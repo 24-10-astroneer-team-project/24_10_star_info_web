@@ -1,0 +1,44 @@
+.calendar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+.event-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.event-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.event-dot.meteor {
+    background-color: blue;
+}
+
+.event-dot.planet {
+    background-color: red;
+}
+
+.highlighted {
+    background-color: #f0f8ff;
+    border: 1px solid #a4c6e4;
+}
+
+.event-list {
+    margin-top: 20px;
+}
+
+.event-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.event-list li {
+    margin: 5px 0;
+}

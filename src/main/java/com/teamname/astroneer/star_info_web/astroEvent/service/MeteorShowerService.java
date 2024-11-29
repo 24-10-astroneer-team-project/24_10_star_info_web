@@ -1,6 +1,7 @@
 package com.teamname.astroneer.star_info_web.astroEvent.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.client.util.DateTime;
 import com.teamname.astroneer.star_info_web.astroEvent.data.MeteorShowerData;
 import com.teamname.astroneer.star_info_web.astroEvent.dto.meteorShower.CoordinatesDTO;
 import com.teamname.astroneer.star_info_web.astroEvent.dto.meteorShower.MeteorShowerVisibilityDTO;
@@ -10,6 +11,9 @@ import com.teamname.astroneer.star_info_web.astroEvent.mapper.MeteorShowerVisibi
 import com.teamname.astroneer.star_info_web.astroEvent.repository.AstronomicalEventRepository;
 import com.teamname.astroneer.star_info_web.astroEvent.repository.MeteorShowerVisibilityRepository;
 import com.teamname.astroneer.star_info_web.astroEvent.util.Util;
+import com.teamname.astroneer.star_info_web.googleCalender.dto.EventCategory;
+import com.teamname.astroneer.star_info_web.googleCalender.dto.EventRequest;
+import com.teamname.astroneer.star_info_web.googleCalender.service.PublicCalendarEventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +22,15 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +42,7 @@ public class MeteorShowerService {
     private final Util util;
     private final MeteorShowerVisibilityRepository meteorShowerVisibilityRepository;
     private final AstronomicalEventRepository astronomicalEventRepository;
+    private final PublicCalendarEventService publicCalendarEventService;
 
     @Cacheable(value = "meteorShowerVisibility", key = "#cometName + '-' + #startDate")
     public String getMeteorShowerData(String cometName, String startDate) {
@@ -55,8 +65,8 @@ public class MeteorShowerService {
         }
     }
 
-    @Cacheable(value = "meteorShowerVisibility", key = "#meteorShowerName + '-' + #year + '-' + #latitude + '-' + #longitude")
-    @Retryable(value = {RestClientException.class}, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+//    @Cacheable(value = "meteorShowerVisibility", key = "#meteorShowerName + '-' + #year + '-' + #latitude + '-' + #longitude")
+//    @Retryable(value = {RestClientException.class}, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public String getMeteorShowerVisibilityData(String meteorShowerName, int year, double latitude, double longitude) {
         try {
             // Step 1: DB에서 데이터 조회
@@ -213,6 +223,71 @@ public class MeteorShowerService {
                         meteorShowerName, year, latitude, longitude, e);
             }
         }
+    }
+
+    @Transactional
+    public void syncMeteorShowersToCalendar(int year) throws IOException {
+        log.info("Fetching meteor shower visibility data for year: {}", year);
+
+        // Step 1: DB에서 유성우 데이터 조회
+        List<MeteorShowerVisibility> visibilityList = meteorShowerVisibilityRepository.findByYear(year);
+
+        if (visibilityList.isEmpty()) {
+            log.warn("No meteor shower visibility data found for year: {}", year);
+            return;
+        }
+
+        // Step 2: EventRequest 리스트로 변환
+        List<EventRequest> eventRequests = new ArrayList<>();
+        for (MeteorShowerVisibility visibility : visibilityList) {
+            // Step 2-1: OffsetDateTime → DateTime 변환
+            OffsetDateTime sunset = visibility.getSunsetTime(); // OffsetDateTime
+            OffsetDateTime sunrise = visibility.getSunriseTime(); // OffsetDateTime
+
+            DateTime googleSunset = new DateTime(sunset.toInstant().toEpochMilli());
+            DateTime googleSunrise = new DateTime(sunrise.plusDays(1).toInstant().toEpochMilli());
+
+            // **Best Time 이벤트 추가**
+            EventRequest bestTimeRequest = new EventRequest();
+            bestTimeRequest.setSummary(visibility.getMeteorShowerName() + " Best Meteor Shower");
+            bestTimeRequest.setLocation("Lat: " + visibility.getLatitude() + ", Lon: " + visibility.getLongitude());
+            bestTimeRequest.setDescription(String.format(
+                    "Visibility: %s\nDirection: %s\nMoon Phase: %s\nMessage: %s",
+                    visibility.getVisibilityRating(),
+                    visibility.getDirection(),
+                    visibility.getPhaseDescription(),
+                    visibility.getVisibilityMessage()
+            ));
+            bestTimeRequest.setStartDateTime(googleSunset.toStringRfc3339());
+            bestTimeRequest.setEndDateTime(googleSunrise.toStringRfc3339());
+            bestTimeRequest.setTimeZone(visibility.getTimeZoneId());
+            bestTimeRequest.setEventCategory(EventCategory.METEOR);
+
+            eventRequests.add(bestTimeRequest);
+
+            // **피크 기간 이벤트 추가**
+            EventRequest peakPeriodRequest = new EventRequest();
+            peakPeriodRequest.setSummary(visibility.getMeteorShowerName() + " Peak Period");
+            peakPeriodRequest.setLocation("Lat: " + visibility.getLatitude() + ", Lon: " + visibility.getLongitude());
+            peakPeriodRequest.setDescription(String.format(
+                    "Meteor shower peak period from %s to %s.",
+                    visibility.getPeakStart(),
+                    visibility.getPeakEnd()
+            ));
+            peakPeriodRequest.setStartDateTime(visibility.getPeakStart() + "T00:00:00Z");
+            peakPeriodRequest.setEndDateTime(visibility.getPeakEnd() + "T23:59:59Z");
+            peakPeriodRequest.setTimeZone(visibility.getTimeZoneId());
+            peakPeriodRequest.setEventCategory(EventCategory.METEOR);
+
+            eventRequests.add(peakPeriodRequest);
+        }
+
+        log.info("Prepared {} EventRequests for synchronization", eventRequests.size());
+
+        // Step 3: Google Calendar 동기화 요청
+        publicCalendarEventService.syncAllEventsWithBatch(eventRequests);
+
+        log.info("Successfully synced meteor showers to Google Calendar");
     }
 
 }

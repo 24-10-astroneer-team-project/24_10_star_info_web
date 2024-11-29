@@ -3,10 +3,7 @@ package com.teamname.astroneer.star_info_web.astroEvent.controller;
 import com.teamname.astroneer.star_info_web.astroEvent.service.MeteorShowerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/meteorShower")
@@ -32,5 +29,21 @@ public class MeteorShowerController {
                 decodedMeteorShowerName, year, latitude, longitude);
 
         return meteorShowerService.getMeteorShowerVisibilityData(decodedMeteorShowerName, year, latitude, longitude);
+    }
+
+    // 연도 기준으로 유성우 데이터를 Google Calendar와 동기화
+    @PostMapping("/syncToCalendar")
+    public String syncMeteorShowersToCalendar(@RequestParam int year) {
+        try {
+            log.info("Syncing meteor showers for year: {}", year);
+
+            // 서비스 호출로 Google Calendar 동기화
+            meteorShowerService.syncMeteorShowersToCalendar(year);
+
+            return "Meteor showers synced to Google Calendar successfully";
+        } catch (Exception e) {
+            log.error("Failed to sync meteor showers", e);
+            return "Failed to sync meteor showers: " + e.getMessage();
+        }
     }
 }
