@@ -65,8 +65,8 @@ public class MeteorShowerService {
         }
     }
 
-    @Cacheable(value = "meteorShowerVisibility", key = "#meteorShowerName + '-' + #year + '-' + #latitude + '-' + #longitude")
-    @Retryable(value = {RestClientException.class}, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+//    @Cacheable(value = "meteorShowerVisibility", key = "#meteorShowerName + '-' + #year + '-' + #latitude + '-' + #longitude")
+//    @Retryable(value = {RestClientException.class}, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public String getMeteorShowerVisibilityData(String meteorShowerName, int year, double latitude, double longitude) {
         try {
             // Step 1: DB에서 데이터 조회
