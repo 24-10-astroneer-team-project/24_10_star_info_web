@@ -111,6 +111,19 @@ CREATE TABLE `user_event_interest` (
                                        FOREIGN KEY (`event_id`) REFERENCES `astronomical_event` (`event_id`) ON DELETE CASCADE
 );
 
+-- public_calendar 테이블
+CREATE TABLE public_calendar (
+                                id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                googleEventId VARCHAR(255) UNIQUE NOT NULL,
+                                summary VARCHAR(255) NOT NULL,
+                                location VARCHAR(255),
+                                description TEXT,
+                                start_datetime DATETIME NOT NULL,
+                                end_datetime DATETIME NOT NULL,
+                                time_zone VARCHAR(255) NOT NULL,
+                                created_by VARCHAR(255) NOT NULL
+);
+
 SHOW TABLES;
 
 -- user table 조회
@@ -125,3 +138,13 @@ SELECT * FROM observation_location;
 -- astronomical_event table 조회
 SELECT * FROM astronomical_event;
 SELECT * FROM meteor_shower_visibility;
+
+SELECT * FROM public_calendar;
+
+
+
+
+
+
+
+drop table if exists public_calendar;

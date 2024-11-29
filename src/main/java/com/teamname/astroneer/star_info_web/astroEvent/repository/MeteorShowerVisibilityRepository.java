@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -25,4 +26,10 @@ public interface MeteorShowerVisibilityRepository extends JpaRepository<MeteorSh
             @Param("longitude") int longitude,
             @Param("peakStart") LocalDate peakStart
     );
+
+    @Query("""
+            SELECT m FROM MeteorShowerVisibility m
+            WHERE YEAR(m.peakStart) = :year
+           """)
+    List<MeteorShowerVisibility> findByYear(int year);
 }
