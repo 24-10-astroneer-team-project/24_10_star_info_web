@@ -1,3 +1,5 @@
+/* Planet.jsx */
+/* 어디에도 쓰이고 있지 않음. 존재이유 모르겠음. 건들필요 x */
 import React from 'react';
 
 const Planet = ({ id, name, size, planetClass, planetImage, handlePlanetClick }) => {
