@@ -15,6 +15,7 @@ import MemberDetail from "./components/member/MemberDetail";
 import PrivateRoute from "./components/member/PrivateRoute";
 import MeteorShowerPage from "./components/meteorShower/MeteorShowerPage";
 import PublicCalendarPage from "./components/publicCalendar/publicCalendarPage";
+import GoogleAuthHandler from "./components/member/GoogleAuthHandler";
 // import LoadingSpinner from "./components/ui/LoadingSpinner";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <AuthProvider>
             <Router>
                 <Routes>
+                    <Route path="/react/dashboard" element={<GoogleAuthHandler />} />
                     <Route path="/react/main" element={<MainPage/>}/> {/* 메인 페이지로 라우팅 */}
                     <Route path="/react/login" element={<LoginPage/>}/> {/* 로그인 페이지로 라우팅 */}
                     <Route path="/react/map" element={<MapComponent/>}/> {/* 지도 컴포넌트 라우트 추가 */}

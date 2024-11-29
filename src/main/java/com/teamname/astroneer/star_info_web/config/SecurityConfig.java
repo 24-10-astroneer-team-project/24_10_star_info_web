@@ -1,11 +1,16 @@
 package com.teamname.astroneer.star_info_web.config;
 
+import com.teamname.astroneer.star_info_web.config.redis.service.RedisRefreshTokenService;
+import com.teamname.astroneer.star_info_web.jwt.JwtUtil;
 import com.teamname.astroneer.star_info_web.security.*;
+import com.teamname.astroneer.star_info_web.security.jwt.JwtAuthenticationFilter;
 import jakarta.servlet.DispatcherType;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +22,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -27,15 +34,24 @@ public class SecurityConfig {
     private final CustomOAuth2SuccessHandler oAuth2AuthenticationSuccessHandler;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final JwtUtil jwtUtil;
+    private final RedisRefreshTokenService redisRefreshTokenService; // Redis 서비스 추가
+    private final OAuth2AuthorizedClientRepository authorizedClientRepository; // OAuth2 클라이언트 리포지토리 추가
 
     // 생성자 주입을 통한 의존성 주입
     @Autowired
     public SecurityConfig(CustomOAuth2SuccessHandler oAuth2AuthenticationSuccessHandler,
                           CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
-                          CustomOAuth2UserService customOAuth2UserService) {
+                          @Lazy CustomOAuth2UserService customOAuth2UserService,
+                          JwtUtil jwtUtil,
+                          @Lazy RedisRefreshTokenService redisRefreshTokenService,
+                          @Lazy OAuth2AuthorizedClientRepository authorizedClientRepository) {
         this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
         this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
         this.customOAuth2UserService = customOAuth2UserService;
+        this.jwtUtil = jwtUtil;
+        this.redisRefreshTokenService = redisRefreshTokenService;
+        this.authorizedClientRepository = authorizedClientRepository;
     }
 
 
@@ -50,7 +66,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()  // FORWARD 요청은 인증 없이 허용
-                                .requestMatchers("/","/react/**", "/static/**", "/react/login", "/react/main").permitAll()  // React 경로 추가
+                                .requestMatchers("/", "/react/**", "/static/**", "/react/login", "/react/main").permitAll()  // React 경로 추가
                                 .requestMatchers("/login").anonymous() // 로그인되지 않은 사용자만 접근 가능
                                 .requestMatchers("/api/**", "/auth/**", "/oauth2/**").authenticated() // API 경로는 명확히 구분
                                 .requestMatchers("/locations", "/locations/**").permitAll()
@@ -58,7 +74,7 @@ public class SecurityConfig {
                                 .requestMatchers("/planet/**", "/planet/visibility", "/planet/opposition").permitAll() // 행성 경로
                                 .requestMatchers("/meteorShower", "/meteorShower/general", "/meteorShower/**").permitAll() // 유성우 경로
                                 .requestMatchers("/public/calendar/**").permitAll() // 공용 캘린더 경로
-                                .requestMatchers("/static/**","/media/**","/js/**", "/css/**", "/img/**", "/fontawesome-free-6.5.1-web/**", "/particle.png").permitAll()
+                                .requestMatchers("/static/**", "/media/**", "/js/**", "/css/**", "/img/**", "/fontawesome-free-6.5.1-web/**", "/particle.png").permitAll()
                                 .requestMatchers("/api/location/save").authenticated()
                                 .anyRequest().authenticated()
                 )
@@ -71,15 +87,19 @@ public class SecurityConfig {
                         .failureHandler(customOAuth2FailureHandler)
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService))
                 )
+                .addFilterBefore(new JwtAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), jwtUtil), LogoutFilter.class) // JWT 필터 추가
                 .sessionManagement(sessionManagement ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT 인증 시 무상태 설정
                 )
-                .logout(logout ->
-                        logout
-                                .logoutUrl("/api/member/logout")
-                                .logoutSuccessUrl("/login?logout")
-                                .invalidateHttpSession(true)
-                                .deleteCookies("JSESSIONID")
+                .logout(logout -> logout
+                        .logoutUrl("/api/member/logout")
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_OK); // 성공 상태 반환
+                            response.getWriter().write("Logout successful");
+                        })
+                        .addLogoutHandler(customLogoutHandler(authorizedClientRepository, redisRefreshTokenService)) // 제대로 된 핸들러 등록
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                 );
         return http.build();
     }
@@ -91,8 +111,6 @@ public class SecurityConfig {
                 .requestMatchers("/static/**", "/js/**", "/css/**", "/img/**");        // 추가적으로 정의한 정적 리소스 경로
     }
 
-
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -101,5 +119,11 @@ public class SecurityConfig {
     @Bean
     public OAuth2AuthorizedClientRepository authorizedClientRepository() {
         return new HttpSessionOAuth2AuthorizedClientRepository();
+    }
+
+    @Bean
+    public CustomLogoutHandler customLogoutHandler(@Lazy OAuth2AuthorizedClientRepository authorizedClientRepository,
+                                             @Lazy RedisRefreshTokenService redisRefreshTokenService) {
+        return new CustomLogoutHandler(authorizedClientRepository, redisRefreshTokenService);
     }
 }

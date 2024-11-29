@@ -1,9 +1,12 @@
 package com.teamname.astroneer.star_info_web.controller;
 
+import com.teamname.astroneer.star_info_web.config.redis.service.RedisRefreshTokenService;
 import com.teamname.astroneer.star_info_web.dto.MemberDetailDTO;
 import com.teamname.astroneer.star_info_web.entity.Member;
+import com.teamname.astroneer.star_info_web.jwt.JwtUtil;
 import com.teamname.astroneer.star_info_web.mapper.MemberMapper;
 import com.teamname.astroneer.star_info_web.service.MemberService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,6 +36,8 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MemberMapper memberMapper;
+    private final RedisRefreshTokenService redisRefreshTokenService;
+    private final JwtUtil jwtUtil;
 
     @GetMapping("/me")
     public ResponseEntity<MemberDetailDTO> getAuthenticatedUser() {
@@ -93,26 +99,53 @@ public class MemberController {
         return ResponseEntity.ok(updatedUserDetail);
     }
 
-
-
     // 로그인 상태 확인 API
     @GetMapping("/check-auth")
     public boolean checkAuthenticated(Authentication authentication) {
         return authentication != null && authentication.isAuthenticated();
     }
 
-    // 로그아웃 처리 API
-    @PostMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        // 세션 무효화 처리
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
+//    // JWT 기반 로그아웃 처리 API
+//    @PostMapping("/logout")
+//    public ResponseEntity<?> logout(@RequestBody Map<String, String> request) {
+//        String refreshToken = request.get("refreshToken");
+//
+//        try {
+//            // Refresh Token 검증
+//            String email = jwtUtil.validateToken(refreshToken);
+//
+//            // Redis에서 Refresh Token 삭제
+//            redisRefreshTokenService.deleteRefreshToken(email);
+//
+//            // SecurityContext 초기화 (선택 사항)
+//            SecurityContextHolder.clearContext();
+//
+//            return ResponseEntity.ok("Logged out successfully");
+//        } catch (JwtException e) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Refresh Token");
+//        }
+//    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshAccessToken(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refreshToken");
+
+        try {
+            String email = jwtUtil.validateToken(refreshToken);
+
+            // Redis에서 Refresh Token 검증
+            if (!redisRefreshTokenService.validateRefreshToken(email, refreshToken)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired Refresh Token");
+            }
+
+            // 새로운 Access Token 생성
+            String newAccessToken = jwtUtil.generateToken(email);
+
+            return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
+        } catch (ExpiredJwtException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh Token expired");
+        } catch (JwtException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Refresh Token");
         }
-
-        // SecurityContext도 초기화 (선택사항)
-        SecurityContextHolder.clearContext();
-
-        return "dd";
     }
 }

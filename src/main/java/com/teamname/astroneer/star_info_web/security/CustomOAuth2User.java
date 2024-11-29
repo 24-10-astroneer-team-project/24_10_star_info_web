@@ -15,10 +15,14 @@ public class CustomOAuth2User implements OAuth2User, UserDetails {
 
     private final Member member;
     private final Map<String, Object> attributes;
+    private final String accessToken; // Access Token 필드
+    private final String refreshToken; // Refresh Token 필드
 
-    public CustomOAuth2User(Member member, Map<String, Object> attributes) {
+    public CustomOAuth2User(Member member, Map<String, Object> attributes, String accessToken, String refreshToken) {
         this.member = member;
         this.attributes = attributes;
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 
     @Override

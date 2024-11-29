@@ -1,67 +1,84 @@
 // AuthProvider.js
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import axios from "axios";
+import jwtDecode from "jwt-decode";
+import axiosInstance from "../api/axiosInstance";
 
 // AuthContext 생성
 const AuthContext = createContext();
 
-// AuthProvider 컴포넌트 정의
 export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(undefined); // 초기값 undefined로 설정
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState(null);
     const [isAuthLoading, setIsAuthLoading] = useState(true);
 
     useEffect(() => {
-        axios.get("/api/member/me")
-            .then(response => {
-                if (response.data) {
+        const token = localStorage.getItem("accessToken");
+        console.log("Stored token:", token); // 디버깅용 로그
+
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                console.log("Decoded token:", decoded); // 디버깅용 로그
+
+                if (Date.now() < decoded.exp * 1000) { // 토큰 만료 확인
+                    axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+                    console.log("Authorization header set:", axiosInstance.defaults.headers.common["Authorization"]); // 디버깅용 로그
                     setIsAuthenticated(true);
-                    setUser(response.data);
-                    console.log("User data set:", response.data);
+                    setUser(decoded);
                 } else {
-                    setIsAuthenticated(false);
-                    setUser(null);
-                    console.log("No user data found.");
+                    console.warn("Access token expired");
+                    logout(); // 만료된 경우 로그아웃
                 }
-            })
-            .catch(() => {
-                setIsAuthenticated(false);
-                setUser(null);
-                console.log("Failed to fetch user data.");
-            })
-            .finally(() => {
-                setIsAuthLoading(false); // 인증 상태 확인 완료 후 로딩 상태 변경
-            });
-    }, []);
-
-
-    // 로그인 함수 (백엔드와 연동)
-    const login = async (credentials) => {
-        try {
-            const response = await axios.post("/api/member/login", credentials); // 백엔드 로그인 API 호출
-            setIsAuthenticated(true);
-            setUser(response.data); // 로그인 성공 시 사용자 정보 설정
-        } catch (error) {
-            console.error("로그인 실패", error);
+            } catch (error) {
+                console.error("Invalid JWT token:", error);
+                logout(); // 잘못된 토큰인 경우 로그아웃
+            }
+        } else {
+            console.log("No access token found");
             setIsAuthenticated(false);
             setUser(null);
         }
-    };
+        setIsAuthLoading(false); // 로딩 상태 완료
+    }, []);
 
-    // 로그아웃 함수 (백엔드와 연동)
     const logout = async () => {
-        try {
-            await axios.post("/api/member/logout"); // 백엔드 로그아웃 API 호출
-            setIsAuthenticated(false);
-            setUser(null); // 로그아웃 시 사용자 정보 제거
-        } catch (error) {
-            console.error("로그아웃 실패", error);
+        console.log("Logging out...");
+
+        const accessToken = localStorage.getItem("accessToken");
+        console.log(`[DEBUG] Access Token: ${accessToken}`);
+
+        if (accessToken) {
+            try {
+                const response = await fetch('/api/member/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    console.log("Server logout successful.");
+                } else {
+                    console.warn("Server logout failed:", response.status);
+                }
+            } catch (error) {
+                console.error("Error during logout request:", error);
+            }
         }
+
+        // 100ms 딜레이 후 로컬 상태 초기화
+        setTimeout(() => {
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            setIsAuthenticated(false);
+            setUser(null);
+        }, 100);
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user, isAuthLoading, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, user, isAuthLoading, logout }}>
             {children}
         </AuthContext.Provider>
     );

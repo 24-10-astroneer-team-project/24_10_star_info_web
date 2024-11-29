@@ -1,9 +1,12 @@
 package com.teamname.astroneer.star_info_web.security;
 
+import com.teamname.astroneer.star_info_web.config.redis.service.RedisRefreshTokenService;
 import com.teamname.astroneer.star_info_web.entity.Member;
 import com.teamname.astroneer.star_info_web.exception.EmailAlreadyExistsException;
+import com.teamname.astroneer.star_info_web.jwt.JwtUtil;
 import com.teamname.astroneer.star_info_web.repository.MemberRepository;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -14,13 +17,19 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Optional;
 
+
+@Slf4j
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberRepository memberRepository;
+    private final JwtUtil jwtUtil;
+    private final RedisRefreshTokenService redisRefreshTokenService;
 
-    public CustomOAuth2UserService(MemberRepository memberRepository) {
+    public CustomOAuth2UserService(MemberRepository memberRepository, JwtUtil jwtUtil, RedisRefreshTokenService redisRefreshTokenService) {
         this.memberRepository = memberRepository;
+        this.jwtUtil = jwtUtil;
+        this.redisRefreshTokenService = redisRefreshTokenService;
     }
 
     @Override
@@ -65,25 +74,42 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private OAuth2User processGoogleUser(OAuth2User oAuth2User, String email, String googleLoginId) {
         Optional<Member> localUser = memberRepository.findByGoogleLoginId(googleLoginId);
 
-        // 이미 기존 Google ID로 로그인한 사용자가 있을 경우, 해당 사용자로 로그인 처리
+        // 이미 Google ID로 로그인한 사용자가 있을 경우
         if (localUser.isPresent()) {
-            return new CustomOAuth2User(localUser.get(), oAuth2User.getAttributes());
+            Member existingUser = localUser.get();
+
+            // JWT 발급
+            String accessToken = jwtUtil.generateToken(existingUser.getEmail());
+            String refreshToken = jwtUtil.generateRefreshToken(existingUser.getEmail());
+
+            // Refresh Token Redis에 저장
+            redisRefreshTokenService.saveRefreshToken(existingUser.getEmail(), refreshToken);
+            log.info("successfully Redis Save Token: {}", refreshToken);
+
+            return new CustomOAuth2User(existingUser, oAuth2User.getAttributes(), accessToken, refreshToken);
         }
 
+        // 새 Google 사용자를 로컬 DB에 등록
         if (memberRepository.findByEmail(email).isPresent()) {
-            // 중복된 이메일이 존재할 경우 예외 발생
             throw new EmailAlreadyExistsException("이미 사용 중인 이메일입니다.");
         }
-
-        System.out.println("로컬 DB에 Google 사용자가 존재하지 않음, 새로운 사용자 등록 시작");
 
         String displayName = oAuth2User.getAttribute("name") != null ? oAuth2User.getAttribute("name") : "사용자";
         String nickname = email.split("@")[0];
         createGoogleUserInLocalDB(email, displayName, nickname, googleLoginId);
 
         Member newUser = memberRepository.findByGoogleLoginId(googleLoginId).orElseThrow();
-        return new CustomOAuth2User(newUser, oAuth2User.getAttributes());
+
+        // JWT 발급
+        String accessToken = jwtUtil.generateToken(newUser.getEmail());
+        String refreshToken = jwtUtil.generateRefreshToken(newUser.getEmail());
+
+        // Refresh Token Redis에 저장
+        redisRefreshTokenService.saveRefreshToken(newUser.getEmail(), refreshToken);
+
+        return new CustomOAuth2User(newUser, oAuth2User.getAttributes(), accessToken, refreshToken);
     }
+
 
     // 로컬 DB에 Google 사용자 생성
     private void createGoogleUserInLocalDB(String email, String uName, String nickname, String googleLoginId) {
