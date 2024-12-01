@@ -22,7 +22,7 @@ public class ConstellationService {
     public String getConstellationData(double latitude, double longitude, String startDate, String endDate) {
         // 외부 API 호출을 위한 URL 생성
         String url = String.format(
-                "http://64.110.98.105:5555/api/constellations?lat=%f&lon=%f&start_date=%s&end_date=%s",
+                "http://64.110.98.105:5555/api/constellations/visibility?lat=%f&lon=%f&start_date=%s&end_date=%s",
                 latitude, longitude, startDate, endDate
         );
 

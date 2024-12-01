@@ -10,17 +10,19 @@ const GoogleAuthHandler = () => {
         const queryParams = new URLSearchParams(window.location.search);
         const accessToken = queryParams.get("accessToken");
         const refreshToken = queryParams.get("refreshToken");
+        const userId = queryParams.get("userId"); // userId 추가
 
-        if (accessToken && refreshToken) {
+        if (accessToken && refreshToken && userId) {
             // 로컬스토리지에 저장
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
-            console.log("Tokens saved successfully");
+            localStorage.setItem("userId", userId); // userId 저장
+            console.log("Tokens and userId saved successfully");
 
-            // 토큰 저장 후 메인 페이지로 리다이렉트
+            // 저장 후 메인 페이지로 리다이렉트
             navigate("/react/main");
         } else {
-            console.error("No tokens found in query params");
+            console.error("Required tokens or userId are missing in query params");
             navigate("/login"); // 인증 실패 시 로그인 페이지로 리다이렉트
         }
     }, [navigate]);

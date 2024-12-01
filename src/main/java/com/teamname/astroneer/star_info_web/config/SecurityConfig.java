@@ -2,6 +2,7 @@ package com.teamname.astroneer.star_info_web.config;
 
 import com.teamname.astroneer.star_info_web.config.redis.service.RedisRefreshTokenService;
 import com.teamname.astroneer.star_info_web.jwt.JwtUtil;
+import com.teamname.astroneer.star_info_web.repository.MemberRepository;
 import com.teamname.astroneer.star_info_web.security.*;
 import com.teamname.astroneer.star_info_web.security.jwt.JwtAuthenticationFilter;
 import jakarta.servlet.DispatcherType;
@@ -37,6 +38,7 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
     private final RedisRefreshTokenService redisRefreshTokenService; // Redis 서비스 추가
     private final OAuth2AuthorizedClientRepository authorizedClientRepository; // OAuth2 클라이언트 리포지토리 추가
+    private final MemberRepository memberRepository;
 
     // 생성자 주입을 통한 의존성 주입
     @Autowired
@@ -45,13 +47,14 @@ public class SecurityConfig {
                           @Lazy CustomOAuth2UserService customOAuth2UserService,
                           JwtUtil jwtUtil,
                           @Lazy RedisRefreshTokenService redisRefreshTokenService,
-                          @Lazy OAuth2AuthorizedClientRepository authorizedClientRepository) {
+                          @Lazy OAuth2AuthorizedClientRepository authorizedClientRepository, MemberRepository memberRepository) {
         this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
         this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
         this.customOAuth2UserService = customOAuth2UserService;
         this.jwtUtil = jwtUtil;
         this.redisRefreshTokenService = redisRefreshTokenService;
         this.authorizedClientRepository = authorizedClientRepository;
+        this.memberRepository = memberRepository;
     }
 
 
@@ -87,7 +90,7 @@ public class SecurityConfig {
                         .failureHandler(customOAuth2FailureHandler)
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService))
                 )
-                .addFilterBefore(new JwtAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), jwtUtil), LogoutFilter.class) // JWT 필터 추가
+                .addFilterBefore(new JwtAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), jwtUtil, memberRepository), LogoutFilter.class) // JWT 필터 추가
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT 인증 시 무상태 설정
                 )

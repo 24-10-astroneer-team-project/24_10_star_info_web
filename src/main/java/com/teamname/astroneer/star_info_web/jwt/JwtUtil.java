@@ -13,10 +13,10 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    @Value("${spring.jwt.secret}") // application-secret.yml의 JWT_SECRET 값 주입
+    @Value("${spring.jwt.secret}")
     private String secret;
 
-    @Value("${spring.jwt.expiration}") // application-secret.yml의 JWT 만료 시간
+    @Value("${spring.jwt.expiration}")
     private long expirationTime;
 
     @Value("${spring.jwt.refresh-expiration}")
@@ -26,39 +26,40 @@ public class JwtUtil {
 
     @PostConstruct
     public void init() {
-        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret)); // JWT_SECRET 값을 Key로 변환
+        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
 
-    public String generateToken(String email) {
+    public String generateToken(String sub, String email) {
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(email) // 이메일을 Subject로 설정
+                .claim("googleLoginId", sub) // Google sub를 id처럼 사용
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String validateToken(String token) {
+    public String generateRefreshToken(String sub, String email) {
+        return Jwts.builder()
+                .setSubject(email)
+                .claim("googleLoginId", sub)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + refreshExpirationTime))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public Claims validateToken(String token) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token)
-                    .getBody()
-                    .getSubject(); // 토큰이 유효하면 이메일 반환
+                    .getBody();
         } catch (ExpiredJwtException e) {
-            throw new ExpiredJwtException(null, null, "JWT expired"); // 만료된 토큰
-        } catch (MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
-            throw new JwtException("Invalid JWT"); // 잘못된 토큰
+            throw new ExpiredJwtException(null, null, "JWT expired");
+        } catch (JwtException e) {
+            throw new JwtException("Invalid JWT");
         }
-    }
-
-    public String generateRefreshToken(String email) {
-        return Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + refreshExpirationTime)) // Refresh Token 만료 시간
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
     }
 }

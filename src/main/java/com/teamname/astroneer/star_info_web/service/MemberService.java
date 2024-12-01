@@ -116,4 +116,13 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
     public Optional<Member> findByGoogleLoginId(String googleLoginId) {
         return memberRepository.findByGoogleLoginId(googleLoginId);
     }
+
+    public MemberDetailDTO getMemberDetailByGoogleLoginId(String googleLoginId) {
+        Optional<Member> member = memberRepository.findByGoogleLoginId(googleLoginId);
+
+        if (member.isPresent()) {
+            return memberMapper.toMemberDetailDTO(member.get()); // DTO 변환
+        }
+        return null;
+    }
 }
