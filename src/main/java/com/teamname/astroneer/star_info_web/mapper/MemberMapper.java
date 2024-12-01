@@ -9,13 +9,9 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
 
-    MemberMapper INSTANCE = Mappers.getMapper(MemberMapper.class);
-
     // Member -> MemberDetailDTO 매핑
     @Mapping(source = "id", target = "userId")
+    @Mapping(source = "locations", target = "locations") // Location 매핑
+    @Mapping(source = "favoriteLocationId", target = "favoriteLocationId") // 즐겨찾기 위치 ID 매핑
     MemberDetailDTO toMemberDetailDTO(Member member);
-
-    // MemberDetailDTO -> Member 매핑 (필요 시)
-//    @Mapping(source = "userId", target = "id")
-//    Member toMember(MemberDetailDTO memberDetailDTO);
 }
