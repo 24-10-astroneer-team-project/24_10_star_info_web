@@ -1,0 +1,101 @@
+/* 팝업 전체 배경 */
+.planet-popup-bc {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 100;
+}
+
+/* 팝업 컨테이너 */
+.planet-popup {
+    position: relative;
+    width: 60%;
+    height: 75%;
+    background: rgba(57, 57, 57, 0.5);
+    border: 0.8px solid #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    display: flex;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* 좌측 상단: 이름과 한글 이름 */
+.planet-title {
+    position: absolute;
+    top: 8%;
+    left: 38px;
+    font-family: 'Inter', sans-serif;
+    font-size: 4vw;
+    font-weight: 400;
+    color: #C1C1C1;
+    line-height: 68px;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* 행성 이미지 */
+.planet-image {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 38px;
+    width: 45%; /* 팝업 전체의 40% */
+    height: auto;
+    border-radius: 5px;
+}
+
+/* Planet Profile */
+.planet-profile {
+    position: absolute;
+    bottom: 20px;
+    left: 38px;
+    font-family: 'Inter', sans-serif;
+    font-size: 25px;
+    line-height: 30px;
+    color: #C1C1C1;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* 설명 텍스트 */
+.planet-description {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%);
+    width: 525px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.5vw;
+    line-height: 1.5;
+    color: #FFFFFF;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* 관측 정보 버튼 */
+.planet-button {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 139px;
+    height: 45px;
+    background: #292929;
+    border: 1px solid #FFFFFF;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
+
+.planet-button span {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    line-height: 40px;
+    color: #FFFFFF;
+}

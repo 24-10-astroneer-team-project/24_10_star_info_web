@@ -1,50 +1,124 @@
-/* MeteorShowerCardPage.css */
-
 .meteor-shower-cards {
-    display: flex; /* 카드들을 가로로 배치 */
-    flex-wrap: wrap; /* 화면이 작아지면 다음 줄로 카드 이동 */
-    justify-content: center; /* 카드들이 중앙에 배치되도록 */
-    gap: 20px; /* 카드 사이의 간격 */
-    padding: 20px; /* 외곽 여백 */
-    margin-top: 30px; /* 상단 여백 */
-    z-index: 10; /* 카드들이 다른 요소들보다 위에 보이도록 */
-    position: relative; /* z-index 적용을 위해 position 추가 */
+    display: flex; /* 카드들을 가로로 배치하여 플렉스 컨테이너로 설정 */
+    flex-wrap: wrap; /* 화면 크기가 작아질 경우 다음 줄로 카드가 넘어가도록 설정 */
+    justify-content: center; /* 카드들을 중앙 정렬 */
+    gap: 40px; /* 카드들 사이의 간격 */
+    padding: 40px; /* 카드 컨테이너의 내부 여백 */
+    margin-top: 50px; /* 컨테이너의 상단 여백 */
+    z-index: 10; /* 카드 컨테이너가 다른 요소들 위에 오도록 설정 */
+    position: relative; /* z-index 적용을 위해 상대 위치 설정 */
 }
 
 .meteor-shower-card {
-    background-color: #1e1e2e; /* 카드 배경색 - 어두운 톤 */
-    color: #ffffff; /* 글씨 색상 - 흰색 */
-    border-radius: 10px; /* 둥근 모서리 */
+    background-color: rgba(30, 30, 46, 0.4); /* 카드 배경에 투명도를 조금 더 추가 */
+    color: #ffffff; /* 텍스트 색상: 흰색 */
+    border-radius: 8px; /* 카드의 모서리를 조금 더 둥글게 설정 */
     width: 300px; /* 카드의 너비 */
-    padding: 20px; /* 내부 여백 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 카드 그림자 */
-    transition: transform 0.2s, box-shadow 0.2s; /* 애니메이션 효과 */
+    height: 480px; /* 카드의 높이 */
+    overflow: hidden; /* 카드 영역을 넘는 콘텐츠를 숨김 */
+    position: relative; /* 내부 요소의 위치를 설정하기 위한 상대 위치 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2),
+    0 0 10px rgba(173, 216, 230, 0.2); /* 은은한 카드 그림자 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 카드 움직임과 그림자 변화의 애니메이션 효과 */
 }
 
 .meteor-shower-card:hover {
-    transform: translateY(-10px); /* 마우스를 올렸을 때 카드가 살짝 올라가는 효과 */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* 마우스를 올렸을 때 그림자 강화 */
+    transform: translateY(-10px); /* 마우스를 올렸을 때 카드가 살짝 위로 올라감 */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(173, 216, 230, 0.3); /* 강조된 그림자 효과 */
 }
 
-.meteor-shower-card h2,
-.meteor-shower-card h3 {
-    font-size: 1.5em; /* 제목 폰트 크기 */
-    margin-bottom: 15px; /* 제목과 내용 사이 간격 */
+/* 혜성 이름 스타일 (초기: 카드 하단 중앙) */
+.comet-name {
+    position: absolute; /* 부모 요소를 기준으로 절대 위치 설정 */
+    bottom: 20px; /* 카드 하단에서의 위치 */
+    left: 50%; /* 카드의 수평 중앙에 위치 */
+    transform: translateX(-50%); /* 수평 위치를 정확히 중앙으로 조정 */
+    font-size: 1.2em; /* 텍스트 크기 */
+    font-weight: bold; /* 텍스트를 굵게 설정 */
+    text-align: center; /* 텍스트를 가운데 정렬 */
+    color: #c3eaff; /* 은은한 청록색 텍스트 */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); /* 텍스트 그림자 추가 */
+    transition: all 0.3s ease; /* 위치, 크기 등의 변화에 부드러운 애니메이션 효과 적용 */
 }
 
-.meteor-shower-card p {
-    line-height: 1.6; /* 텍스트 간격 */
-    font-size: 1em; /* 본문 폰트 크기 */
+/* 상세 정보 스타일 */
+.meteor-shower-details {
+    opacity: 0; /* 기본적으로 보이지 않도록 설정 */
+    padding: 20px; /* 내부 콘텐츠의 여백 */
+    text-align: left; /* 텍스트를 왼쪽 정렬 */
+    position: absolute; /* 부모 요소를 기준으로 절대 위치 설정 */
+    top: 60px; /* 카드 상단에서의 위치 */
+    left: 10%; /* 카드 왼쪽에서의 간격 */
+    right: 10%; /* 카드 오른쪽에서의 간격 */
+    transition: opacity 0.3s ease; /* 투명도 변화에 부드러운 애니메이션 효과 적용 */
+    font-size: 0.9em; /* 텍스트 크기 유지 */
+    color: #d1e7ff; /* 밝은 파란색 텍스트 */
 }
 
-.meteor-shower-card .date {
-    font-size: 0.9em; /* 날짜 폰트 크기 */
-    color: #b0b0b0; /* 날짜 색상 - 밝은 회색 */
-    margin-top: 10px; /* 상단 여백 */
+/* 마우스를 올렸을 때 혜성 이름 이동 */
+.meteor-shower-card:hover .comet-name {
+    bottom: 370px; /* 카드 상단으로 이동 */
+    transform: translate(-50%, -100%); /* 위치를 중앙으로 유지하며 위로 이동 */
+    color: #80d4ff; /* 색상을 조금 더 밝게 */
+    font-size: 1.3em; /* 텍스트 크기 약간 증가 */
 }
 
-.meteor-shower-card .conditions {
-    margin-top: 15px; /* 조건 정보 상단 여백 */
-    font-weight: bold; /* 굵은 글씨로 강조 */
-    color: #80cbc4; /* 조건 글씨 색상 - 부드러운 청록색 */
+/* 마우스를 올렸을 때 상세 정보 표시 */
+.meteor-shower-card:hover .meteor-shower-details {
+    opacity: 1; /* 상세 정보를 보이도록 설정 */
+}
+
+/* 상세 정보 텍스트 스타일 */
+.meteor-shower-details h4,
+.meteor-shower-details p {
+    margin: 5px 0; /* 각 줄의 상하 간격 설정 */
+    line-height: 1.4; /* 텍스트의 줄 간격 설정 */
+}
+
+/* 버튼 스타일 */
+.meteor-shower-details button {
+    margin: 20px auto; /* 버튼을 가운데 정렬 */
+    padding: 10px 15px; /* 버튼 내부 여백 */
+    display: block; /* 버튼을 블록 요소로 변경 */
+    border: none; /* 버튼 외곽선 제거 */
+    border-radius: 8px; /* 끝부분만 약간 둥글게 설정 */
+    background: linear-gradient(90deg, #30475e, #6c757d); /* 어두운 색상과 회색의 은은한 그라데이션 */
+    color: #ffffff; /* 텍스트 색상: 흰색 */
+    font-weight: bold; /* 텍스트를 굵게 설정 */
+    font-size: 0.9em; /* 텍스트 크기 유지 */
+    cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+    position: relative; /* 내부 요소 정렬을 위한 위치 설정 */
+    overflow: hidden; /* 버튼 내부 요소가 넘치지 않도록 설정 */
+    z-index: 1; /* 텍스트가 배경 애니메이션 위에 오도록 설정 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease; /* 애니메이션 효과 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 은은한 그림자 */
+}
+
+/* 버튼 배경 애니메이션 */
+.meteor-shower-details button::before {
+    content: ''; /* 빈 콘텐츠 추가 */
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(173, 216, 230, 0.3), rgba(30, 30, 46, 0.1), rgba(173, 216, 230, 0.3)); /* 흐르는 빛 효과 */
+    z-index: 0; /* 텍스트 아래로 배경 배치 */
+    transition: all 0.5s ease; /* 애니메이션 효과 */
+    transform: skewX(-20deg); /* 배경 왜곡 */
+    filter: blur(2px); /* 흐릿한 효과 */
+}
+
+/* 버튼 Hover 효과 */
+.meteor-shower-details button:hover {
+    transform: scale(1.05); /* 약간 확대 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* 강조된 그림자 */
+    background: linear-gradient(90deg, #4e657d, #8a99a6); /* Hover 시 약간 밝아지는 그라데이션 */
+}
+
+/* Hover 시 배경 애니메이션 */
+.meteor-shower-details button:hover::before {
+    left: 0; /* 배경이 버튼 내부로 이동 */
+    transition: all 0.3s ease; /* 부드러운 애니메이션 */
 }

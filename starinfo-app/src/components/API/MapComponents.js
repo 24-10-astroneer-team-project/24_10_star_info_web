@@ -15,6 +15,7 @@ const libraries = ["places"];
 
 // MapComponent 컴포넌트 정의
 const MapComponent = () => {
+
     // 커스텀 훅에서 기본 위치와 상태 업데이트 함수 가져오기
     const { location, setLocation } = useGoogleMap({ lat: 37.5665, lng: 126.9780 }); // 기본 위치: 서울
     const [marker, setMarker] = useState(null); // 마커 상태 (선택한 위치를 저장)

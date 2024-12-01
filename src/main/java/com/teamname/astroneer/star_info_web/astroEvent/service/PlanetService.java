@@ -23,7 +23,7 @@ public class PlanetService {
         System.out.println("=====================================행성의 가시성 서비스 접근=============================================");
         // 외부 API 호출을 위한 URL 생성
         String url = String.format(
-                "http://64.110.98.105:5555/api/planet_visibility?planet=%s&lat=%f&lon=%f&date=%s&range_days=%s",
+                "http://64.110.98.105:5555/api/planets/visibility?planet=%s&lat=%f&lon=%f&date=%s&range_days=%s",
                 planetName,latitude, longitude, date, rangeDays
         );
 
@@ -45,7 +45,7 @@ public class PlanetService {
     public String getOppositionData(String planetName, String year) {
         // 외부 API 호출을 위한 URL 생성
         String url = String.format(
-                "http://64.110.98.105:5555/api/opposition?planet=%s&year=%s",
+                "http://64.110.98.105:5555/api/planets/opposition?planet=%s&year=%s",
                 planetName, year
         );
 

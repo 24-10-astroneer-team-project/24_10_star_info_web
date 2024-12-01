@@ -14,6 +14,9 @@ src/main/resources/static/*
 src/main/resources/static/css
 src/main/resources/static/js
 
+src/main/resources/application-secret.yml
+
+
 # STS 관련 파일들
 .apt_generated
 .classpath
@@ -27,9 +30,9 @@ src/main/resources/static/js
 .env
 starinfo-app/.env
 
-# Firebase API KEY
+# Firebase API KEY # Google API KEY
 /src/main/resources/teamastroneerstarinfo-firebase-adminsdk-l8qw1-62cdf88ebf.json
-/src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
+src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
 
 # 프로퍼티 파일
 /src/main/resources/application-DB.properties
