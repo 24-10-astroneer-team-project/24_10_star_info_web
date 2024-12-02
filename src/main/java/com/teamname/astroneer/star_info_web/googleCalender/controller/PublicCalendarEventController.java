@@ -102,4 +102,14 @@ public class PublicCalendarEventController {
             return "Failed to reset calendar: " + e.getMessage();
         }
     }
+
+    /////////////////////////////
+
+    @GetMapping("/events/monthly")
+    public List<PublicCalendar> getMonthlyEvents(
+            @RequestParam int year,
+            @RequestParam int month
+    ) {
+        return publicCalendarEventService.getMonthlyEvents(year, month);
+    }
 }

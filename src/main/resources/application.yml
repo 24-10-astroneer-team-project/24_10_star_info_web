@@ -1,11 +1,12 @@
 spring:
-#  devtools:
-#    restart:
-#      enabled: false
+  profiles:
+    active: dev
   application:
     name: star_info_web
   config:
-    import: classpath:application-DB.properties
+    import:
+      - classpath:application-DB.yml
+      - classpath:application-secret.yml
   jpa:
     hibernate:
       ddl-auto: update
@@ -13,24 +14,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
-            scope:
-              - profile
-              - email
-            redirect-uri: "{baseUrl}/login/oauth2/code/google"
-            authorization-grant-type: authorization_code
-        provider:
-          google:
-            authorization-uri: https://accounts.google.com/o/oauth2/auth
-            token-uri: https://oauth2.googleapis.com/token
-            user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
-            user-name-attribute: sub
   web:
     resources:
       static-locations: classpath:/static/
@@ -38,16 +21,6 @@ spring:
     static-path-pattern: "/**"
     pathmatch:
       matching-strategy: ant_path_matcher
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      timeout: 6000  # ?? ????(???)
-      lettuce:
-        pool:
-          max-active: 8   # ?? ?? ?
-          max-idle: 8     # ?? ?? ?? ?
-          min-idle: 0     # ?? ?? ?? ?
 server:
   port: 7777
   error:
@@ -56,22 +29,23 @@ server:
 
 logging:
   level:
-    root: INFO  # ?? ?? ??? INFO? ??
-    com.teamname.astroneer.star_info_web: DEBUG  # ?? ??? ?? ???? DEBUG ?? ??
+    root: INFO
+    com.teamname.astroneer.star_info_web: DEBUG
     org:
       springframework:
-        security: WARN  # ?? ?? ??? WARN ??? ??
-        web: INFO  # Spring ? ?? ??? INFO? ??
-        security.oauth2: WARN  # OAuth2 ?? ??? WARN?? ??
-        security.web.authentication: WARN  # ?? ??? WARN?? ??
+        security: WARN
+        web: INFO
+        security.oauth2: WARN
+        security.web.authentication: WARN
+        org.springframework.security: DEBUG
         data:
-          redis: WARN  # Redis ?? ??? WARN?? ??
+          redis: WARN
       hibernate:
-        SQL: INFO  # Hibernate? SQL ??? INFO? ??
+        SQL: INFO
         type:
           descriptor:
             sql:
-              BasicBinder: OFF  # Hibernate ??? ?? ????
+              BasicBinder: OFF
     io:
       lettuce:
-        core: WARN  # Lettuce Redis ????? ??? WARN?? ??
+        core: WARN

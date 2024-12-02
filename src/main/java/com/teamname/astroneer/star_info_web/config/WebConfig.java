@@ -29,31 +29,18 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
-        registry.addMapping("/api/**")
+        registry.addMapping("/**") // 모든 경로에 CORS 적용
                 .allowedOriginPatterns("http://localhost:7777", "http://localhost:9999", "http://localhost:4444")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("*")
-                .exposedHeaders(HttpHeaders.LOCATION)
+                .allowedHeaders("Content-Type", "Authorization", "Accept", "X-Requested-With")
+                .exposedHeaders(HttpHeaders.AUTHORIZATION, HttpHeaders.LOCATION) // 필요한 헤더 노출
                 .allowCredentials(true)
                 .maxAge(3600);
     }
 
-    /// API로 시작하지 않는 모든 경로 요청을 React의 index.html로 포워딩
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/react/**")
                 .setViewName("forward:/index.html");
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:7777", "http://localhost:9999", "http://localhost:4444"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 }

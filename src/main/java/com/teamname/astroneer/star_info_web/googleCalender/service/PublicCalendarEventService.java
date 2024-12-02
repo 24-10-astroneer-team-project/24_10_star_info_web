@@ -19,7 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -221,5 +224,15 @@ public class PublicCalendarEventService {
         log.info("Deleted all events from the database.");
 
         log.info("Reset completed.");
+    }
+
+    public List<PublicCalendar> getMonthlyEvents(int year, int month) {
+        LocalDate startOfMonth = LocalDate.of(year, month, 1);
+        LocalDate endOfMonth = startOfMonth.with(TemporalAdjusters.lastDayOfMonth());
+
+        return publicCalendarRepository.findByStartDateTimeBetween(
+                startOfMonth.atStartOfDay(),
+                endOfMonth.atTime(LocalTime.MAX)
+        );
     }
 }
