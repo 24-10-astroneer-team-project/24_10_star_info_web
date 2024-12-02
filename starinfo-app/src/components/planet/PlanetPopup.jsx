@@ -109,29 +109,23 @@ const planets = [
 
 // PlanetCard 컴포넌트 정의
 const PlanetCard = ({ name, k_name, diameter, moons, desc, url }) => (
-    <div>
-        {/* 이름과 한글 이름 */}
-        <div className="planet-title">
-            {name}, {k_name}
-        </div>
-
-        {/* 행성 이미지 */}
-        <img src={url} alt={name} className="planet-image" />
-
-        {/* Planet Profile */}
-        <div className="planet-profile">
-            <h3>Planet Profile</h3>
-            <p>diameter: {diameter}</p>
-            <p>moons: {moons}</p>
-        </div>
-
-        {/* 설명 */}
-        <div className="planet-description">{desc}</div>
-
-        {/* 관측 정보 버튼 */}
-        <div className="planet-button">
-            <span>관측 정보 ▷</span>
-        </div>
+        <div className="planet-info">
+            {/* 좌측: 타이틀, 이미지, 프로필 */}
+            <div className="planet-details">
+                <div className="planet-title">
+                    {name}, {k_name}
+                </div>
+                <img src={url} alt={name} className="planet-image" />
+                <div className="planet-profile">
+                    <h3>Planet Profile</h3>
+                    <p>diameter: {diameter}</p>
+                    <p>moons: {moons}</p>
+                </div>
+            </div>
+            {/* 우측: 설명 */}
+            <div className="planet-description">
+                {desc}
+            </div>
     </div>
 );
 
@@ -140,10 +134,7 @@ const PlanetPopup = ({ selectedPlanet, isPlanetPopupOpen, closePlanetPopup }) =>
 
     return (
         <div id="planetPopup" className="planet-popup-bc" onClick={closePlanetPopup}>
-            <div
-                className="planet-popup"
-                onClick={(e) => e.stopPropagation()}
-            >
+            <div className="planet-popup" onClick={(e) => e.stopPropagation()}>
                 <PlanetCard
                     name={selectedPlanet.name}
                     k_name={selectedPlanet.k_name}
@@ -151,8 +142,6 @@ const PlanetPopup = ({ selectedPlanet, isPlanetPopupOpen, closePlanetPopup }) =>
                     moons={selectedPlanet.moons}
                     desc={selectedPlanet.desc}
                     url={selectedPlanet.url}
-                    tilt={selectedPlanet.tilt}
-                    color={selectedPlanet.color}
                 />
             </div>
         </div>
