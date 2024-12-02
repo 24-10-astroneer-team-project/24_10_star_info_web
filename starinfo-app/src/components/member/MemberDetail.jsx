@@ -23,12 +23,24 @@ function MemberDetail() {
         }
 
         const fetchMemberDetail = async () => {
-            try {
-                const response = await axios.get(`/api/member/${userId}`);
-                setMemberDetail(response.data);
+            const accessToken = localStorage.getItem("accessToken"); // Access Token 가져오기
+
+            if (!accessToken) {
+                setError(new Error("로그인이 필요합니다."));
                 setLoading(false);
+                return;
+            }
+
+            try {
+                const response = await axios.get(`/api/member/${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`, // Authorization 헤더 추가
+                    },
+                });
+                setMemberDetail(response.data);
             } catch (err) {
                 setError(err);
+            } finally {
                 setLoading(false);
             }
         };
@@ -38,41 +50,66 @@ function MemberDetail() {
         }
     }, [userId, location.state]);
 
-    if (loading) {
-        return <div>로딩 중...</div>;
-    }
-
-    if (error) {
-        return <div>에러 발생: {error.message}</div>;
-    }
-
     const handleUpdateFavoriteLocation = async (locationId) => {
+        const accessToken = localStorage.getItem("accessToken");
+
+        if (!accessToken) {
+            toast.error("로그인이 필요합니다.");
+            return;
+        }
+
         try {
-            await axios.post(`/api/member/${userId}/favorite-location/${locationId}`);
-            toast.success('즐겨찾기 위치가 업데이트되었습니다.'); // 토스트 알림 성공 메시지
+            await axios.post(
+                `/api/member/${userId}/favorite-location/${locationId}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`, // Authorization 헤더 추가
+                    },
+                }
+            );
+            toast.success('즐겨찾기 위치가 업데이트되었습니다.');
         } catch (err) {
             console.error('Error updating favorite location:', err);
-            toast.error('즐겨찾기 위치 업데이트에 실패했습니다.'); // 토스트 알림 에러 메시지
+            toast.error('즐겨찾기 위치 업데이트에 실패했습니다.');
         }
     };
 
     const handleUpdateDescription = async (locationId) => {
+        const accessToken = localStorage.getItem("accessToken");
+
+        if (!accessToken) {
+            toast.error("로그인이 필요합니다.");
+            return;
+        }
+
         try {
-            const description = descriptions[locationId]; // 해당 위치의 설명 가져오기
-            await axios.patch(`/api/member/location/${locationId}/description`, {
-                description: description,
-            });
-            toast.success('위치 설명이 업데이트되었습니다.'); // 토스트 알림 성공 메시지
+            const description = descriptions[locationId];
+            await axios.patch(
+                `/api/member/location/${locationId}/description`,
+                { description },
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`, // Authorization 헤더 추가
+                    },
+                }
+            );
+            toast.success('위치 설명이 업데이트되었습니다.');
             setDescriptions((prevDescriptions) => ({
                 ...prevDescriptions,
-                [locationId]: '', // 설명 입력 필드를 초기화
+                [locationId]: '',
             }));
-            // 최신 정보를 다시 불러오기 위해 호출
-            const response = await axios.get(`/api/member/${userId}`);
+
+            // 최신 정보를 다시 불러오기
+            const response = await axios.get(`/api/member/${userId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`, // Authorization 헤더 추가
+                },
+            });
             setMemberDetail(response.data);
         } catch (err) {
             console.error('Error updating location description:', err);
-            toast.error('위치 설명 업데이트에 실패했습니다.'); // 토스트 알림 에러 메시지
+            toast.error('위치 설명 업데이트에 실패했습니다.');
         }
     };
 

@@ -48,7 +48,7 @@ public class MeteorShowerService {
     public String getMeteorShowerData(String cometName, String startDate) {
         // 외부 API 호출을 위한 URL 생성
         String url = String.format(
-                "http://64.110.98.105:5555/api/meteor_shower?comet=%s&start_date=%s",
+                "http://64.110.98.105:5555/api/meteor_shower/info?comet=%s&start_date=%s",
                 cometName, startDate
         );
 
@@ -129,7 +129,7 @@ public class MeteorShowerService {
 
     // 외부 API 요청 후 DATA 저장 및 조회
     private String fetchAndSaveMeteorShowerData(String meteorShowerName, int year, double latitude, double longitude) {
-        String url = String.format("http://64.110.98.105:5555/api/meteor_shower_visibility?name=%s&year=%s&latitude=%f&longitude=%f",
+        String url = String.format("http://64.110.98.105:5555/api/meteor_shower/visibility?name=%s&year=%s&latitude=%f&longitude=%f",
                 meteorShowerName, year, latitude, longitude);
 
 //        log.debug("Request URL: {}", url);

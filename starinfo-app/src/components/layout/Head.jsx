@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useAuth } from "../../services/AuthProvider"; // 로그인 상태 확인용
 import './Head.css';
 import ProfileButton from "../member/MemberProfileButton";
+import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify"; // 토스트 알람
 
 function Head() {
     const [isMenuVisible, setMenuVisible] = useState(false);
     const { isAuthenticated, logout } = useAuth(); // 로그인 상태와 로그아웃 메서드 가져오기
+    const navigate = useNavigate();
 
     const handleMouseEnter = () => setMenuVisible(true);
     const handleMouseLeave = () => setMenuVisible(false);
@@ -22,6 +24,9 @@ function Head() {
             draggable: true,
             progress: undefined,
         });
+        setTimeout(() => {
+            navigate('/react/main'); // 로그아웃 후 메인 페이지로 이동
+        }, 2000); // 알림 표시 후 2초 대기
     };
 
     return (
