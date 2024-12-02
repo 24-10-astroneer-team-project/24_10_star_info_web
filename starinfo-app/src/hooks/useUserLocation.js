@@ -24,6 +24,7 @@ function useUserLocation() {
 
                 if (isAuthenticated && user?.userId) {
                     console.log('useUserLocation - 로그인된 사용자입니다. 사용자 프로필에서 위치 정보 가져오기...');
+                    console.log(`userId: ${user.id}, ${user.userId}`);
                     const userLocation = await getUserLocationFromProfile(user.userId);
 
                     if (userLocation) {
