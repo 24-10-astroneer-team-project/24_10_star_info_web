@@ -1,12 +1,9 @@
 spring:
   profiles:
     active: dev
+    include: secret, DB
   application:
     name: star_info_web
-  config:
-    import:
-      - classpath:application-DB.yml
-      - classpath:application-secret.yml
   jpa:
     hibernate:
       ddl-auto: update
@@ -30,22 +27,9 @@ server:
 logging:
   level:
     root: INFO
-    com.teamname.astroneer.star_info_web: DEBUG
+    com.teamname.astroneer.star_info_web: DEBUG  # 여기는 개발 단계에서 DEBUG로 유지
     org:
       springframework:
-        security: WARN
         web: INFO
-        security.oauth2: WARN
-        security.web.authentication: WARN
-        org.springframework.security: DEBUG
-        data:
-          redis: WARN
       hibernate:
-        SQL: INFO
-        type:
-          descriptor:
-            sql:
-              BasicBinder: OFF
-    io:
-      lettuce:
-        core: WARN
+        SQL: OFF  # 필요할 때만 DEBUG로 바꿀 것을 추천
