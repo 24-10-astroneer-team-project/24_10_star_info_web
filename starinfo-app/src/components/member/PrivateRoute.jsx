@@ -1,19 +1,23 @@
 // PrivateRoute.jsx
 
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../services/AuthProvider';
-import RequireLogin from '../member/RequireLogin';
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../../services/AuthProvider";
 
 const PrivateRoute = ({ children }) => {
-    const { isAuthenticated } = useAuth(); // 로그인 여부 확인
+    const { isAuthenticated, isAuthLoading } = useAuth();
 
-    if (!isAuthenticated) {
-        // 로그인되지 않은 경우 로그인 필요 페이지로 리디렉션
-        return <RequireLogin />;
+    if (isAuthLoading) {
+        // 로딩 중에는 빈 화면 또는 로딩 스피너를 표시
+        return <div>로딩 중...</div>;
     }
 
-    // 로그인된 경우, 요청한 페이지로 이동
+    if (!isAuthenticated) {
+        // 인증되지 않은 경우 로그인 페이지로 리다이렉트
+        return <Navigate to="/react/login" />;
+    }
+
+    // 인증된 경우 보호된 컴포넌트를 렌더링
     return children;
 };
 

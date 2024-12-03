@@ -64,7 +64,8 @@ public class SecurityConfig {
                 .headers(headers -> headers
                         .contentTypeOptions(HeadersConfigurer.ContentTypeOptionsConfig::disable)
                 )
-                .cors(withDefaults())  // CORS 설정
+//                .cors(withDefaults())  // CORS 설정
+                .cors(AbstractHttpConfigurer::disable)  // CORS 비활성화
                 .csrf(AbstractHttpConfigurer::disable)  // CSRF 비활성화
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests

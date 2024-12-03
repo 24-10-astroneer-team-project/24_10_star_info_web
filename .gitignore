@@ -15,7 +15,7 @@ src/main/resources/static/css
 src/main/resources/static/js
 
 src/main/resources/application-secret.yml
-
+src/main/resources/application-DB.yml
 
 # STS 관련 파일들
 .apt_generated
