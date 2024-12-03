@@ -48,3 +48,7 @@
     left: 50%;
     transform: translateX(-50%);
 }
+
+.thirdSectionDescription {
+    cursor: pointer; /* 기본 커서 스타일 */
+}
