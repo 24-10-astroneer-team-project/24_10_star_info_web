@@ -1,17 +1,20 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './SolarSystem.module.scss'; // SCSS 모듈을 임포트합니다.
 import './ThirdSection.css'; // 새로 만든 CSS 파일 임포트
 import Main_Button from '../../../../components/layout/Main_Button'; // Main_Button 컴포넌트 임포트
 
 const SolarSystem_main = () => {
-    const handleButtonClick = () => {
-        window.location.href = '/react/planet'; // 행성 페이지로 리디렉션
+    const navigate = useNavigate();
+
+    // 특정 행성을 클릭했을 때 실행
+    const handlePlanetClick = (planetName) => {
+        navigate(`/react/planet?selectedPlanet=${planetName}`);
     };
     return (
         <div className={`${styles.solarSystemContainer} thirdSectionContainer`}>
 
-
-            <input className={`${styles.planet9} thirdSectionPlanet`} id="pluto" name="planet" type="radio" />
+            <input className={`${styles.planet9} thirdSectionPlanet`} id="pluto" name="planet" type="radio"/>
             <label className={`${styles.pluto} ${styles.menu} thirdSectionMenu`} htmlFor="pluto">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -23,7 +26,7 @@ const SolarSystem_main = () => {
                 </div>
             </label>
 
-            <input className={`${styles.planet8} thirdSectionPlanet`} id="neptune" name="planet" type="radio" />
+            <input className={`${styles.planet8} thirdSectionPlanet`} id="neptune" name="planet" type="radio"/>
             <label className={`${styles.neptune} ${styles.menu} thirdSectionMenu`} htmlFor="neptune">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -35,7 +38,7 @@ const SolarSystem_main = () => {
                 </div>
             </label>
 
-            <input className={`${styles.planet7} thirdSectionPlanet`} id="uranus" name="planet" type="radio" />
+            <input className={`${styles.planet7} thirdSectionPlanet`} id="uranus" name="planet" type="radio"/>
             <label className={`${styles.uranus} ${styles.menu} thirdSectionMenu`} htmlFor="uranus">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -47,7 +50,7 @@ const SolarSystem_main = () => {
                 </div>
             </label>
 
-            <input className={`${styles.planet6} thirdSectionPlanet`} id="saturn" name="planet" type="radio" />
+            <input className={`${styles.planet6} thirdSectionPlanet`} id="saturn" name="planet" type="radio"/>
             <label className={`${styles.saturn} ${styles.menu} thirdSectionMenu`} htmlFor="saturn">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -59,7 +62,7 @@ const SolarSystem_main = () => {
                 </div>
             </label>
 
-            <input className={`${styles.planet5} thirdSectionPlanet`} id="jupiter" name="planet" type="radio" />
+            <input className={`${styles.planet5} thirdSectionPlanet`} id="jupiter" name="planet" type="radio"/>
             <label className={`${styles.jupiter} ${styles.menu} thirdSectionMenu`} htmlFor="jupiter">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -71,7 +74,8 @@ const SolarSystem_main = () => {
                 </div>
             </label>
 
-            <input className={`${styles.planet4} thirdSectionPlanet`} id="mars" name="planet" type="radio" defaultChecked />
+            <input className={`${styles.planet4} thirdSectionPlanet`} id="mars" name="planet" type="radio"
+                   defaultChecked/>
             <label className={`${styles.menu} ${styles.mars} thirdSectionMenu`} htmlFor="mars">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -83,7 +87,8 @@ const SolarSystem_main = () => {
                 </div>
             </label>
 
-            <input className={`${styles.planet3} thirdSectionPlanet`} id="earth" name="planet" type="radio" defaultChecked />
+            <input className={`${styles.planet3} thirdSectionPlanet`} id="earth" name="planet" type="radio"
+                   defaultChecked/>
             <label className={`${styles.menu} ${styles.earth} thirdSectionMenu`} htmlFor="earth">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -95,7 +100,8 @@ const SolarSystem_main = () => {
                 </div>
             </label>
 
-            <input className={`${styles.planet2} thirdSectionPlanet`} id="venus" name="planet" type="radio" defaultChecked />
+            <input className={`${styles.planet2} thirdSectionPlanet`} id="venus" name="planet" type="radio"
+                   defaultChecked/>
             <label className={`${styles.menu} ${styles.venus} thirdSectionMenu`} htmlFor="venus">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -107,7 +113,8 @@ const SolarSystem_main = () => {
                 </div>
             </label>
 
-            <input className={`${styles.planet1} thirdSectionPlanet`} id="mercury" name="planet" type="radio" defaultChecked />
+            <input className={`${styles.planet1} thirdSectionPlanet`} id="mercury" name="planet" type="radio"
+                   defaultChecked/>
             <label className={`${styles.menu} ${styles.mercury} thirdSectionMenu`} htmlFor="mercury">
                 <div className={`${styles.preview} thirdSectionPreview`}></div>
                 <div className={`${styles.info} thirdSectionInfo`}>
@@ -122,11 +129,14 @@ const SolarSystem_main = () => {
             <div className={`${styles.solar} thirdSectionSolar`}>
                 <div className={`${styles.solar_systm} thirdSectionSystem`}>
                     <div className={`${styles.planet} ${styles.mercury} thirdSectionPlanet`}>
-                        <div className={`${styles.planet_description} ${styles.mercury} thirdSectionDescription`}>
+                        <div className={`${styles.planet_description} ${styles.mercury} thirdSectionDescription`}
+                             onClick={() => handlePlanetClick('mercury')}
+                        >
                             <h2>Planet</h2>
                             <h1>Mercury</h1>
                             <p>
-                                태양에 가장 가까운 행성입니다. 다른 모든 행성보다 빠르게 태양을 공전하며, 이러한 이유로 로마인들은 이 행성을 발이 빠른 전령 신의 이름을 따서 명명했습니다.
+                                태양에 가장 가까운 행성입니다. 다른 모든 행성보다 빠르게 태양을 공전하며, 이러한 이유로 로마인들은 이 행성을 발이 빠른 전령 신의 이름을 따서
+                                명명했습니다.
                             </p>
                         </div>
                         <div className={`${styles.overlay} thirdSectionOverlay`}></div>
@@ -135,7 +145,9 @@ const SolarSystem_main = () => {
 
                 <div className={`${styles.solar_systm} thirdSectionSystem`}>
                     <div className={`${styles.planet} ${styles.venus} thirdSectionPlanet`}>
-                        <div className={`${styles.planet_description} ${styles.venus} thirdSectionDescription`}>
+                        <div className={`${styles.planet_description} ${styles.venus} thirdSectionDescription`}
+                             onClick={() => handlePlanetClick('venus')}
+                        >
                             <h2>Planet</h2>
                             <h1>Venus</h1>
                             <p>
@@ -153,7 +165,9 @@ const SolarSystem_main = () => {
                             <h2>Moon</h2>
                         </div>
                         <div className={`${styles.trajectory} ${styles.m} thirdSectionTrajectory`}></div>
-                        <div className={`${styles.planet_description} ${styles.earth} thirdSectionDescription`}>
+                        <div className={`${styles.planet_description} ${styles.earth} thirdSectionDescription`}
+                             onClick={() => handlePlanetClick('earth')}
+                        >
                             <h2>Planet</h2>
                             <h1>Earth</h1>
                             <p>
@@ -176,7 +190,9 @@ const SolarSystem_main = () => {
                             <h2>Phoebos</h2>
                         </div>
                         <div className={`${styles.trajectory} ${styles.p} thirdSectionTrajectory`}></div>
-                        <div className={`${styles.planet_description} ${styles.mars} thirdSectionDescription`}>
+                        <div className={`${styles.planet_description} ${styles.mars} thirdSectionDescription`}
+                             onClick={() => handlePlanetClick('mars')}
+                        >
                             <h2>Planet</h2>
                             <h1>Mars</h1>
                             <p>
@@ -204,7 +220,9 @@ const SolarSystem_main = () => {
                         <div className={`${styles.trajectory} ${styles.lop} thirdSectionTrajectory`}></div>
                         <div className={`${styles.trajectory} ${styles.eu} thirdSectionTrajectory`}></div>
                         <div className={`${styles.trajectory} ${styles.ga} thirdSectionTrajectory`}></div>
-                        <div className={`${styles.planet_description} ${styles.jupiter} thirdSectionDescription`}>
+                        <div className={`${styles.planet_description} ${styles.jupiter} thirdSectionDescription`}
+                             onClick={() => handlePlanetClick('jupiter')}
+                        >
                             <h2>Planet</h2>
                             <h1>Jupiter</h1>
                             <p>
@@ -232,7 +250,9 @@ const SolarSystem_main = () => {
                         <div className={`${styles.trajectory} ${styles.ti} thirdSectionTrajectory`}></div>
                         <div className={`${styles.trajectory} ${styles.di} thirdSectionTrajectory`}></div>
                         <div className={`${styles.trajectory} ${styles.enc} thirdSectionTrajectory`}></div>
-                        <div className={`${styles.planet_description} ${styles.saturn} thirdSectionDescription`}>
+                        <div className={`${styles.planet_description} ${styles.saturn} thirdSectionDescription`}
+                             onClick={() => handlePlanetClick('saturn')}
+                        >
                             <h2>Planet</h2>
                             <h1>Saturn</h1>
                             <p>
@@ -260,7 +280,9 @@ const SolarSystem_main = () => {
                         <div className={`${styles.trajectory} ${styles.mir} thirdSectionTrajectory`}></div>
                         <div className={`${styles.trajectory} ${styles.ari} thirdSectionTrajectory`}></div>
                         <div className={`${styles.trajectory} ${styles.umb} thirdSectionTrajectory`}></div>
-                        <div className={`${styles.planet_description} ${styles.uranus} thirdSectionDescription`}>
+                        <div className={`${styles.planet_description} ${styles.uranus} thirdSectionDescription`}
+                             onClick={() => handlePlanetClick('uranus')}
+                        >
                             <h2>Planet</h2>
                             <h1>Uranus</h1>
                             <p>
@@ -288,7 +310,9 @@ const SolarSystem_main = () => {
                         <div className={`${styles.trajectory} ${styles.tri} thirdSectionTrajectory`}></div>
                         <div className={`${styles.trajectory} ${styles.pro} thirdSectionTrajectory`}></div>
                         <div className={`${styles.trajectory} ${styles.ner} thirdSectionTrajectory`}></div>
-                        <div className={`${styles.planet_description} ${styles.neptune} thirdSectionDescription`}>
+                        <div className={`${styles.planet_description} ${styles.neptune} thirdSectionDescription`}
+                             onClick={() => handlePlanetClick('neptune')}
+                        >
                             <h2>Planet</h2>
                             <h1>Neptune</h1>
                             <p>
@@ -301,7 +325,9 @@ const SolarSystem_main = () => {
 
                 <div className={`${styles.solar_systm} thirdSectionSystem`}>
                     <div className={`${styles.planet} ${styles.pluto} thirdSectionPlanet`}>
-                        <div className={`${styles.planet_description} ${styles.pluto} thirdSectionDescription`}>
+                        <div className={`${styles.planet_description} ${styles.pluto} thirdSectionDescription`}
+                             onClick={() => handlePlanetClick('pluto')}
+                        >
                             <h2>Dwarf planet</h2>
                             <h1>Pluto</h1>
                             <p>
@@ -312,8 +338,8 @@ const SolarSystem_main = () => {
                         <div className={`${styles.overlay} thirdSectionOverlay`}></div>
                     </div>
                 </div>
-                {/* 버튼 추가 */}
-                    <Main_Button onClick={handleButtonClick} label="행성 정보 보러가기" />
+                {/* 버튼 */}
+                <Main_Button onClick={() => navigate('/react/planet')} label="행성 페이지 이동"/>
             </div>
         </div>
     );

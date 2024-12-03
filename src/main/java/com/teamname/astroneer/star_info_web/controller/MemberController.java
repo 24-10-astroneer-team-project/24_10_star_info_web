@@ -11,6 +11,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/member")
 @RequiredArgsConstructor
@@ -63,17 +65,6 @@ public class MemberController {
     @GetMapping("/{userId}")
     public ResponseEntity<MemberDetailDTO> getUserDetail(@PathVariable long userId) {
         MemberDetailDTO userDetail = memberService.getMemberDetail(userId);
-        if (userDetail == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(userDetail);
-    }
-
-    // Google Login ID 기반 사용자 상세 정보 조회
-    @GetMapping("/by-google-login-id/{googleLoginId}")
-    public ResponseEntity<MemberDetailDTO> getUserDetailByGoogleLoginId(@PathVariable String googleLoginId) {
-        MemberDetailDTO userDetail = memberService.getMemberDetailByGoogleLoginId(googleLoginId);
-
         if (userDetail == null) {
             return ResponseEntity.notFound().build();
         }
@@ -139,29 +130,53 @@ public class MemberController {
 //    }
 
     @PostMapping("/refresh")
-    public ResponseEntity<?> refreshAccessToken(@RequestBody Map<String, String> request) {
-        String refreshToken = request.get("refreshToken");
+    public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) {
+        log.debug("=============================리프레시 토큰 로직 시작====================================");
 
         try {
-            // Refresh Token 검증 및 Claims 추출
-            Claims claims = jwtUtil.validateToken(refreshToken);
-            String email = claims.getSubject(); // Subject에 저장된 이메일 추출
-            String googleLoginId = claims.get("googleLoginId", String.class); // Claim으로 저장된 Google Login ID 추출
+            log.debug("RedisRefreshTokenService instance: {}", redisRefreshTokenService);
+            log.debug("JwtUtil instance: {}", jwtUtil);
 
-            // Redis에서 Refresh Token 검증
-            if (!redisRefreshTokenService.validateRefreshToken(email, refreshToken)) {
+            String authHeader = request.getHeader("Authorization");
+            log.debug("Authorization 헤더 값: {}", authHeader);
+
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                log.error("Authorization 헤더가 없거나 형식이 잘못되었습니다.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing or invalid Authorization header");
+            }
+
+            String refreshToken = authHeader.substring(7);
+            log.debug("Refresh Token 값: {}", refreshToken);
+
+            Claims claims = jwtUtil.validateToken(refreshToken);
+            log.debug("JWT Claims: {}", claims);
+
+            String email = claims.getSubject();
+            String googleLoginId = claims.get("googleLoginId", String.class);
+            boolean isValid = redisRefreshTokenService.validateRefreshToken(email, refreshToken);
+            log.debug("Redis 토큰 유효성 검증 결과: {}", isValid);
+
+            if (!isValid) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired Refresh Token");
             }
 
-            // 새로운 Access Token 생성
-            String newAccessToken = jwtUtil.generateToken(googleLoginId, email);
+            // Retrieve userId
+            Optional<Member> memberOptional = memberService.findByGoogleLoginId(googleLoginId);
+            if (memberOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
+            }
+            Member member = memberOptional.get();
+            Long userId = member.getId();
 
-            return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
-        } catch (ExpiredJwtException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh Token expired");
-        } catch (JwtException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Refresh Token");
+            // Generate new Access Token
+            String newAccessToken = jwtUtil.generateToken(email, googleLoginId);
+            log.debug("새로 생성된 Access Token: {}", newAccessToken);
+
+            // Return Access Token and userId
+            return ResponseEntity.ok(Map.of("accessToken", newAccessToken, "userId", userId));
+        } catch (Exception e) {
+            log.error("리프레시 토큰 처리 중 예외 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing refresh token");
         }
     }
-
 }

@@ -7,7 +7,9 @@ import com.teamname.astroneer.star_info_web.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -39,21 +41,35 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
         Optional<Member> member = memberRepository.findByGoogleLoginId(googleLoginId);
 
-        if (email != null && googleLoginId != null) {
+        if (email != null && googleLoginId != null && member.isPresent()) {
             Member user = member.get();
-            String accessToken = jwtUtil.generateToken(googleLoginId, email);
-            String refreshToken = jwtUtil.generateRefreshToken(googleLoginId, email);
 
-            log.info("Generated Access Token: {}", accessToken);
-            log.info("Generated Refresh Token: {}", refreshToken);
+            // CustomOAuth2User 생성
+            CustomOAuth2User customOAuth2User = new CustomOAuth2User(
+                    user,
+                    oauthUser.getAttributes(),
+                    jwtUtil.generateToken(googleLoginId, email),
+                    jwtUtil.generateRefreshToken(googleLoginId, email)
+            );
+
+            // SecurityContext에 설정
+            Authentication customAuth = new UsernamePasswordAuthenticationToken(
+                    customOAuth2User,
+                    null,
+                    customOAuth2User.getAuthorities()
+            );
+            SecurityContextHolder.getContext().setAuthentication(customAuth);
+
+            log.info("JWT 인증 성공: {}", customOAuth2User.getEmail());
 
             // URL 인코딩 후 리디렉션
-            response.sendRedirect("/react/dashboard?accessToken=" + URLEncoder.encode(accessToken, StandardCharsets.UTF_8.name())
-                    + "&refreshToken=" + URLEncoder.encode(refreshToken, StandardCharsets.UTF_8.name())+ "&userId=" + user.getId());
+            response.sendRedirect("/react/dashboard?accessToken=" + URLEncoder.encode(customOAuth2User.getAccessToken(), StandardCharsets.UTF_8.name())
+                    + "&refreshToken=" + URLEncoder.encode(customOAuth2User.getRefreshToken(), StandardCharsets.UTF_8.name()) + "&userId=" + user.getId());
         } else {
-            log.error("OAuth2 User 정보 부족: email={}, googleLoginId={}", email, googleLoginId);
+            log.error("OAuth2 User 정보 부족 또는 사용자 미등록: email={}, googleLoginId={}", email, googleLoginId);
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Email or Google Login ID not found");
         }
     }
+
 
 }
