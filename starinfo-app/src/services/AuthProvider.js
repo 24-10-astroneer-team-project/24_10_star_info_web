@@ -15,9 +15,17 @@ export const AuthProvider = ({ children }) => {
     const getAccessToken = () => localStorage.getItem("accessToken");
     const getRefreshToken = () => localStorage.getItem("refreshToken");
 
+    // Axios 인스턴스 생성 및 관리
+    const axiosInstance = createAxiosInstance(async () => {
+        const newAccessToken = await refreshAccessToken();
+        if (newAccessToken) {
+            axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
+        }
+    });
+
     // Access Token 갱신 로직
     const refreshAccessToken = async () => {
-        const refreshToken = localStorage.getItem("refreshToken");
+        const refreshToken = getRefreshToken();
         if (!refreshToken) {
             console.log("[ERROR] Refresh token missing. Logging out.");
             logout();
@@ -27,11 +35,11 @@ export const AuthProvider = ({ children }) => {
         try {
             const response = await axios.post(
                 "/api/member/refresh",
-                {}, // 요청 본문은 비움
+                {}, // 요청 본문 비움
                 {
                     headers: {
-                        Authorization: `Bearer ${refreshToken}`, // Authorization 헤더에 리프레시 토큰 포함
-                        "Content-Type": "application/json", // JSON 형식 명시
+                        Authorization: `Bearer ${refreshToken}`,
+                        "Content-Type": "application/json",
                     },
                 }
             );
@@ -39,6 +47,9 @@ export const AuthProvider = ({ children }) => {
             const { accessToken, userId } = response.data;
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("userId", userId);
+
+            // Axios 인스턴스에 Authorization 헤더 업데이트
+            axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
             console.log(`[SUCCESS] Access Token 갱신 성공. UserId: ${userId}, AccessToken: ${accessToken}`);
             return accessToken;
@@ -49,22 +60,21 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-
-    // Axios 인스턴스 생성
-    const axiosInstance = createAxiosInstance(refreshAccessToken);
-
     useEffect(() => {
         const initializeAuth = async () => {
             setIsAuthLoading(true);
             const token = getAccessToken();
-            const userId = localStorage.getItem("userId"); // userId 가져오기
+            const userId = localStorage.getItem("userId");
 
             if (token) {
                 try {
                     const decoded = jwtDecode(token);
                     if (decoded.exp * 1000 > Date.now()) {
                         setIsAuthenticated(true);
-                        setUser({ ...decoded, userId }); // userId 포함
+                        setUser({ ...decoded, userId });
+
+                        // Axios 인스턴스에 Authorization 헤더 설정
+                        axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
                     } else {
                         await refreshAccessToken();
                     }
@@ -81,7 +91,20 @@ export const AuthProvider = ({ children }) => {
         initializeAuth();
     }, []);
 
-    // Access Token 만료 확인 및 갱신 로직
+    // 인증 상태 변경 시 Authorization 헤더 관리
+    useEffect(() => {
+        if (isAuthenticated) {
+            const token = getAccessToken();
+            if (token) {
+                axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+                console.log("[INFO] Authorization 헤더 추가됨.");
+            }
+        } else {
+            delete axiosInstance.defaults.headers.common["Authorization"];
+            console.log("[INFO] Authorization 헤더 제거됨.");
+        }
+    }, [isAuthenticated]);
+
     useEffect(() => {
         const interval = setInterval(async () => {
             const token = getAccessToken();
@@ -96,24 +119,21 @@ export const AuthProvider = ({ children }) => {
                     await refreshAccessToken();
                 } else if (timeUntilExpiration <= 0) {
                     console.warn("[WARNING] Access Token expired!");
-                    logout(); // 만료된 경우 로그아웃
+                    logout();
                 }
             }
-        }, 300000); // 5분 간격으로 실행
+        }, 300000); // 5분 간격
 
-        return () => clearInterval(interval); // 컴포넌트 언마운트 시 인터벌 해제
+        return () => clearInterval(interval);
     }, []);
 
     const logout = async () => {
         console.log("Logging out...");
-
         const accessToken = getAccessToken();
-        console.log(`[DEBUG] Access Token: ${accessToken}`);
 
         if (accessToken) {
             try {
-                const response = await fetch("/api/member/logout", {
-                    method: "POST",
+                const response = await axios.post("/api/member/logout", {}, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                         "Content-Type": "application/json",
@@ -130,16 +150,18 @@ export const AuthProvider = ({ children }) => {
             }
         }
 
-        // 로컬 상태 초기화
+        // Local Storage와 Axios 인스턴스 정리
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-        localStorage.removeItem("userId"); // userId 저장
+        localStorage.removeItem("userId");
+        delete axiosInstance.defaults.headers.common["Authorization"];
+
         setIsAuthenticated(false);
         setUser(null);
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user, isAuthLoading, logout, refreshAccessToken }}>
+        <AuthContext.Provider value={{ isAuthenticated, user, isAuthLoading, logout, axiosInstance }}>
             {children}
         </AuthContext.Provider>
     );

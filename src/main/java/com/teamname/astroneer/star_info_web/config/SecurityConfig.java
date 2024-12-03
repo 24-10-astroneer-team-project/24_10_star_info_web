@@ -6,7 +6,9 @@ import com.teamname.astroneer.star_info_web.repository.MemberRepository;
 import com.teamname.astroneer.star_info_web.security.*;
 import com.teamname.astroneer.star_info_web.security.jwt.JwtAuthenticationFilter;
 import jakarta.servlet.DispatcherType;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -64,8 +66,8 @@ public class SecurityConfig {
                 .headers(headers -> headers
                         .contentTypeOptions(HeadersConfigurer.ContentTypeOptionsConfig::disable)
                 )
-//                .cors(withDefaults())  // CORS 설정
-                .cors(AbstractHttpConfigurer::disable)  // CORS 비활성화
+                .cors(withDefaults())  // CORS 설정
+//                .cors(AbstractHttpConfigurer::disable)  // CORS 비활성화
                 .csrf(AbstractHttpConfigurer::disable)  // CSRF 비활성화
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
@@ -91,7 +93,22 @@ public class SecurityConfig {
                         .failureHandler(customOAuth2FailureHandler)
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService))
                 )
-                .addFilterBefore(new JwtAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), jwtUtil, memberRepository), LogoutFilter.class) // JWT 필터 추가
+                // 특정 경로에만 JwtAuthenticationFilter 추가
+                .addFilterBefore(
+                        new JwtAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), jwtUtil, memberRepository) {
+                            @Override
+                            protected boolean shouldNotFilter(@NotNull HttpServletRequest request) {
+                                // 필터링을 제외할 경로 정의
+                                String path = request.getRequestURI();
+                                return path.startsWith("/react/")
+                                        || path.startsWith("/constellations/")
+                                        || path.startsWith("/planet/")
+                                        || path.startsWith("/meteorShower/")
+                                        || path.startsWith("/public/calendar/");
+                            }
+                        },
+                        LogoutFilter.class
+                )
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT 인증 시 무상태 설정
                 )
@@ -112,7 +129,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations())  // Spring이 제공하는 공통 정적 리소스 경로
-                .requestMatchers("/static/**", "/js/**", "/css/**", "/img/**");        // 추가적으로 정의한 정적 리소스 경로
+                .requestMatchers("/static/**", "/js/**", "/css/**", "/img/**", "/index.html", "/react/**");        // 추가적으로 정의한 정적 리소스 경로
     }
 
     @Bean
