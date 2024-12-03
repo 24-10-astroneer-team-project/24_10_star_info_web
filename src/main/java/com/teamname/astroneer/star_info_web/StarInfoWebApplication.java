@@ -20,6 +20,7 @@ public class StarInfoWebApplication {
         System.setProperty("JWT_SECRET", dotenv.get("JWT_SECRET"));
 
         System.out.println(Dotenv.configure().ignoreIfMissing().load());
+        System.out.println(System.getProperty("JWT_SECRET"));
 
         // Spring Boot 애플리케이션 실행
         SpringApplication.run(StarInfoWebApplication.class, args);

@@ -30,18 +30,12 @@ server:
 logging:
   level:
     root: INFO
-    com.teamname.astroneer.star_info_web: DEBUG
+    com.teamname.astroneer.star_info_web: DEBUG  # 여기는 개발 단계에서 DEBUG로 유지
     org:
       springframework:
-        security: WARN
         web: INFO
-        security.oauth2: WARN
-        security.web.authentication: WARN
-        org.springframework.security: DEBUG
-        data:
-          redis: WARN
       hibernate:
-        SQL: INFO
+        SQL: OFF  # 필요할 때만 DEBUG로 바꿀 것을 추천
         type:
           descriptor:
             sql:
@@ -49,3 +43,5 @@ logging:
     io:
       lettuce:
         core: WARN
+
+

@@ -5,5 +5,5 @@ spring:
     url: jdbc:mysql://localhost:3306/2024_10_ASTRONEER_TEAMPROJECT
     hikari:
       username: root
-      password: 1234
+      password:
       driver-class-name: com.mysql.cj.jdbc.Driver

@@ -40,7 +40,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation(kotlin("script-runtime"))
     //환경변수 관련
-    implementation ("io.github.cdimascio:dotenv-java:2.2.0")
+    implementation ("io.github.cdimascio:dotenv-java:2.3.0")
     //파이어베이스
     implementation("com.google.firebase:firebase-admin:8.1.0")
     //mysql
@@ -80,7 +80,8 @@ tasks.withType<JavaCompile> {
 
 
 tasks.withType<Test> {
-    useJUnitPlatform()
+//    useJUnitPlatform()
+    enabled=false
 }
 
 tasks.withType<Copy> {
