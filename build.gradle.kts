@@ -80,7 +80,6 @@ tasks.withType<JavaCompile> {
 
 
 tasks.withType<Test> {
-//    useJUnitPlatform()
     enabled = false
 }
 

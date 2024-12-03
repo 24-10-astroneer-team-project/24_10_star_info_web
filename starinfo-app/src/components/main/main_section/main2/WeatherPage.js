@@ -43,6 +43,7 @@ function WeatherPage() {
 
     return (
         <div className={`${styles.bg} weather-page`}>
+            {/* 카드 컨테이너 */}
             <h1 className={styles.weatherTitle}>7-Day Weather Forecast for {cityName}</h1> {/* 도시 이름 표시 */}
 
             {/* 도시 이름 검색 입력 필드와 버튼 추가 */}
@@ -58,7 +59,6 @@ function WeatherPage() {
                     검색
                 </button>
             </div>
-
             <div className={styles.cardContainer}>
                 {weatherData.daily.slice(0, 7).map((day, index) => (
                     <WeatherCard
