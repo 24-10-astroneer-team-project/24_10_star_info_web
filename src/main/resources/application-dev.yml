@@ -10,6 +10,8 @@ data:
         min-idle: 0
 logging:
   level:
+    org.springframework.security.web: DEBUG  # 웹 시큐리티 관련 디버그
+    org.springframework.security.oauth2: INFO  # OAuth2 관련 로그는 INFO로 제한
     root: INFO  # 전체적인 루트 로그는 INFO로 줄여서 기본적인 정보만 기록
     org:
       hibernate:
