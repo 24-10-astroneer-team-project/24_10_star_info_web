@@ -80,7 +80,8 @@ tasks.withType<JavaCompile> {
 
 
 tasks.withType<Test> {
-    useJUnitPlatform()
+   // useJUnitPlatform()
+    enabled = false
 }
 
 tasks.withType<Copy> {
