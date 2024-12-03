@@ -4,7 +4,7 @@
     justify-content: center; /* 카드들을 중앙 정렬 */
     gap: 40px; /* 카드들 사이의 간격 */
     padding: 40px; /* 카드 컨테이너의 내부 여백 */
-    margin-top: 50px; /* 컨테이너의 상단 여백 */
+    margin-top: 10vh; /* 컨테이너의 상단 여백 */
     z-index: 10; /* 카드 컨테이너가 다른 요소들 위에 오도록 설정 */
     position: relative; /* z-index 적용을 위해 상대 위치 설정 */
 }

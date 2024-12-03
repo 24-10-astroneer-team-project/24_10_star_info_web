@@ -1,6 +1,7 @@
 package com.teamname.astroneer.star_info_web.service;
 
 import com.teamname.astroneer.star_info_web.dto.LocationDTO;
+import com.teamname.astroneer.star_info_web.dto.LocationEditRequest;
 import com.teamname.astroneer.star_info_web.entity.Location;
 import com.teamname.astroneer.star_info_web.entity.Member;
 import com.teamname.astroneer.star_info_web.exception.InvalidLocationException;
@@ -68,4 +69,28 @@ public class LocationService {
     public Optional<Location> findById(long locationId) {
         return locationRepository.findById(locationId);
     }
+
+
+
+    public void deleteLocation(Long locationId) {
+        if (!locationRepository.existsById(locationId)) {
+            throw new InvalidLocationException("존재하지 않는 위치입니다.");
+        }
+        locationRepository.deleteById(locationId);
+        System.out.println("Deleted location with ID: " + locationId);
+    }
+
+    public boolean updateLocation(LocationEditRequest editRequest) {
+        return locationRepository.findById(editRequest.getLocationId())
+                .map(location -> {
+                    // 필드 업데이트
+                    location.setLatitude(editRequest.getLat());
+                    location.setLongitude(editRequest.getLng());
+                    location.setDescription(editRequest.getDescription());
+                    locationRepository.save(location); // 저장
+                    return true;
+                })
+                .orElse(false); // id에 해당하는 위치가 없으면 false 반환
+    }
+
 }

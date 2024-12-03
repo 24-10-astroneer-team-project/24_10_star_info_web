@@ -32,7 +32,7 @@ dependencies {
 //    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     implementation("org.springframework.boot:spring-boot-starter-web")
     compileOnly("org.projectlombok:lombok")
-//    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -81,7 +81,7 @@ tasks.withType<JavaCompile> {
 
 tasks.withType<Test> {
 //    useJUnitPlatform()
-    enabled=false
+    enabled = false
 }
 
 tasks.withType<Copy> {

@@ -1,7 +1,7 @@
 .meteor-page {
     display: flex;
     flex-direction: column;
-    min-height: 100%; /* 페이지 전체를 차지하도록 설정 */
+    min-height: 100vh; /* 페이지 전체 높이를 차지 */
 }
 
 .meteor-page .content {
@@ -12,7 +12,7 @@
     align-items: center; /* 카드가 중앙으로 정렬 */
     overflow: auto; /* 스크롤 가능하게 설정 */
     padding: 20px; /* 카드와 화면 가장자리 사이 여백 */
-    height: auto; /* 높이를 카드 내용에 따라 자동으로 조정 */
+    flex: 1; /* 남은 공간을 콘텐츠 영역이 차지하도록 설정 */
     z-index: 2; /* 캔버스 위에 콘텐츠를 표시 */
 }
 
@@ -26,7 +26,7 @@
 }
 
 .meteor-page footer {
-    flex-shrink: 0;
+    flex-shrink: 0; /* 푸터 크기 고정 */
     background-color: #000;
     color: #fff;
     text-align: center;
