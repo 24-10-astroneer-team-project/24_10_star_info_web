@@ -17,6 +17,7 @@ src/main/resources/static/js
 src/main/resources/application-secret.yml
 src/main/resources/application-DB.yml
 
+
 # STS 관련 파일들
 .apt_generated
 .classpath
@@ -67,4 +68,3 @@ package-lock.json
 # Redis 관련 파일
 Redis-x64-3.0.504/
 
-src/main/resources/application-DB.yml

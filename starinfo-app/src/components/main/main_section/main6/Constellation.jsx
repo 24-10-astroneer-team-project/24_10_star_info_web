@@ -109,14 +109,7 @@ const Constellation = () => {
         <div className="rotating-polygon-section" style={{ position: 'relative' }}>
             <canvas ref={canvasRef} className="rotating-polygon-canvas"></canvas>
             {/* 버튼 추가 */}
-            <div
-                style={{
-                    position: 'absolute',
-                    zIndex: 10,
-                    bottom: '300px', // 하단에서 20px 위로 배치
-                    left: '250px', // 오른쪽에서 30px 안쪽으로 배치
-                }}
-            >
+            <div>
                 <Main_Button
                     onClick={handleButtonClick}
                     label="별자리 정보 보러가기"
