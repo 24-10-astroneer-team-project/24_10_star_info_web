@@ -32,6 +32,9 @@ const PlanetPage = () => {
     const navigate = useNavigate();
     const locationSearch = useLocation(); // URL 파라미터를 가져오기 위해 useLocation 사용
 
+    console.log("PlanetPage - Current location:", location);
+
+
     const today = new Date().toISOString().split("T")[0];
     const rangeDays = "1";
 
