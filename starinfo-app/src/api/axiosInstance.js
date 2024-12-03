@@ -12,41 +12,37 @@ const createAxiosInstance = (refreshAccessToken) => {
     instance.interceptors.request.use(
         async (config) => {
             const token = localStorage.getItem("accessToken");
-            if (token) {
-                const decoded = jwtDecode(token);
-                const timeUntilExpiration = decoded.exp * 1000 - Date.now();
+            if (!token) {
+                console.warn("[INFO] No Access Token available. Skipping Authorization header.");
+                return config; // 헤더 추가하지 않고 반환
+            }
 
-                console.log(`[INFO] Time until expiration: ${timeUntilExpiration}ms`);
+            const decoded = jwtDecode(token);
+            const timeUntilExpiration = decoded.exp * 1000 - Date.now();
 
-                if (timeUntilExpiration < 30000) { // Access Token 만료 30초 전
+            console.log(`[INFO] Time until expiration: ${timeUntilExpiration}ms`);
+
+            if (timeUntilExpiration < 30000) { // Access Token 만료 30초 전
+                try {
                     console.log("[INFO] Access Token 만료 임박. 갱신 시도...");
                     const newAccessToken = await refreshAccessToken();
                     if (newAccessToken) {
                         config.headers.Authorization = `Bearer ${newAccessToken}`;
+                    } else {
+                        console.warn("[WARNING] Failed to refresh Access Token.");
                     }
-                } else {
-                    config.headers.Authorization = `Bearer ${token}`;
+                } catch (error) {
+                    console.error("[ERROR] Access Token refresh failed:", error);
+                    // 선택적으로 요청 중단하거나 기본 헤더 없이 요청 진행
                 }
+            } else {
+                config.headers.Authorization = `Bearer ${token}`;
             }
+
             return config;
         },
         (error) => Promise.reject(error)
     );
-
-    //남은 시간 콘솔에 출력
-    setInterval(() => {
-        const token = localStorage.getItem("accessToken");
-        if (token) {
-            const decoded = jwtDecode(token);
-            const timeUntilExpiration = decoded.exp * 1000 - Date.now();
-
-            if (timeUntilExpiration > 0) {
-                console.log(`[DEBUG] Time left for token expiration: ${timeUntilExpiration / 1000}s`);
-            } else {
-                console.warn("[WARNING] Access Token expired!");
-            }
-        }
-    }, 300000); // 5분 간격으로 실행
 
     return instance;
 };
