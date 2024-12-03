@@ -11,6 +11,7 @@ async function moveBuildFiles() {
 
         // 최상위 파일들도 static 폴더로 이동 (index.html, asset-manifest.json 등)
         const topLevelFiles = ['asset-manifest.json', 'favicon.ico', 'index.html', 'logo192.png', 'logo512.png', 'manifest.json', 'robots.txt'];
+      
         for (const file of topLevelFiles) {
             const sourcePath = path.join(buildDir, file);
             const destinationPath = path.join(staticDir, file);

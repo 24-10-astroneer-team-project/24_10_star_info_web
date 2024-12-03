@@ -1594,7 +1594,7 @@ dl.infos dd span:after {
 }
 
 /*!* --------------------------------------------------------------------------- 반응형 스타일 코드 *!*/
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1024px) {
     /*#universe {*/
     /*    font-size: 60%;*/
     /*}*/
