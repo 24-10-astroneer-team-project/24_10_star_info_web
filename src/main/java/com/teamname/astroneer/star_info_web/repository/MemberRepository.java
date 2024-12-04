@@ -17,4 +17,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByGoogleLoginId(String googleLoginId); // 구글 로그인 ID로 회원 찾기
 
     boolean existsByGoogleLoginId(String googleLoginId);
+
+    Optional<Member> findByFavoriteLocationId(Long locationId);
 }
