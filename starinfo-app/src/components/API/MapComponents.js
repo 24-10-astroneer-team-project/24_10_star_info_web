@@ -72,16 +72,19 @@ const MapComponent = () => {
 
     // 위치 저장/수정 처리 함수
     const saveHandleSubmit = async () => {
-        const targetMarker = markerRef.current; // 항상 최신 상태값 사용
-        if (!targetMarker) {
+        console.log("saveHandleSubmit - Current markerRef:", markerRef.current);
+        const targetMarker = markerRef.current;
+
+        if (!targetMarker || !targetMarker.lat || !targetMarker.lng) {
+            console.error("Invalid markerRef:", markerRef.current);
             toast.warn('관측 위치를 선택해주세요.');
             return;
         }
 
         try {
             const payload = {
-                id: isEditing ? editingLocationId : undefined, // 수정 모드일 경우 ID 포함
-                ...targetMarker,
+                id: isEditing ? editingLocationId : undefined,
+                ...targetMarker, // 최신 마커 값 사용
                 description,
             };
 
@@ -102,6 +105,7 @@ const MapComponent = () => {
             toast.error('위치 정보를 저장/수정하는 데 실패했습니다.');
         }
     };
+
 
 
     return (

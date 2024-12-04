@@ -73,12 +73,25 @@ public class LocationService {
 
 
     public void deleteLocation(Long locationId) {
+        // 위치가 존재하는지 확인
         if (!locationRepository.existsById(locationId)) {
             throw new InvalidLocationException("존재하지 않는 위치입니다.");
         }
+
+        // 즐겨찾기인지 확인
+        Optional<Member> memberOptional = memberRepository.findByFavoriteLocationId(locationId);
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+            member.setFavoriteLocationId(0L); // 즐겨찾기 초기화
+            memberRepository.save(member); // 변경사항 저장
+            System.out.println("Reset favorite location for user with ID: " + member.getFavoriteLocationId());
+        }
+
+        // 위치 삭제
         locationRepository.deleteById(locationId);
         System.out.println("Deleted location with ID: " + locationId);
     }
+
 
     public boolean updateLocation(LocationEditRequest editRequest) {
         return locationRepository.findById(editRequest.getLocationId())
