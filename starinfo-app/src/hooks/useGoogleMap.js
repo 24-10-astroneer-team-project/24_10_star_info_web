@@ -9,51 +9,45 @@ export const useGoogleMap = (initialLocation = { lat: 0, lng: 0 }, isEditing = f
     const autocompleteRef = useRef(null); // Autocomplete 인스턴스를 참조하기 위한 ref
     const markerRef = useRef(initialLocation);
 
-    // 장소 변경 이벤트 핸들러
-    const handlePlaceSelected = () => {
-        if (!autocompleteRef.current) {
-            console.error("Autocomplete is not initialized");
-            return;
-        }
-
-        const place = autocompleteRef.current.getPlace();
-        if (place?.geometry?.location) {
-            const lat = place.geometry.location.lat();
-            const lng = place.geometry.location.lng();
-            const newLocation = { lat, lng };
-
-            if (isEditing) {
-                setEditingMarker(newLocation); // 수정 중인 위치 업데이트
-            } else {
-                setMarker(newLocation); // 마커 업데이트
-            }
-
-            setLocation(newLocation); // 지도 중심 이동
-            console.log(
-                isEditing
-                    ? 'Editing location selected:'
-                    : 'New location selected:',
-                newLocation
-            );
-        }
-    };
-
-    // 지도 클릭 이벤트 핸들러
     const handleMapClick = (event) => {
         const lat = event.latLng.lat();
         const lng = event.latLng.lng();
         const clickedLocation = { lat, lng };
 
         if (isEditing) {
-            setEditingLocation(lat, lng); // 수정 중이라면 editingMarker 업데이트
-            markerRef.current = { lat, lng }; // 최신 위치 업데이트
+            setEditingLocation(lat, lng);
+            markerRef.current = clickedLocation; // 최신 상태 반영
+            console.log('Editing marker set:', markerRef.current);
         } else {
-            setLocation(clickedLocation); // 저장 중이라면 marker 업데이트
-            setMarker(clickedLocation); // 새 마커 설정
-            markerRef.current = clickedLocation; // 최신 위치 업데이트
+            setLocation(clickedLocation);
+            setMarker(clickedLocation);
+            markerRef.current = clickedLocation; // 최신 상태 반영
+            console.log('New marker set:', markerRef.current);
         }
-        console.log('New marker set:', clickedLocation);
     };
+
+    // 장소 변경 이벤트 핸들러
+    const handlePlaceSelected = () => {
+        const place = autocompleteRef.current?.getPlace();
+        if (place?.geometry?.location) {
+            const lat = place.geometry.location.lat();
+            const lng = place.geometry.location.lng();
+            const newLocation = { lat, lng };
+
+            if (isEditing) {
+                setEditingMarker(newLocation);
+            } else {
+                setMarker(newLocation);
+            }
+
+            setLocation(newLocation);
+            markerRef.current = newLocation; // 최신 상태 반영
+            console.log("Updated markerRef after place selected:", markerRef.current);
+        } else {
+            console.error("No valid geometry found for the selected place.");
+        }
+    };
+
 
     // 수정 중인 위치 설정
     const setEditingLocation = (lat, lng) => {
