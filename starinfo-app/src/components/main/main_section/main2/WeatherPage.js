@@ -4,28 +4,22 @@ import React, { useEffect, useState } from 'react';
 import styles from './WeatherPage.module.css';
 import useUserLocation from '../../../../hooks/useUserLocation'; // 위치 데이터 훅
 import useWeather from '../../../../hooks/weather/useWeather'; // 날씨 데이터 훅
-import { useAuth } from '../../../../services/AuthProvider'; // 인증 상태 훅
 import WeatherCard from './WeatherCard';
 
 function WeatherPage() {
     const { location, locationLoading } = useUserLocation();
-    const { isAuthenticated } = useAuth(); // 인증 상태 가져오기
-    const [searchCity, setSearchCity] = useState(""); // 도시 이름 입력 상태 추가
-    const [cityToSearch, setCityToSearch] = useState(null); // 검색을 위해 사용할 도시 이름 저장
-    const { weatherData, weatherLoading, weatherError, cityName } = useWeather(location, cityToSearch, locationLoading, isAuthenticated); // locationLoading 추가
-    const [renderKey, setRenderKey] = useState(0); // 강제 재렌더링 키
-
-    useEffect(() => {
-        // 로그인 상태가 변경되면 강제 재렌더링
-        setRenderKey((prevKey) => prevKey + 1);
-    }, [isAuthenticated]);
+    const [searchCity, setSearchCity] = useState(""); // 도시 이름 입력 상태
+    const [cityToSearch, setCityToSearch] = useState(null); // 검색할 도시 이름
+    const { weatherData, weatherLoading, weatherError, cityName } = useWeather(location, cityToSearch, locationLoading);
 
     const handleSearch = () => {
-        // 검색 버튼 클릭 시 도시 이름 설정
-        setCityToSearch(searchCity);
+        if (searchCity.trim()) {
+            setCityToSearch(searchCity.trim());
+        }
     };
 
-    if (locationLoading || weatherLoading) {
+    // 로딩 상태 처리
+    if (locationLoading || weatherLoading || !location) {
         return (
             <div className={`${styles.bg} weather-page`}>
                 <p>Loading...</p>
@@ -33,6 +27,7 @@ function WeatherPage() {
         );
     }
 
+    // 에러 상태 처리
     if (weatherError) {
         return (
             <div className={`${styles.bg} weather-page`}>
@@ -43,10 +38,12 @@ function WeatherPage() {
 
     return (
         <div className={`${styles.bg} weather-page`}>
-            {/* 카드 컨테이너 */}
-            <h1 className={styles.weatherTitle}>7-Day Weather Forecast for {cityName}</h1> {/* 도시 이름 표시 */}
+            {/* 제목 */}
+            <h1 className={styles.weatherTitle}>
+                7-Day Weather Forecast for {cityName || "Unknown City"}
+            </h1>
 
-            {/* 도시 이름 검색 입력 필드와 버튼 추가 */}
+            {/* 검색 입력 필드 */}
             <div className={styles.weatherSearchContainer}>
                 <input
                     type="text"
@@ -59,8 +56,10 @@ function WeatherPage() {
                     검색
                 </button>
             </div>
+
+            {/* 날씨 카드 */}
             <div className={styles.cardContainer}>
-                {weatherData.daily.slice(0, 7).map((day, index) => (
+                {weatherData?.daily?.slice(0, 7).map((day, index) => (
                     <WeatherCard
                         key={index}
                         weatherData={day}
