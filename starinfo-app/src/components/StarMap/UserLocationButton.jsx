@@ -33,21 +33,20 @@ function UserLocationButton({ constellationData }) {
     // 로그인 상태일 경우 즐겨찾기 위치 정보 및 사용자 닉네임 표시
     return (
         <>
-        <div className="user-location-container">
-            <p className="user-info">
-                <strong>{user.nickname}</strong>님의 현재 선호 위치:
-            </p>
-            <div className="location-info">
-                <p>동네: {cityName || '정보 없음'}</p> {/* cityName 표시 */}
-                <p>설명: {location?.description ? location.description : '설명 없음'}</p> {/* 설명 표시 */}
-            <button className="go-button" onClick={handleOpenPopup}>→</button>
-        </div>
-        </div>
-    {
-        showPopup && (
-            <FavoriteLocationPopup
-                locationDescription={location.description || '정보 없음'}
-                constellations={constellationData.constellations || []} // StarMap에서 전달받은 데이터 그대로 전달
+            <div className="user-location-container">
+                <p className="user-info">
+                    <strong>{user.nickname}</strong>님의 현재 선호 위치:
+                </p>
+                <div className="location-info">
+                    <p>동네: {cityName || '정보 없음'}</p> {/* cityName 표시 */}
+                    {location.description && <p>설명: {location.description}</p>}
+                    <button className="go-button" onClick={handleOpenPopup}>→</button>
+                </div>
+            </div>
+            {showPopup && (
+                <FavoriteLocationPopup
+                    locationDescription={location.description || '정보 없음'}
+                    constellations={constellationData.constellations || []} // StarMap에서 전달받은 데이터 그대로 전달
                     onClose={handleClosePopup}
                 />
             )}

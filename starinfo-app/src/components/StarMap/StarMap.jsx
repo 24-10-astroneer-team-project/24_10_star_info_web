@@ -94,7 +94,7 @@ function StarMap() {
 
     // 아래는 완전 화면
     const closePopup = () => {
-        setPopupInfo({isVisible: false, constellationId: '', position: {x: 0, y: 0}});
+        setPopupInfo({ isVisible: false, constellationId: '', position: { x: 0, y: 0 } });
     };
 
     // 별자리 다이어그램을 그리는 useEffect
@@ -115,11 +115,14 @@ function StarMap() {
 
             if (popupInfo.constellationId === constellationId) {
                 // 같은 별자리를 다시 클릭하면 팝업을 닫기
-                setPopupInfo({isVisible: false, constellationId: '', position: {x: 0, y: 0}});
+                setPopupInfo({ isVisible: false, constellationId: '', position: { x: 0, y: 0 } });
             } else {
-                // 다른 별자리를 클릭하면 일단 현재 팝업을 닫고, 새로운 선택을 설정
-                setPopupInfo((prev) => ({...prev, isVisible: false}));
-                setNewSelection({constellationId, x: event.clientX, y: event.clientY});
+                // 다른 별자리를 클릭하면 강조 상태와 팝업 정보를 설정
+                setPopupInfo({
+                    isVisible: true,
+                    constellationId: constellationId,
+                    position: { x: event.clientX, y: event.clientY },
+                });
             }
         }
     };
@@ -179,109 +182,151 @@ function StarMap() {
                                     </filter>
                                 </defs>
                                 <g className="constellations">
-                                    <g className="constellation" id="pegasus">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'pegasus' ? 'selected' : ''}`}
+                                        id="pegasus"
+                                    >
                                         <path
                                             d=" M 256 139 L 290 95 L 356.738 93 L 403 106 L 524 95 L 512 168 L 554 182 L 584.939 217 L 629 274 M 403 106 L 419 174 L 394 192 M 419 174 L 512 168 L 548 197 L 566 226 L 566 281"
                                             fill="none" stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,429.314,143.931)" className="title">Pegasus
                                         </text>
                                     </g>
-                                    <g className="constellation" id="cassiopeia">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'cassiopeia' ? 'selected' : ''}`}
+                                        id="cassiopeia"
+                                    >
                                         <path
                                             d=" M 504.582 335.784 L 531.863 320.439 L 537.83 346.867 L 556.586 349.425 L 568.521 375.853"
                                             fill="none" stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,544,334.964)" className="title">Cassiopeia
                                         </text>
                                     </g>
-                                    <g className="constellation" id="cepheus">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'cepheus' ? 'selected' : ''}`}
+                                        id="cepheus"
+                                    >
                                         <path
                                             d=" M 403.133 386.935 L 418.478 346.867 L 460.251 380.115 L 491.795 432.971 L 433.824 417.206 L 403.133 386.935"
                                             fill="none" stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,356,412.964)" className="title">Cepheus</text>
                                     </g>
-                                    <g className="constellation" id="perseus">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'perseus' ? 'selected' : ''}`}
+                                        id="perseus"
+                                    >
                                         <path
                                             d=" M 768.009 331.522 L 752.857 346.867 L 732.204 359.808 L 712.927 356.133 L 687.873 367.327 L 669.118 362.212 L 641.837 362.212 L 623.082 362.212 L 636.722 353.687 L 660.592 349.425 L 677.643 334.079 L 694.693 318.734 L 699.808 307.651 L 687.873 293.784"
                                             fill="none" stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,665,386.964)" className="title">Perseus</text>
                                     </g>
-                                    <g className="constellation" id="auriga">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'auriga' ? 'selected' : ''}`}
+                                        id="auriga"
+                                    >
                                         <path
                                             d=" M 826.833 450.874 L 795.401 415.921 L 755.222 438.939 L 732.204 455.136 M 826.407 450.874 L 785.912 499.467 L 743.286 499.467 L 732.204 455.136"
                                             fill="none" stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,750.636,465.683)" className="title">Auriga
                                         </text>
                                     </g>
-                                    <g className="constellation" id="taurus">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'taurus' ? 'selected' : ''}`}
+                                        id="taurus"
+                                    >
                                         <path
                                             d=" M 872.016 460.251 L 872.016 356.133 L 869.459 343.628 L 864.344 327.259 L 857.131 336.412 L 857.131 343.457 L 853.261 349.425 Q 837.971 412.437 826.833 450.874"
                                             fill="none" stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,877,409.964)" className="title">Taurus</text>
                                     </g>
-                                    <g className="constellation" id="orion">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'orion' ? 'selected' : ''}`}
+                                        id="orion"
+                                    >
                                         <path
                                             d=" M 947.038 429.561 L 989.663 440.644 M 947.038 429.561 L 932.545 455.136 L 948.743 490.942 M 991.368 462.809 L 948.743 490.942"
                                             fill="none" stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,935.644,514.964)" className="title">Orion</text>
                                     </g>
-                                    <g className="constellation" id="gemini">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'gemini' ? 'selected' : ''}`}
+                                        id="gemini"
+                                    >
                                         <path
                                             d=" M 864.344 533.568 L 843.883 565.111 L 785.912 629.049 L 802.11 646.952 L 847.293 624.787 L 872.016 637.575 L 860.934 599.211 L 893.329 565.111 L 864.344 533.568"
                                             fill="none" stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,880.812,595.964)" className="title">Gemini
                                         </text>
                                     </g>
-                                    <g className="constellation" id="cancer">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'cancer' ? 'selected' : ''}`}
+                                        id="cancer"
+                                    >
                                         <path
                                             d=" M 750.107 720.269 L 795.401 757.779 L 802.11 802.11 M 796.142 757.779 L 860.934 744.991"
                                             fill="none" stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,774,729.431)" className="title">Cancer</text>
                                     </g>
-                                    <g className="constellation" id="ursa_major">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'ursa_major' ? 'selected' : ''}`}
+                                        id="ursa_major"
+                                    >
                                         <path
                                             d=" M 558.291 810.635 L 511.402 726.236 L 504.582 695.546 L 548.061 675.085 L 592.391 640.132 L 625.639 594.949 L 536.925 644.913 L 487.532 675.085 L 456.841 681 L 431.266 675.085 L 395.46 697 M 487.532 675.085 L 504.582 695.546 M 511.402 726.236 L 554.028 739.876 L 611.999 729.646 M 554.028 738.171 L 608.163 738.171 M 592.391 640.132 L 624.748 666.56 L 662.298 657.182 M 625.639 666.56 L 661.871 664.855"
                                             fill="none" stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,411.486,708.398)" className="title">Ursa Major
                                         </text>
-                                        <text transform="matrix(1,0,0,1,426.969,727.464)" className="subtitle">Big
-                                            Dipper
-                                        </text>
                                     </g>
-                                    <g className="constellation" id="leo">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'leo' ? 'selected' : ''}`}
+                                        id="leo"
+                                    >
                                         <path
                                             d=" M 747.549 855.818 L 698.103 873.721 L 685.564 848.526 L 660.592 845.588 L 652.92 825.128 L 679.348 796.142 L 698.103 800.405 M 660.592 845.588 L 572.783 866.901 L 518.223 906.117 L 579.029 895.166 L 698.103 873.721 M 572.783 866.901 L 579.029 895.166"
                                             fill="none" stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,615,908.221)" className="title">Leo</text>
                                     </g>
-                                    <g className="constellation" id="virgo">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'virgo' ? 'selected' : ''}`}
+                                        id="virgo"
+                                    >
                                         <path
                                             d=" M 424.446 987.106 L 522.485 975.171 L 526 953 L 488 940.217 L 384.849 953 L 295.716 949.595 L 285.941 945.332 L 255.648 916.331 L 247.432 907.822 L 180 859 L 166.986 866.901 M 384.849 953 L 382.673 913.789"
                                             stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,396,926.431)" className="title">Virgo</text>
                                     </g>
-                                    <g className="constellation" id="ursa_minor">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'ursa_minor' ? 'selected' : ''}`}
+                                        id="ursa_minor"
+                                    >
                                         <path
                                             d=" M 499.467 496.057 L 482.719 501.172 L 456.841 513.96 L 444.054 536.125 L 427.926 533.568 L 424.446 562.352 L 441.496 562.352 L 444.054 536.125"
                                             fill="none" stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,478.284,529.622)" className="title">Ursa Minor
                                         </text>
-                                        <text transform="matrix(1,0,0,1,492.25,544.412)" className="subtitle">Little
-                                            Dipper
-                                        </text>
                                     </g>
-                                    <g className="constellation" id="draco">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'draco' ? 'selected' : ''}`}
+                                        id="draco"
+                                    >
                                         <path
                                             d=" M 319.587 505.009 L 289.029 503.73 L 295.716 527.6 L 310.209 521.633 L 319.587 505.435 L 384.849 460.251 L 404.838 449.169 L 406.543 489.237 L 369.032 529.66 L 355.392 562.352 L 349.425 586.424 L 364.77 605.179 L 427.926 617.967 L 482.719 607 L 513 608.967"
                                             fill="none" stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,300.93,552.931)" className="title">Draco</text>
                                     </g>
-                                    <g className="constellation" id="bootes">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'bootes' ? 'selected' : ''}`}
+                                        id="bootes"
+                                    >
                                         <path
                                             d=" M 306.799 687.873 L 266.731 700.661 L 272.698 757.677 L 281.546 822.57 L 298.274 756.115 L 323.849 720.269 L 306.799 687.873"
                                             fill="none" stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,310,762.431)" className="title">Bootes</text>
                                     </g>
-                                    <g className="constellation" id="corona_borealis">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'corona_borealis' ? 'selected' : ''}`}
+                                        id="corona_borealis"
+                                    >
                                         <path
                                             d=" M 223 656 L 212 667 L 203.356 675.085 L 207.297 689.578 L 222.4 704.071 L 238.598 702.366 L 244 689.578"
                                             stroke="rgb(255,255,255)"/>
@@ -289,34 +334,43 @@ function StarMap() {
                                             Borealis
                                         </text>
                                     </g>
-                                    <g className="constellation" id="hercules">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'hercules' ? 'selected' : ''}`}
+                                        id="hercules"
+                                    >
                                         <path
                                             d=" M 168.691 489.237 L 160.166 519.075 L 155.904 543.769 L 155.904 556.815 L 151.641 571.078 L 155.904 640.132 L 92.818 580.456 L 151.641 571.078 L 188.299 580.456 L 216.142 557.309 M 146.526 662.298 L 155.904 640.132 L 201.087 605.179 L 236.04 589.834 L 255.648 592.391 L 281.546 600.916 M 236.04 590.26 L 216.142 557.309"
                                             fill="none" stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,72.429,528.931)" className="title">Hercules
                                         </text>
                                     </g>
-                                    <g className="constellation" id="lyra">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'lyra' ? 'selected' : ''}`}
+                                        id="lyra"
+                                    >
                                         <path
                                             d=" M 197 422.741 L 220 434 L 219.166 443 L 219 443 L 226.637 456.841 L 233 447.464 L 200 434 L 197 422.741"
                                             stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,179.641,454.722)" className="title">Lyra</text>
                                     </g>
-                                    <g className="constellation" id="delphinus">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'delphinus' ? 'selected' : ''}`}
+                                        id="delphinus"
+                                    >
                                         <path
                                             d=" M 164.429 234.703 L 190.857 241.155 L 201.087 231.777 L 191.433 234.703 L 183.184 239.45"
                                             fill="none" stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,149.894,222.931)" className="title">Delphinus
                                         </text>
                                     </g>
-                                    <g className="constellation" id="cygnus">
+                                    <g
+                                        className={`constellation ${popupInfo.constellationId === 'cygnus' ? 'selected' : ''}`}
+                                        id="cygnus"
+                                    >
                                         <path
                                             d=" M 272.698 295.716 L 279.518 343.457 L 279.518 391.198 M 188.299 373.295 L 203.356 364.77 L 224.588 359.808 L 241.056 353.687 L 281.546 343.457 L 316.176 343.457"
                                             fill="none" stroke="rgb(255,255,255)"/>
                                         <text transform="matrix(1,0,0,1,191.213,323.966)" className="title">Cygnus
-                                        </text>
-                                        <text transform="matrix(1,0,0,1,181.728,342.756)" className="subtitle">Northern
-                                            Cross
                                         </text>
                                     </g>
                                 </g>

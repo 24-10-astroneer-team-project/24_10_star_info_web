@@ -42,17 +42,9 @@
     background-image: radial-gradient(circle, #061c3d, #041833, #04142a, #041021, #030b18);
 }
 
-.subtitle {
-    font-size: 15px;
-}
-
 .month {
     font-size: 12px;
     font-weight: normal;
-    fill-opacity: 0;
-}
-
-.subtitle {
     fill-opacity: 0;
 }
 
@@ -62,7 +54,7 @@
     fill-opacity: 0; /* 기본 투명도 */
 }
 
-.month, .title, .subtitle {
+.month, .title {
     fill: white;
     filter: drop-shadow(0 0 1rem black);
 }
@@ -89,6 +81,7 @@
         stroke-width: 0;
     }
 }
+
 .constellation path {
     stroke: white;
     stroke-width: 1;
@@ -101,13 +94,51 @@
 
 .constellation:hover path,
 .drawConstellation path {
-    animation: drawPath 1s linear forwards;
+    animation: drawPath 0.5s linear forwards;
 }
 
 .constellation:hover text,
 .drawConstellation text {
     font-size: 24px;
     animation: fillPath 1s linear forwards;
+}
+
+.constellation.selected path,
+.drawConstellation path {
+    animation: drawPath 0.5s linear forwards;
+    stroke: #FFE066; /* 연노랑 */
+    stroke-dasharray: 550;
+    stroke-dashoffset: 550;
+}
+
+.constellation.selected text,
+.drawConstellation text {
+    font-size: 24px;
+    animation: fillPath 1s linear forwards;
+    fill: #FFE066; /* 연노랑 */
+}
+
+/* 애니메이션 정의 */
+@keyframes highlightGlow {
+    0% {
+        stroke: white;
+        filter: drop-shadow(0 0 0px white);
+    }
+    100% {
+        stroke: #ffd700;
+        filter: drop-shadow(0 0 10px #ffd700);
+    }
+}
+
+@keyframes textGlow {
+    0% {
+        fill: white;
+        text-shadow: 0 0 0px white;
+    }
+    100% {
+        fill: #ffd700;
+        text-shadow: 0 0 10px #ffd700;
+    }
 }
 
 .diagram path {
