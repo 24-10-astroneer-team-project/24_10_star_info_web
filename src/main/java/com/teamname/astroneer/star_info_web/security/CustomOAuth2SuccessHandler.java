@@ -39,17 +39,22 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         String email = oauthUser.getAttribute("email");
         String googleLoginId = oauthUser.getAttribute("sub"); // Google의 "sub"을 고유 식별자로 사용
 
-        Optional<Member> member = memberRepository.findByGoogleLoginId(googleLoginId);
+        // 사용자 조회
+        Optional<Member> memberOptional = memberRepository.findByGoogleLoginId(googleLoginId);
 
-        if (email != null && googleLoginId != null && member.isPresent()) {
-            Member user = member.get();
+        if (email != null && googleLoginId != null && memberOptional.isPresent()) {
+            Member user = memberOptional.get();
+
+            // JWT 생성
+            String accessToken = jwtUtil.generateToken(googleLoginId, email, user.getId());
+            String refreshToken = jwtUtil.generateRefreshToken(googleLoginId, email, user.getId());
 
             // CustomOAuth2User 생성
             CustomOAuth2User customOAuth2User = new CustomOAuth2User(
                     user,
                     oauthUser.getAttributes(),
-                    jwtUtil.generateToken(googleLoginId, email),
-                    jwtUtil.generateRefreshToken(googleLoginId, email)
+                    accessToken,
+                    refreshToken
             );
 
             // SecurityContext에 설정
@@ -60,16 +65,21 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
             );
             SecurityContextHolder.getContext().setAuthentication(customAuth);
 
-            log.info("JWT 인증 성공: {}", customOAuth2User.getEmail());
+            log.info("JWT 인증 성공: {}, UserId: {}", customOAuth2User.getEmail(), user.getId());
 
             // URL 인코딩 후 리디렉션
-            response.sendRedirect("/react/dashboard?accessToken=" + URLEncoder.encode(customOAuth2User.getAccessToken(), StandardCharsets.UTF_8.name())
-                    + "&refreshToken=" + URLEncoder.encode(customOAuth2User.getRefreshToken(), StandardCharsets.UTF_8.name()) + "&userId=" + user.getId());
+            String redirectUrl = String.format("/react/dashboard?accessToken=%s&refreshToken=%s&userId=%s",
+                    URLEncoder.encode(accessToken, StandardCharsets.UTF_8),
+                    URLEncoder.encode(refreshToken, StandardCharsets.UTF_8),
+                    user.getId());
+
+            response.sendRedirect(redirectUrl);
         } else {
             log.error("OAuth2 User 정보 부족 또는 사용자 미등록: email={}, googleLoginId={}", email, googleLoginId);
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Email or Google Login ID not found");
         }
     }
+
 
 
 }

@@ -74,14 +74,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private OAuth2User processGoogleUser(OAuth2User oAuth2User, String email, String googleLoginId) {
         // Google ID로 기존 사용자 확인
         Optional<Member> localUser = memberRepository.findByGoogleLoginId(googleLoginId);
+        boolean isNewUser = false;
 
         // 기존 사용자 처리
         if (localUser.isPresent()) {
             Member existingUser = localUser.get();
 
             // JWT 발급
-            String accessToken = jwtUtil.generateToken(existingUser.getGoogleLoginId(), existingUser.getEmail());
-            String refreshToken = jwtUtil.generateRefreshToken(existingUser.getGoogleLoginId(), existingUser.getEmail());
+            String accessToken = jwtUtil.generateToken(existingUser.getGoogleLoginId(), existingUser.getEmail(), existingUser.getId());
+            String refreshToken = jwtUtil.generateRefreshToken(existingUser.getGoogleLoginId(), existingUser.getEmail(), existingUser.getId());
 
             // Refresh Token Redis에 저장
             redisRefreshTokenService.saveRefreshToken(existingUser.getEmail(), refreshToken);
@@ -104,8 +105,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Member newUser = memberRepository.findByGoogleLoginId(googleLoginId).orElseThrow();
 
         // JWT 발급
-        String accessToken = jwtUtil.generateToken(newUser.getGoogleLoginId(), newUser.getEmail());
-        String refreshToken = jwtUtil.generateRefreshToken(newUser.getGoogleLoginId(), newUser.getEmail());
+        String accessToken = jwtUtil.generateToken(newUser.getGoogleLoginId(), newUser.getEmail(), newUser.getId());
+        String refreshToken = jwtUtil.generateRefreshToken(newUser.getGoogleLoginId(), newUser.getEmail(), newUser.getId());
 
         // Refresh Token Redis에 저장
         redisRefreshTokenService.saveRefreshToken(newUser.getEmail(), refreshToken);
