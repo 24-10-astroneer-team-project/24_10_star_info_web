@@ -17,12 +17,14 @@ public class CustomOAuth2User implements OAuth2User, UserDetails {
     private final Map<String, Object> attributes;
     private final String accessToken; // Access Token 필드
     private final String refreshToken; // Refresh Token 필드
+    private final boolean isNewUser;
 
-    public CustomOAuth2User(Member member, Map<String, Object> attributes, String accessToken, String refreshToken) {
+    public CustomOAuth2User(Member member, Map<String, Object> attributes, String accessToken, String refreshToken, boolean isNewUser) {
         this.member = member;
         this.attributes = attributes;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
+        this.isNewUser = isNewUser;
     }
 
     @Override
@@ -70,5 +72,9 @@ public class CustomOAuth2User implements OAuth2User, UserDetails {
     }
 
     public long getUserId() { return member.getId();
+    }
+
+    public boolean isNewUser() {
+        return isNewUser;
     }
 }

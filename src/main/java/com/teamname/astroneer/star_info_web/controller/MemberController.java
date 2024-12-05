@@ -162,7 +162,7 @@ public class MemberController {
             }
 
             // Generate new Access Token
-            String newAccessToken = jwtUtil.generateToken(googleLoginId, email, userId); // userId 포함
+            String newAccessToken = jwtUtil.generateToken(googleLoginId, email, userId, false); // userId 포함
             log.debug("새로 생성된 Access Token: {}", newAccessToken);
 
             // Return Access Token and userId

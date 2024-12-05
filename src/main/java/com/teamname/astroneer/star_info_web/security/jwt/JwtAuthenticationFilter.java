@@ -89,7 +89,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             user.setEmail(email);
             user.setGoogleLoginId(googleLoginId);
 
-            CustomOAuth2User customOAuth2User = new CustomOAuth2User(user, null, null, null);
+            CustomOAuth2User customOAuth2User = new CustomOAuth2User(user, null, null, null, false);
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     customOAuth2User, null, customOAuth2User.getAuthorities()
@@ -110,6 +110,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             String email = refreshClaims.getSubject();
             String googleLoginId = refreshClaims.get("googleLoginId", String.class);
             Long userId = refreshClaims.get("userId", Long.class); // JWT에서 userId 추출
+            boolean isNewUser = refreshClaims.get("isNewUser", Boolean.class);
 
             if (email == null || googleLoginId == null || userId == null) {
                 log.warn("리프레시 토큰 검증 실패: 잘못된 토큰 데이터");
@@ -118,7 +119,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             }
 
             // 새로운 Access Token 생성
-            String newAccessToken = jwtUtil.generateToken(googleLoginId, email, userId); // userId 포함된 Access Token 생성
+            String newAccessToken = jwtUtil.generateToken(googleLoginId, email, userId, isNewUser); // userId 포함된 Access Token 생성
 
             // 응답 헤더에 Access Token과 userId 추가
             response.setHeader("Authorization", "Bearer " + newAccessToken);
