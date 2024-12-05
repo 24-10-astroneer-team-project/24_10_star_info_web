@@ -134,9 +134,6 @@ public class MemberController {
         log.debug("=============================리프레시 토큰 로직 시작====================================");
 
         try {
-            log.debug("RedisRefreshTokenService instance: {}", redisRefreshTokenService);
-            log.debug("JwtUtil instance: {}", jwtUtil);
-
             String authHeader = request.getHeader("Authorization");
             log.debug("Authorization 헤더 값: {}", authHeader);
 
@@ -148,11 +145,15 @@ public class MemberController {
             String refreshToken = authHeader.substring(7);
             log.debug("Refresh Token 값: {}", refreshToken);
 
+            // Validate Refresh Token
             Claims claims = jwtUtil.validateToken(refreshToken);
             log.debug("JWT Claims: {}", claims);
 
             String email = claims.getSubject();
             String googleLoginId = claims.get("googleLoginId", String.class);
+            Long userId = claims.get("userId", Long.class); // JWT에서 userId 추출
+            log.debug("Extracted userId from JWT: {}", userId);
+
             boolean isValid = redisRefreshTokenService.validateRefreshToken(email, refreshToken);
             log.debug("Redis 토큰 유효성 검증 결과: {}", isValid);
 
@@ -160,16 +161,8 @@ public class MemberController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired Refresh Token");
             }
 
-            // Retrieve userId
-            Optional<Member> memberOptional = memberService.findByGoogleLoginId(googleLoginId);
-            if (memberOptional.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
-            }
-            Member member = memberOptional.get();
-            Long userId = member.getId();
-
             // Generate new Access Token
-            String newAccessToken = jwtUtil.generateToken(email, googleLoginId);
+            String newAccessToken = jwtUtil.generateToken(googleLoginId, email, userId, false); // userId 포함
             log.debug("새로 생성된 Access Token: {}", newAccessToken);
 
             // Return Access Token and userId

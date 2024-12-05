@@ -1,19 +1,12 @@
 package com.teamname.astroneer.star_info_web.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.EncodedResourceResolver;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -31,8 +24,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**") // 모든 경로에 CORS 적용
                 .allowedOriginPatterns("http://localhost:7777", "http://localhost:9999", "http://localhost:4444")
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("Content-Type", "Authorization", "Accept", "X-Requested-With")
+                .allowedMethods("*")
+                .allowedHeaders("*")
                 .exposedHeaders(HttpHeaders.AUTHORIZATION, HttpHeaders.LOCATION) // 필요한 헤더 노출
                 .allowCredentials(true)
                 .maxAge(3600);

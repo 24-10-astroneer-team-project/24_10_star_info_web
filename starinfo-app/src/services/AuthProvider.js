@@ -46,7 +46,6 @@ export const AuthProvider = ({ children }) => {
 
             const { accessToken, userId } = response.data;
             localStorage.setItem("accessToken", accessToken);
-            localStorage.setItem("userId", userId);
 
             // Axios 인스턴스에 Authorization 헤더 업데이트
             axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
@@ -64,14 +63,22 @@ export const AuthProvider = ({ children }) => {
         const initializeAuth = async () => {
             setIsAuthLoading(true);
             const token = getAccessToken();
-            const userId = localStorage.getItem("userId");
 
             if (token) {
                 try {
-                    const decoded = jwtDecode(token);
+                    const decoded = jwtDecode(token); // JWT 디코딩
+                    console.log(decoded);
+                    const userId = decoded.userId; // userId 추출
+
                     if (decoded.exp * 1000 > Date.now()) {
                         setIsAuthenticated(true);
-                        setUser({ ...decoded, userId });
+                        setUser(decoded);
+
+                        // userId를 로컬스토리지에 저장
+                        if (userId) {
+                            localStorage.setItem("userId", userId);
+                            console.log(`[INFO] userId 저장 완료: ${userId}`);
+                        }
 
                         // Axios 인스턴스에 Authorization 헤더 설정
                         axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -153,7 +160,6 @@ export const AuthProvider = ({ children }) => {
         // Local Storage와 Axios 인스턴스 정리
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-        localStorage.removeItem("userId");
         delete axiosInstance.defaults.headers.common["Authorization"];
 
         setIsAuthenticated(false);

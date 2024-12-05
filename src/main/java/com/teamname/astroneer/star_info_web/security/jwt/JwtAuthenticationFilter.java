@@ -26,8 +26,6 @@ import java.util.Optional;
 @Slf4j
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
-
     private final JwtUtil jwtUtil;
     private final MemberRepository memberRepository;
 
@@ -83,25 +81,24 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     private void authenticateUser(HttpServletRequest request, Claims claims) {
         String email = claims.getSubject();
         String googleLoginId = claims.get("googleLoginId", String.class);
+        Long userId = claims.get("userId", Long.class); // JWT에서 userId 추출
 
-        if (email != null && googleLoginId != null) {
-            Optional<Member> member = memberRepository.findByGoogleLoginId(googleLoginId);
-            if (member.isPresent()) {
-                Member user = member.get();
+        if (email != null && googleLoginId != null && userId != null) {
+            Member user = new Member(); // DB 조회 없이 Member 객체 생성
+            user.setId(userId); // JWT에서 추출한 userId 설정
+            user.setEmail(email);
+            user.setGoogleLoginId(googleLoginId);
 
-                CustomOAuth2User customOAuth2User = new CustomOAuth2User(user, null, null, null);
+            CustomOAuth2User customOAuth2User = new CustomOAuth2User(user, null, null, null, false);
 
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        customOAuth2User, null, customOAuth2User.getAuthorities()
-                );
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                    customOAuth2User, null, customOAuth2User.getAuthorities()
+            );
 
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-                log.info("JWT 인증 성공: {} (GoogleLoginId: {}, UserId: {}, URL: {})",
-                        email, googleLoginId, user.getId(), request.getRequestURI());
-            } else {
-                throw new JwtException("User not found");
-            }
+            log.info("JWT 인증 성공: {} (GoogleLoginId: {}, UserId: {}, URL: {})",
+                    email, googleLoginId, userId, request.getRequestURI());
         } else {
             throw new JwtException("Invalid JWT payload");
         }
@@ -112,25 +109,23 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             Claims refreshClaims = jwtUtil.validateToken(refreshToken);
             String email = refreshClaims.getSubject();
             String googleLoginId = refreshClaims.get("googleLoginId", String.class);
+            Long userId = refreshClaims.get("userId", Long.class); // JWT에서 userId 추출
+            boolean isNewUser = refreshClaims.get("isNewUser", Boolean.class);
 
-            Optional<Member> memberOptional = memberRepository.findByGoogleLoginId(googleLoginId);
-
-            if (memberOptional.isEmpty()) {
-                log.warn("리프레시 토큰 검증 실패. 사용자가 존재하지 않습니다.");
+            if (email == null || googleLoginId == null || userId == null) {
+                log.warn("리프레시 토큰 검증 실패: 잘못된 토큰 데이터");
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid Refresh Token");
                 return;
             }
 
-            Member user = memberOptional.get();
-
             // 새로운 Access Token 생성
-            String newAccessToken = jwtUtil.generateToken(googleLoginId, email);
+            String newAccessToken = jwtUtil.generateToken(googleLoginId, email, userId, isNewUser); // userId 포함된 Access Token 생성
 
             // 응답 헤더에 Access Token과 userId 추가
             response.setHeader("Authorization", "Bearer " + newAccessToken);
-            response.setHeader("userId", String.valueOf(user.getId()));
+            response.setHeader("userId", String.valueOf(userId));
 
-            log.info("리프레시 토큰을 사용해 새 Access Token 생성: {} (UserId: {})", newAccessToken, user.getId());
+            log.info("리프레시 토큰을 사용해 새 Access Token 생성: {} (UserId: {})", newAccessToken, userId);
         } catch (ExpiredJwtException e) {
             log.error("리프레시 토큰 만료됨: {}", e.getMessage());
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Refresh Token expired");
@@ -139,5 +134,4 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid Refresh Token");
         }
     }
-
 }
