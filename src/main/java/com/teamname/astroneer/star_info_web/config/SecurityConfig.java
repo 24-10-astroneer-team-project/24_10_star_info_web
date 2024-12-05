@@ -75,13 +75,13 @@ public class SecurityConfig {
                                 .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()  // FORWARD 요청은 인증 없이 허용
                                 .requestMatchers("/", "/react/**", "/static/**", "/react/login", "/react/main").permitAll()  // React 경로 추가
                                 .requestMatchers("/login").anonymous() // 로그인되지 않은 사용자만 접근 가능
-                                .requestMatchers("/api/**", "/auth/**", "/oauth2/**").authenticated() // API 경로는 명확히 구분
-                                .requestMatchers("/locations", "/locations/**").permitAll()
+                                .requestMatchers("/locations", "/locations/**", "/api/member/refresh").permitAll()
                                 .requestMatchers("/constellations", "/constellations/**").permitAll() // 별자리 경로
                                 .requestMatchers("/planet/**", "/planet/visibility", "/planet/opposition").permitAll() // 행성 경로
                                 .requestMatchers("/meteorShower", "/meteorShower/general", "/meteorShower/**").permitAll() // 유성우 경로
                                 .requestMatchers("/public/calendar/**").permitAll() // 공용 캘린더 경로
                                 .requestMatchers("/static/**", "/media/**", "/js/**", "/css/**", "/img/**", "/fontawesome-free-6.5.1-web/**", "/particle.png").permitAll()
+                                .requestMatchers("/api/**", "/auth/**", "/oauth2/**").authenticated() // API 경로는 명확히 구분
                                 .requestMatchers("/api/location/save").authenticated()
                                 .anyRequest().authenticated()
                 )

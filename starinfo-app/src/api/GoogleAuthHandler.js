@@ -11,9 +11,8 @@ const GoogleAuthHandler = () => {
     useEffect(() => {
         const queryParams = new URLSearchParams(window.location.search);
         const accessToken = queryParams.get("accessToken");
-        const refreshToken = queryParams.get("refreshToken");
 
-        if (accessToken && refreshToken) {
+        if (accessToken) {
             try {
                 // JWT 디코딩
                 const decodedToken = jwtDecode(accessToken);
@@ -22,7 +21,6 @@ const GoogleAuthHandler = () => {
 
                 // 로컬스토리지에 저장
                 localStorage.setItem("accessToken", accessToken);
-                localStorage.setItem("refreshToken", refreshToken);
                 console.log("Tokens saved successfully");
 
                 // 첫 로그인 여부 확인 후 리디렉션

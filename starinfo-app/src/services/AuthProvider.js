@@ -13,7 +13,6 @@ export const AuthProvider = ({ children }) => {
     const [isAuthLoading, setIsAuthLoading] = useState(true);
 
     const getAccessToken = () => localStorage.getItem("accessToken");
-    const getRefreshToken = () => localStorage.getItem("refreshToken");
 
     // Axios 인스턴스 생성 및 관리
     const axiosInstance = createAxiosInstance(async () => {
@@ -25,36 +24,48 @@ export const AuthProvider = ({ children }) => {
 
     // Access Token 갱신 로직
     const refreshAccessToken = async () => {
-        const refreshToken = getRefreshToken();
-        if (!refreshToken) {
-            console.log("[ERROR] Refresh token missing. Logging out.");
+        const accessToken = localStorage.getItem("accessToken");
+        let userId = null;
+
+        // 만료된 토큰 디코딩으로 userId 확인 시도
+        if (accessToken) {
+            try {
+                const decoded = jwtDecode(accessToken);
+                userId = decoded.userId; // JWT에 포함된 userId 추출
+            } catch (error) {
+                console.warn("[WARN] 만료된 Access Token 디코딩 실패:", error);
+            }
+        }
+
+        // 로컬 스토리지에서 userId 확인
+        if (!userId) {
+            userId = localStorage.getItem("userId");
+        }
+
+        if (!userId) {
+            console.error("[ERROR] 사용자 식별 정보 없음. 로그아웃 처리.");
             logout();
             return null;
         }
 
         try {
+            // 사용자 ID를 포함한 요청 전송
             const response = await axios.post(
                 "/api/member/refresh",
-                {}, // 요청 본문 비움
-                {
-                    headers: {
-                        Authorization: `Bearer ${refreshToken}`,
-                        "Content-Type": "application/json",
-                    },
-                }
+                { userId },
+                { headers: { "Content-Type": "application/json" } }
             );
 
-            const { accessToken, userId } = response.data;
+            const { accessToken } = response.data;
+
+            // 새 액세스 토큰 저장
             localStorage.setItem("accessToken", accessToken);
 
-            // Axios 인스턴스에 Authorization 헤더 업데이트
-            axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
-            console.log(`[SUCCESS] Access Token 갱신 성공. UserId: ${userId}, AccessToken: ${accessToken}`);
+            console.log("[SUCCESS] Access Token 갱신 성공:", accessToken);
             return accessToken;
         } catch (error) {
-            console.error("[ERROR] Failed to refresh access token:", error);
-            logout();
+            console.error("[ERROR] Access Token 갱신 실패:", error);
+            logout(); // 실패 시 로그아웃 처리
             return null;
         }
     };
@@ -62,36 +73,42 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const initializeAuth = async () => {
             setIsAuthLoading(true);
-            const token = getAccessToken();
 
-            if (token) {
+            const accessToken = getAccessToken();
+
+            if (accessToken) {
+                // Access Token이 존재하면 인증 상태 확인
                 try {
-                    const decoded = jwtDecode(token); // JWT 디코딩
-                    console.log(decoded);
-                    const userId = decoded.userId; // userId 추출
-
+                    const decoded = jwtDecode(accessToken);
                     if (decoded.exp * 1000 > Date.now()) {
                         setIsAuthenticated(true);
                         setUser(decoded);
-
-                        // userId를 로컬스토리지에 저장
-                        if (userId) {
-                            localStorage.setItem("userId", userId);
-                            console.log(`[INFO] userId 저장 완료: ${userId}`);
-                        }
-
-                        // Axios 인스턴스에 Authorization 헤더 설정
-                        axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+                        axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
                     } else {
+                        console.log("[INFO] Access Token 만료됨. 갱신 시도...");
                         await refreshAccessToken();
                     }
                 } catch (error) {
-                    console.error("JWT decoding failed:", error);
+                    console.error("[ERROR] Access Token 확인 중 오류:", error);
                     logout();
                 }
             } else {
-                setIsAuthenticated(false);
+                // Access Token이 없으면 갱신 요청
+                console.log("[INFO] Access Token 없음. Redis에서 Refresh Token 확인 시도...");
+                try {
+                    const newAccessToken = await refreshAccessToken();
+                    if (newAccessToken) {
+                        setIsAuthenticated(true);
+                    } else {
+                        console.log("[INFO] 사용자 인증 실패. 로그인 필요.");
+                        logout();
+                    }
+                } catch (error) {
+                    console.error("[ERROR] Redis Refresh Token 확인 중 오류:", error);
+                    logout();
+                }
             }
+
             setIsAuthLoading(false);
         };
 
@@ -129,7 +146,7 @@ export const AuthProvider = ({ children }) => {
                     logout();
                 }
             }
-        }, 300000); // 5분 간격
+        }, 120000); // 2분 간격
 
         return () => clearInterval(interval);
     }, []);
@@ -159,7 +176,7 @@ export const AuthProvider = ({ children }) => {
 
         // Local Storage와 Axios 인스턴스 정리
         localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("userId");
         delete axiosInstance.defaults.headers.common["Authorization"];
 
         setIsAuthenticated(false);

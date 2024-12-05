@@ -130,43 +130,39 @@ public class MemberController {
 //    }
 
     @PostMapping("/refresh")
-    public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) {
+    public ResponseEntity<?> refreshAccessToken(@RequestBody Map<String, Object> payload) {
         log.debug("=============================리프레시 토큰 로직 시작====================================");
 
         try {
-            String authHeader = request.getHeader("Authorization");
-            log.debug("Authorization 헤더 값: {}", authHeader);
+            // 클라이언트로부터 사용자 식별 정보 (userId) 수신
+            Long userId = Long.valueOf(payload.get("userId").toString());
+            log.debug("수신된 userId: {}", userId);
 
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                log.error("Authorization 헤더가 없거나 형식이 잘못되었습니다.");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing or invalid Authorization header");
+            // userId로 이메일 가져오기
+            String email = memberService.getEmailByUserId(userId);
+            if (email == null) {
+                log.error("해당 userId로 이메일을 찾을 수 없습니다. userId: {}", userId);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
+            }
+            log.debug("userId로 가져온 이메일: {}", email);
+
+            // Redis에서 해당 이메일의 리프레시 토큰 가져오기
+            String refreshToken = redisRefreshTokenService.getRefreshToken(email);
+            if (refreshToken == null) {
+                log.error("Redis에서 리프레시 토큰을 찾을 수 없습니다. email: {}", email);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh Token not found");
             }
 
-            String refreshToken = authHeader.substring(7);
-            log.debug("Refresh Token 값: {}", refreshToken);
-
-            // Validate Refresh Token
+            // 리프레시 토큰 검증
             Claims claims = jwtUtil.validateToken(refreshToken);
-            log.debug("JWT Claims: {}", claims);
-
-            String email = claims.getSubject();
             String googleLoginId = claims.get("googleLoginId", String.class);
-            Long userId = claims.get("userId", Long.class); // JWT에서 userId 추출
-            log.debug("Extracted userId from JWT: {}", userId);
+            log.debug("리프레시 토큰 검증 성공. email={}, googleLoginId={}", email, googleLoginId);
 
-            boolean isValid = redisRefreshTokenService.validateRefreshToken(email, refreshToken);
-            log.debug("Redis 토큰 유효성 검증 결과: {}", isValid);
-
-            if (!isValid) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired Refresh Token");
-            }
-
-            // Generate new Access Token
-            String newAccessToken = jwtUtil.generateToken(googleLoginId, email, userId, false); // userId 포함
+            // 새 액세스 토큰 생성
+            String newAccessToken = jwtUtil.generateToken(googleLoginId, email, userId, false);
             log.debug("새로 생성된 Access Token: {}", newAccessToken);
 
-            // Return Access Token and userId
-            return ResponseEntity.ok(Map.of("accessToken", newAccessToken, "userId", userId));
+            return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
         } catch (Exception e) {
             log.error("리프레시 토큰 처리 중 예외 발생", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing refresh token");
