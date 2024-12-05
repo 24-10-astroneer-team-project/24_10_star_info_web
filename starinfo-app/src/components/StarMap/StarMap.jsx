@@ -5,7 +5,7 @@ import Foot from "../layout/Foot";
 import {drawdiagram} from './Diagram';
 import ConstellationPopup from './ConstellationPopup';
 import LoadingSpinner from '../ui/LoadingSpinner';
-
+import HelpIcon from "./HelpIcon";
 import axios from 'axios';
 import useUserLocation from "../../hooks/useUserLocation";
 import {useAuth} from "../../services/AuthProvider";
@@ -127,6 +127,11 @@ function StarMap() {
         }
     };
 
+    const handleHelpClick = () => {
+        console.log("Help icon clicked!");
+        // 추후 모달 창이나 다른 동작을 여기에 연결 가능
+    };
+
     useEffect(() => {
         if (!popupInfo.isVisible && newSelection) {
             // 애니메이션 지연 후에 새로운 팝업 표시
@@ -153,6 +158,7 @@ function StarMap() {
                     <div className="header">
                         <Head/>
                     </div>
+                    <HelpIcon onClick={handleHelpClick} /> {/* 도움말 아이콘 추가 */}
                     <div className="content-wrapper">
                         <UserLocationButton constellationData={constellationData || []}/>
                         <div className="stars-background"></div>
@@ -244,9 +250,11 @@ function StarMap() {
                                         id="orion"
                                     >
                                         <path
-                                            d=" M 947.038 429.561 L 989.663 440.644 M 947.038 429.561 L 932.545 455.136 L 948.743 490.942 M 991.368 462.809 L 948.743 490.942"
-                                            fill="none" stroke="rgb(255,255,255)"/>
-                                        <text transform="matrix(1,0,0,1,935.644,514.964)" className="title">Orion</text>
+                                            d="M 927.038 429.561 L 969.663 440.644 M 927.038 429.561 L 912.545 455.136 L 928.743 490.942 M 971.368 462.809 L 928.743 490.942"
+                                            fill="none" stroke="rgb(255,255,255)"
+                                        />
+                                        <text transform="matrix(1,0,0,1,915.644,514.964)" className="title">Orion</text>
+
                                     </g>
                                     <g
                                         className={`constellation ${popupInfo.constellationId === 'gemini' ? 'selected' : ''}`}

@@ -67,7 +67,7 @@ function UserLocationButton({constellationData}) {
                     <strong>{user?.nickname || '사용자'}</strong>님의 현재 선호 위치:
                 </p>
                 <div className="location-info">
-                    <p>동네: {cityName || '정보 없음'}</p>
+                    <p>지역: {cityName || '정보 없음'}</p>
                     <p>설명: {location?.description || '정보 없음'}</p>
                     <button className="go-button" onClick={handleOpenPopup}
                             title="선호위치에서의 별자리 관측정보를

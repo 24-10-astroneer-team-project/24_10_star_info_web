@@ -20,7 +20,7 @@
     font-weight: 400;
     letter-spacing: -0.05em;
     opacity: 0;
-    z-index: 2;
+    z-index: 1;
     animation: fadeIn 0.3s ease forwards;
 }
 
