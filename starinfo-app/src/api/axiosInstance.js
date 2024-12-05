@@ -1,50 +1,78 @@
 // src/api/axiosInstance.js
 
+// src/api/axiosInstance.js
+
 import axios from "axios";
-import jwtDecode from "jwt-decode";
 
-const createAxiosInstance = (refreshAccessToken) => {
-    const instance = axios.create({
-        baseURL: "http://localhost:7777", // 기본 URL
+let isRefreshing = false; // 토큰 갱신 중인지 확인
+let failedQueue = []; // 대기열에 실패한 요청 추가
+
+const processQueue = (error, token = null) => {
+    failedQueue.forEach((prom) => {
+        if (token) {
+            prom.resolve(token); // 성공 시 토큰으로 요청 진행
+        } else {
+            prom.reject(error); // 실패 시 오류 전달
+        }
     });
-
-    // 요청 인터셉터 추가
-    instance.interceptors.request.use(
-        async (config) => {
-            const token = localStorage.getItem("accessToken");
-            if (!token) {
-                console.warn("[INFO] No Access Token available. Skipping Authorization header.");
-                return config; // 헤더 추가하지 않고 반환
-            }
-
-            const decoded = jwtDecode(token);
-            const timeUntilExpiration = decoded.exp * 1000 - Date.now();
-
-            console.log(`[INFO] Time until expiration: ${timeUntilExpiration}ms`);
-
-            if (timeUntilExpiration < 30000) { // Access Token 만료 30초 전
-                try {
-                    console.log("[INFO] Access Token 만료 임박. 갱신 시도...");
-                    const newAccessToken = await refreshAccessToken();
-                    if (newAccessToken) {
-                        config.headers.Authorization = `Bearer ${newAccessToken}`;
-                    } else {
-                        console.warn("[WARNING] Failed to refresh Access Token.");
-                    }
-                } catch (error) {
-                    console.error("[ERROR] Access Token refresh failed:", error);
-                    // 선택적으로 요청 중단하거나 기본 헤더 없이 요청 진행
-                }
-            } else {
-                config.headers.Authorization = `Bearer ${token}`;
-            }
-
-            return config;
-        },
-        (error) => Promise.reject(error)
-    );
-
-    return instance;
+    failedQueue = []; // 대기열 초기화
 };
 
-export default createAxiosInstance;
+const axiosInstance = axios.create({
+    baseURL: "http://localhost:7777", // 기본 URL
+    withCredentials: true, // 쿠키 전송 허용
+});
+
+axiosInstance.interceptors.response.use(
+    (response) => response, // 성공 응답 그대로 반환
+    async (error) => {
+        const originalRequest = error.config;
+
+        if (error.response && error.response.status === 401) {
+            if (!isRefreshing) {
+                isRefreshing = true;
+
+                try {
+                    console.log("[INFO] Access Token 갱신 요청 중...");
+                    const response = await axios.post("/api/auth/refresh-from-cookie", {}, { withCredentials: true });
+
+                    console.log("[SUCCESS] Access Token 갱신 성공.");
+                    const newAccessToken = response.data.accessToken;
+
+                    // 새로운 토큰을 대기열의 요청에 적용
+                    processQueue(null, newAccessToken);
+                    isRefreshing = false;
+
+                    // 요청에 새로운 Access Token 적용
+                    return axiosInstance({
+                        ...originalRequest,
+                        headers: {
+                            ...originalRequest.headers,
+                            Authorization: `Bearer ${newAccessToken}`,
+                        },
+                    });
+                } catch (refreshError) {
+                    console.error("[ERROR] Access Token 갱신 실패:", refreshError);
+                    processQueue(refreshError, null); // 모든 대기 중인 요청 실패 처리
+                    isRefreshing = false;
+                    return Promise.reject(refreshError);
+                }
+            } else {
+                // 이미 갱신 요청 중인 경우 대기열에 추가
+                return new Promise((resolve, reject) => {
+                    failedQueue.push({
+                        resolve: (token) => {
+                            originalRequest.headers.Authorization = `Bearer ${token}`;
+                            resolve(axiosInstance(originalRequest));
+                        },
+                        reject: (err) => reject(err),
+                    });
+                });
+            }
+        }
+
+        return Promise.reject(error); // 다른 오류는 그대로 반환
+    }
+);
+
+export default axiosInstance;
