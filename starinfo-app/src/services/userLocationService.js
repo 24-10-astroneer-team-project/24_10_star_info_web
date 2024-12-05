@@ -1,22 +1,12 @@
 // userLocationService.js
 
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 
 export const getUserLocationFromProfile = async (userId) => {
+
     try {
-        const accessToken = localStorage.getItem("accessToken"); // Access Token 가져오기
-
-        if (!accessToken) {
-            console.error("No access token found. Please log in.");
-            return null; // 토큰이 없으면 null 반환
-        }
-
         // 백엔드에서 사용자 프로필 데이터 가져오기
-        const response = await axios.get(`/api/member/${userId}`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`, // Authorization 헤더 추가
-            },
-        });
+        const response = await axiosInstance.get(`/api/member/${userId}`);
 
         // API 응답 확인
         console.log('API Response:', response.data);
@@ -46,4 +36,3 @@ export const getUserLocationFromProfile = async (userId) => {
         return null; // 오류가 발생하면 null을 반환
     }
 };
-

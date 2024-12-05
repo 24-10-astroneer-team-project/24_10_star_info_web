@@ -9,6 +9,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -38,33 +39,29 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        String header = request.getHeader("Authorization");
-
         log.debug("Processing request URL: {}", request.getRequestURI());
 
-        if (header == null || !header.startsWith("Bearer ")) {
-            log.debug("Authorization 헤더가 없거나 형식이 잘못되었습니다. URL: {}", request.getRequestURI());
+        String accessToken = extractTokenFromCookies(request, "accessToken");
+
+        if (accessToken == null) {
+            log.debug("Access Token 쿠키가 없습니다. URL: {}", request.getRequestURI());
             chain.doFilter(request, response);
             return;
         }
 
-        String token = header.substring(7);
         try {
-            Claims claims = jwtUtil.validateToken(token);
-            // 유효한 Access Token이므로 사용자 인증 처리
+            Claims claims = jwtUtil.validateToken(accessToken);
             authenticateUser(request, claims);
 
         } catch (ExpiredJwtException e) {
             log.error("JWT 만료됨. URL: {}, Message: {}", request.getRequestURI(), e.getMessage());
-            String refreshToken = request.getHeader("Refresh-Token");
+            String refreshToken = extractTokenFromCookies(request, "refreshToken");
 
             if (refreshToken != null) {
-                // Refresh Token이 있는 경우, Access Token 갱신 처리
                 handleRefreshToken(refreshToken, response);
-                return; // 새로운 Access Token이 발급되면 필터 체인 중단
+                return;
             } else {
-                // Refresh Token이 없으면 인증 실패
-                log.warn("Access Token 만료 및 Refresh Token 누락. URL: {}", request.getRequestURI());
+                log.warn("Access Token 만료 및 Refresh Token 쿠키 누락. URL: {}", request.getRequestURI());
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT expired and no refresh token provided");
                 return;
             }
@@ -74,8 +71,18 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        // 인증이 완료되었으므로 요청 필터 체인을 계속 진행
         chain.doFilter(request, response);
+    }
+
+    private String extractTokenFromCookies(HttpServletRequest request, String cookieName) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (cookieName.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 
     private void authenticateUser(HttpServletRequest request, Claims claims) {
@@ -109,7 +116,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             Claims refreshClaims = jwtUtil.validateToken(refreshToken);
             String email = refreshClaims.getSubject();
             String googleLoginId = refreshClaims.get("googleLoginId", String.class);
-            Long userId = refreshClaims.get("userId", Long.class); // JWT에서 userId 추출
+            Long userId = refreshClaims.get("userId", Long.class);
             boolean isNewUser = refreshClaims.get("isNewUser", Boolean.class);
 
             if (email == null || googleLoginId == null || userId == null) {
@@ -119,13 +126,17 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             }
 
             // 새로운 Access Token 생성
-            String newAccessToken = jwtUtil.generateToken(googleLoginId, email, userId, isNewUser); // userId 포함된 Access Token 생성
+            String newAccessToken = jwtUtil.generateToken(googleLoginId, email, userId, isNewUser);
 
-            // 응답 헤더에 Access Token과 userId 추가
-            response.setHeader("Authorization", "Bearer " + newAccessToken);
-            response.setHeader("userId", String.valueOf(userId));
+            // Access Token 쿠키에 저장
+            Cookie accessTokenCookie = new Cookie("accessToken", newAccessToken);
+            accessTokenCookie.setHttpOnly(true);
+            accessTokenCookie.setSecure(true);
+            accessTokenCookie.setPath("/");
+            accessTokenCookie.setMaxAge(15 * 60); // 15분
+            response.addCookie(accessTokenCookie);
 
-            log.info("리프레시 토큰을 사용해 새 Access Token 생성: {} (UserId: {})", newAccessToken, userId);
+            log.info("리프레시 토큰으로 새 Access Token 생성 및 쿠키에 저장: {}", newAccessToken);
         } catch (ExpiredJwtException e) {
             log.error("리프레시 토큰 만료됨: {}", e.getMessage());
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Refresh Token expired");

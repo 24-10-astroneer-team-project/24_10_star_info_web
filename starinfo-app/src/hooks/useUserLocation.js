@@ -18,25 +18,28 @@ function useUserLocation() {
 
         const fetchUserLocation = async () => {
             try {
+                console.log("isAuthenticated:", isAuthenticated);
+                console.log("User from Auth:", user);
+
                 if (isAuthenticated && user?.userId) {
                     const userLocation = await getUserLocationFromProfile(user.userId, { signal });
+                    console.log("Fetched User Location:", userLocation);
 
                     if (!signal.aborted && userLocation) {
-                        // 즐겨찾기 위치가 없거나 즐겨찾기 ID가 0일 경우 기본값 설정
                         if (
                             !userLocation.latitude ||
                             !userLocation.longitude ||
                             userLocation.favoriteLocationId === 0
                         ) {
-                            console.warn("No favorite location found or favoriteLocationId is 0. Setting default location.");
+                            console.warn("No favorite location found. Setting default location.");
                             setLocation(defaultLocation);
                             localStorage.setItem("userLocation", JSON.stringify(defaultLocation));
                         } else {
-                            setLocation(userLocation); // 정상 위치 설정
+                            setLocation(userLocation);
                             localStorage.setItem("userLocation", JSON.stringify(userLocation));
                         }
                     } else {
-                        console.warn("No userLocation found. Setting default location.");
+                        console.warn("No user location found. Setting default location.");
                         setLocation(defaultLocation);
                         localStorage.setItem("userLocation", JSON.stringify(defaultLocation));
                     }
@@ -52,7 +55,6 @@ function useUserLocation() {
                 if (!signal.aborted) setIsLoading(false);
             }
         };
-
 
         fetchUserLocation();
         return () => controller.abort();
