@@ -297,12 +297,14 @@ const ConstellationPopup = ({ constellationId, isVisible, closePopup }) => {
                     <button
                         className={activeTab === 'legend' ? 'active' : ''}
                         onClick={() => handleTabChange('legend')}
+                        title="해당 별자리에 관련된 전설을 만나볼 수 있습니다."
                     >
                         별자리 전설
                     </button>
                     <button
                         className={activeTab === 'info' ? 'active' : ''}
                         onClick={() => handleTabChange('info')}
+                        title="해당 별자리의 천체정보를 볼 수 있습니다."
                     >
                         별자리 정보
                     </button>
