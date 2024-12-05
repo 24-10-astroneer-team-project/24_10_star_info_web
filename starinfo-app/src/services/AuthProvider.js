@@ -69,9 +69,15 @@ export const AuthProvider = ({ children }) => {
             if (token) {
                 try {
                     const decoded = jwtDecode(token);
+
                     if (decoded.exp * 1000 > Date.now()) {
                         setIsAuthenticated(true);
-                        setUser({ ...decoded, userId });
+
+                        // 사용자 프로필 데이터 추가 가져오기
+                        const response = await axiosInstance.get(`/api/member/${userId}`);
+                        const userProfile = response.data;
+
+                        setUser({ ...decoded, userId, nickname: userProfile.nickname });
 
                         // Axios 인스턴스에 Authorization 헤더 설정
                         axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -82,7 +88,8 @@ export const AuthProvider = ({ children }) => {
                     console.error("JWT decoding failed:", error);
                     logout();
                 }
-            } else {
+            }
+            else {
                 setIsAuthenticated(false);
             }
             setIsAuthLoading(false);
