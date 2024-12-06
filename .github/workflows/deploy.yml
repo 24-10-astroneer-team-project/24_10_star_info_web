@@ -113,6 +113,6 @@ jobs:
           comment: Deploy
           command: |
             mkdir -p /dockerProjects/starInfo
-            curl -o /dockerProjects/starInfo/zero_downtime_deploy.py https://raw.githubusercontent.com/qblackbirdp/24_10_star_ifo_web/master/infraScript/zero_downtime_deploy.py
+            curl -o /dockerProjects/starInfo/zero_downtime_deploy.py https://raw.githubusercontent.com/2410astroneerTeamProject/24_10_star_ifo_web/master/infraScript/zero_downtime_deploy.py
             chmod +x /dockerProjects/starInfo/zero_downtime_deploy.py
             /dockerProjects/starInfo/zero_downtime_deploy.py
