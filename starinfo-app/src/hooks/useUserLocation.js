@@ -1,56 +1,64 @@
 // useUserLocation.js
 
-import {useEffect, useRef, useState} from 'react';
-import {useAuth} from "../services/AuthProvider";
-import {getUserLocationFromProfile} from "../services/userLocationService";
-import {useNavigate} from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useAuth } from "../services/AuthProvider";
+import { getUserLocationFromProfile } from "../services/userLocationService";
 
 function useUserLocation() {
-    const [location, setLocation] = useState({ latitude: 37.5665, longitude: 126.9780 }); // 기본값: 서울
+    const defaultLocation = { latitude: 37.5665, longitude: 126.9780, description: "서울" };
+    const [location, setLocation] = useState(null); // 초기값 제거
     const [isLoading, setIsLoading] = useState(true);
-    const { isAuthenticated, user, isAuthLoading } = useAuth(); // AuthProvider의 isAuthLoading 추가
-    const isMountedRef = useRef(true);
-    const navigate = useNavigate();
+    const { isAuthenticated, user, isAuthLoading } = useAuth();
 
     useEffect(() => {
-        const fetchUserLocation = async () => {
-            if (isAuthLoading) {
-                console.log("useUserLocation - 인증 로딩 중입니다. 로딩 대기...");
-                return;
-            }
+        if (isAuthLoading) return;
 
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        const fetchUserLocation = async () => {
             try {
-                console.log('useUserLocation - 로그인 상태 확인:', isAuthenticated, '사용자 정보:', user);
+                console.log("isAuthenticated:", isAuthenticated);
+                console.log("User from Auth:", user);
 
                 if (isAuthenticated && user?.userId) {
-                    console.log('useUserLocation - 로그인된 사용자입니다. 사용자 프로필에서 위치 정보 가져오기...');
-                    console.log(`userId: ${user.id}, ${user.userId}`);
-                    const userLocation = await getUserLocationFromProfile(user.userId);
+                    const userLocation = await getUserLocationFromProfile(user.userId, { signal });
+                    console.log("Fetched User Location:", userLocation);
 
-                    if (userLocation) {
-                        setLocation(userLocation);
-                        console.log('useUserLocation - 사용자 저장 위치로 요청 성공:', userLocation);
+                    if (!signal.aborted && userLocation) {
+                        if (
+                            !userLocation.latitude ||
+                            !userLocation.longitude ||
+                            userLocation.favoriteLocationId === 0
+                        ) {
+                            console.warn("No favorite location found. Setting default location.");
+                            setLocation(defaultLocation);
+                            localStorage.setItem("userLocation", JSON.stringify(defaultLocation));
+                        } else {
+                            setLocation(userLocation);
+                            localStorage.setItem("userLocation", JSON.stringify(userLocation));
+                        }
                     } else {
-                        console.log('useUserLocation - 사용자 위치 정보가 없습니다. 기본 위치(서울) 사용합니다.');
+                        console.warn("No user location found. Setting default location.");
+                        setLocation(defaultLocation);
+                        localStorage.setItem("userLocation", JSON.stringify(defaultLocation));
                     }
                 } else {
-                    console.log('useUserLocation - 로그인하지 않음. 기본 위치(서울) 사용');
+                    console.warn("User not authenticated or no userId. Setting default location.");
+                    setLocation(defaultLocation);
+                    localStorage.setItem("userLocation", JSON.stringify(defaultLocation));
                 }
             } catch (error) {
-                console.error('useUserLocation - 사용자 위치 가져오기 오류:', error);
+                console.error("Location fetch error:", error);
+                setLocation(defaultLocation);
             } finally {
-                setIsLoading(false);
-                console.log('useUserLocation - 로딩 상태 완료');
+                if (!signal.aborted) setIsLoading(false);
             }
         };
 
         fetchUserLocation();
-
-        return () => {
-            isMountedRef.current = false;
-            console.log('useUserLocation - 컴포넌트가 언마운트되었습니다.');
-        };
-    }, [isAuthenticated, user?.userId, isAuthLoading]); // 의존성 배열 명확히 설정
+        return () => controller.abort();
+    }, [isAuthenticated, user, isAuthLoading]);
 
     return { location, isLoading };
 }

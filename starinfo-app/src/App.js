@@ -15,7 +15,7 @@ import MemberDetail from "./components/member/MemberDetail";
 import PrivateRoute from "./components/member/PrivateRoute";
 import MeteorShowerPage from "./components/meteorShower/MeteorShowerPage";
 import PublicCalendarPage from "./components/publicCalendar/publicCalendarPage";
-import GoogleAuthHandler from "./components/member/GoogleAuthHandler";
+import GoogleAuthHandler from "./api/GoogleAuthHandler";
 // import LoadingSpinner from "./components/ui/LoadingSpinner";
 
 function App() {

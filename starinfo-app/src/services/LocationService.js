@@ -1,24 +1,27 @@
 // services/LocationService.js
 
-import api from './api';
+import axiosInstance from '../api/axiosInstance'; // axiosInstance 임포트
 
-const baseUrl = 'http://localhost:7777/api';
+const baseUrl = '/api';
 
-export const sendLocationToServer = async (locationData) => {
+export const sendLocationToServer = async (locationData, isEditing = false) => {
     try {
-        // 전송할 locationData 로그로 출력
-        console.log('Sending location data to server:', locationData);
+        const endpoint = isEditing ? `${baseUrl}/location/edit` : `${baseUrl}/location/save`; // 엔드포인트 선택
+        console.log(`${isEditing ? 'Editing' : 'Saving'} location data to server:`, locationData);
 
-        const response = await api.post(`${baseUrl}/location/save`, locationData);
+        const payload = isEditing
+            ? { locationId: locationData.id, ...locationData } // 수정 시 locationId 포함
+            : locationData; // 저장 시 그대로 전송
 
-        // 응답 데이터를 로그로 출력
-        console.log('Server response:', response.data);
+        // 요청 메서드 선택
+        const response = isEditing
+            ? await axiosInstance.put(endpoint, payload)
+            : await axiosInstance.post(endpoint, payload);
 
-        return response.data; // 성공한 경우 응답 데이터 반환
+        console.log('Server response:', response.data); // 응답 데이터 로그 출력
+        return response.data; // 성공 시 응답 데이터 반환
     } catch (error) {
-        // 에러 로그 출력
         console.error('Error sending location to server:', error);
-
-        throw error; // 에러를 캐치하고 다시 던져주어 상위에서 핸들링 할 수 있게 함
+        throw error; // 에러를 상위로 전달
     }
 };

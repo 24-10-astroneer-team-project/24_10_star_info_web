@@ -1,0 +1,118 @@
+name: 'deploy'
+on:
+  push:
+    paths:
+      - '.github/workflows/**'
+      - 'src/**'
+      - 'build.gradle.kts'
+      - 'Dockerfile'
+      - 'readme.md'
+      - 'infraScript/**'
+    branches:
+      - 'master'
+jobs:
+  makeTagAndRelease:
+    runs-on: ubuntu-latest
+    outputs:
+      tag_name: ${{ steps.create_tag.outputs.new_tag }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create Tag
+        id: create_tag
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN_WORKFLOW }}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN_WORKFLOW }}
+        with:
+          tag_name: ${{ steps.create_tag.outputs.new_tag }}
+          release_name: Release ${{ steps.create_tag.outputs.new_tag }}
+          body: ${{ steps.create_tag.outputs.changelog }}
+          draft: false
+          prerelease: false
+  buildImageAndPush:
+    name: 도커 이미지 빌드와 푸시
+    needs: makeTagAndRelease
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Docker Buildx 설치
+        uses: docker/setup-buildx-action@v2
+      - name: 레지스트리 로그인
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN_WORKFLOW }}
+      - name: set lower case owner name
+        run: |
+          echo "OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
+        env:
+          OWNER: "${{ github.repository_owner }}"
+      - name: 프론트 .env 생성
+        env:
+          REACT_APP_GOOGLE_MAPS_KEY: ${{ secrets.REACT_APP_GOOGLE_MAPS_KEY }}
+          REACT_APP_WEATHER_API_KEY: ${{ secrets.REACT_APP_WEATHER_API_KEY }}
+          REACT_APP_WEATHER_API_URL: ${{ secrets.REACT_APP_WEATHER_API_URL }}
+        run: |
+          echo "REACT_APP_GOOGLE_MAPS_KEY=$REACT_APP_GOOGLE_MAPS_KEY" > starinfo-app/.env
+          echo "REACT_APP_WEATHER_API_KEY=$REACT_APP_WEATHER_API_KEY" >> starinfo-app/.env
+          echo "REACT_APP_WEATHER_API_URL=$REACT_APP_WEATHER_API_URL" >> starinfo-app/.env
+      - name: 백엔드 Json Key 생성
+        env:
+          TEAMASTRONEERSTARINFO_437713_78CB5A772263: ${{ secrets.TEAMASTRONEERSTARINFO_437713_78CB5A772263_JSON }}
+        run: |
+          echo "TEAMASTRONEERSTARINFO_437713_78CB5A772263: ${TEAMASTRONEERSTARINFO_437713_78CB5A772263_JSON}" > src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
+      - name: 백엔드 .env 생성
+        env:
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+        run: |
+          echo "REDIS_HOST=${REDIS_HOST}" > .env
+          echo "REDIS_PORT=${REDIS_PORT}" >> .env
+          echo "REDIS_PASSWORD=${REDIS_PASSWORD}" >> .env
+          echo "JWT_SECRET=${JWT_SECRET}" >> .env
+          echo "GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}" >> .env
+          echo "GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}" >> .env
+      - name: application-secret.yml 생성
+        env:
+          ACTIONS_STEP_DEBUG: true
+          APPLICATION_SECRET: ${{ secrets.APPLICATION_SECRET_YML }}
+          APPLICATION_DB: ${{ secrets.APPLICATION_DB_YML }}
+        run: |
+          echo "$APPLICATION_SECRET" > src/main/resources/application-secret.yml 
+          echo "$APPLICATION_DB" >> src/main/resources/application-DB.yml
+      - name: 빌드 앤 푸시
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ env.OWNER_LC }}/starinfo:${{ needs.makeTagAndRelease.outputs.tag_name }},
+            ghcr.io/${{ env.OWNER_LC }}/starinfo:latest
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [ buildImageAndPush ]
+    steps:
+      - name: AWS SSM Send-Command
+        uses: peterkimzz/aws-ssm-send-command@master
+        id: ssm
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          instance-ids: "i-098d0a210585a0e24"
+          working-directory: /
+          comment: Deploy
+          command: |
+            mkdir -p /dockerProjects/starInfo
+            curl -o /dockerProjects/starInfo/zero_downtime_deploy.py https://raw.githubusercontent.com/qblackbirdp/24_10_star_ifo_web/master/infraScript/zero_downtime_deploy.py
+            chmod +x /dockerProjects/starInfo/zero_downtime_deploy.py
+            /dockerProjects/starInfo/zero_downtime_deploy.py

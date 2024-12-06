@@ -63,7 +63,7 @@ export class Polygon {
             ctx.rotate(angle * i - this.rotate);
 
             if (this.images[i]) {
-                const imgSize = 170; // 카드 크기
+                const imgSize = 250; // 카드 크기
                 ctx.drawImage(
                     this.images[i],
                     -imgSize / 2,

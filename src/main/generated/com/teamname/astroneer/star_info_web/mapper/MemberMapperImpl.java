@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-19T11:05:20+0900",
+    date = "2024-12-02T21:17:32+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.11 (Oracle Corporation)"
 )
 @Component
@@ -25,17 +25,17 @@ public class MemberMapperImpl implements MemberMapper {
         MemberDetailDTO memberDetailDTO = new MemberDetailDTO();
 
         memberDetailDTO.setUserId( member.getId() );
+        List<Location> list = member.getLocations();
+        if ( list != null ) {
+            memberDetailDTO.setLocations( new ArrayList<Location>( list ) );
+        }
+        memberDetailDTO.setFavoriteLocationId( member.getFavoriteLocationId() );
         memberDetailDTO.setUName( member.getUName() );
         memberDetailDTO.setNickname( member.getNickname() );
         memberDetailDTO.setEmail( member.getEmail() );
         memberDetailDTO.setPreferredTime( member.getPreferredTime() );
         if ( member.getAlertEnabled() != null ) {
             memberDetailDTO.setAlertEnabled( member.getAlertEnabled() );
-        }
-        memberDetailDTO.setFavoriteLocationId( member.getFavoriteLocationId() );
-        List<Location> list = member.getLocations();
-        if ( list != null ) {
-            memberDetailDTO.setLocations( new ArrayList<Location>( list ) );
         }
         memberDetailDTO.setUpdateDate( member.getUpdateDate() );
         memberDetailDTO.setGoogleLoginId( member.getGoogleLoginId() );

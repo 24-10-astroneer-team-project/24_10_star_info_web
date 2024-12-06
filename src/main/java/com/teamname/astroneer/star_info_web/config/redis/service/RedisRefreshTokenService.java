@@ -18,7 +18,12 @@ public class RedisRefreshTokenService {
 
     // Refresh Token 저장
     public void saveRefreshToken(String email, String refreshToken) {
-        redisTemplate.opsForValue().set(email, refreshToken, 7, TimeUnit.DAYS); // 7일 만료
+        redisTemplate.opsForValue().set("refreshToken:" + email, refreshToken, 7, TimeUnit.DAYS); // 7일 만료
+    }
+
+    // Refresh Token 가져오기
+    public String getRefreshToken(String email) {
+        return redisTemplate.opsForValue().get("refreshToken:" + email);
     }
 
     // Refresh Token 검증

@@ -5,12 +5,16 @@ import com.teamname.astroneer.star_info_web.dto.MemberDetailDTO;
 import com.teamname.astroneer.star_info_web.entity.Member;
 import com.teamname.astroneer.star_info_web.jwt.JwtUtil;
 import com.teamname.astroneer.star_info_web.mapper.MemberMapper;
+import com.teamname.astroneer.star_info_web.security.CustomOAuth2User;
 import com.teamname.astroneer.star_info_web.service.MemberService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +34,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/member")
 @RequiredArgsConstructor
@@ -37,8 +42,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MemberMapper memberMapper;
-    private final RedisRefreshTokenService redisRefreshTokenService;
-    private final JwtUtil jwtUtil;
+
 
     @GetMapping("/me")
     public ResponseEntity<MemberDetailDTO> getAuthenticatedUser() {
@@ -63,17 +67,6 @@ public class MemberController {
     @GetMapping("/{userId}")
     public ResponseEntity<MemberDetailDTO> getUserDetail(@PathVariable long userId) {
         MemberDetailDTO userDetail = memberService.getMemberDetail(userId);
-        if (userDetail == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(userDetail);
-    }
-
-    // Google Login ID 기반 사용자 상세 정보 조회
-    @GetMapping("/by-google-login-id/{googleLoginId}")
-    public ResponseEntity<MemberDetailDTO> getUserDetailByGoogleLoginId(@PathVariable String googleLoginId) {
-        MemberDetailDTO userDetail = memberService.getMemberDetailByGoogleLoginId(googleLoginId);
-
         if (userDetail == null) {
             return ResponseEntity.notFound().build();
         }
@@ -116,52 +109,4 @@ public class MemberController {
     public boolean checkAuthenticated(Authentication authentication) {
         return authentication != null && authentication.isAuthenticated();
     }
-
-//    // JWT 기반 로그아웃 처리 API
-//    @PostMapping("/logout")
-//    public ResponseEntity<?> logout(@RequestBody Map<String, String> request) {
-//        String refreshToken = request.get("refreshToken");
-//
-//        try {
-//            // Refresh Token 검증
-//            String email = jwtUtil.validateToken(refreshToken);
-//
-//            // Redis에서 Refresh Token 삭제
-//            redisRefreshTokenService.deleteRefreshToken(email);
-//
-//            // SecurityContext 초기화 (선택 사항)
-//            SecurityContextHolder.clearContext();
-//
-//            return ResponseEntity.ok("Logged out successfully");
-//        } catch (JwtException e) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Refresh Token");
-//        }
-//    }
-
-    @PostMapping("/refresh")
-    public ResponseEntity<?> refreshAccessToken(@RequestBody Map<String, String> request) {
-        String refreshToken = request.get("refreshToken");
-
-        try {
-            // Refresh Token 검증 및 Claims 추출
-            Claims claims = jwtUtil.validateToken(refreshToken);
-            String email = claims.getSubject(); // Subject에 저장된 이메일 추출
-            String googleLoginId = claims.get("googleLoginId", String.class); // Claim으로 저장된 Google Login ID 추출
-
-            // Redis에서 Refresh Token 검증
-            if (!redisRefreshTokenService.validateRefreshToken(email, refreshToken)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired Refresh Token");
-            }
-
-            // 새로운 Access Token 생성
-            String newAccessToken = jwtUtil.generateToken(googleLoginId, email);
-
-            return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
-        } catch (ExpiredJwtException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh Token expired");
-        } catch (JwtException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Refresh Token");
-        }
-    }
-
 }
