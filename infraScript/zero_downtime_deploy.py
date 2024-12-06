@@ -13,8 +13,8 @@ class ServiceManager:
         self.socat_port: int = socat_port
         self.sleep_duration: int = sleep_duration
         self.services: Dict[str, int] = {
-            'starInfo_1': 8082,
-            'starInfo_2': 8083
+            'starinfo_1': 8082,
+            'starinfo_2': 8083
         }
         self.current_name: Optional[str] = None
         self.current_port: Optional[int] = None
@@ -26,7 +26,7 @@ class ServiceManager:
         cmd: str = f"ps aux | grep 'socat -t0 TCP-LISTEN:{self.socat_port}' | grep -v grep | awk '{{print $NF}}'"
         current_service: str = subprocess.getoutput(cmd)
         if not current_service:
-            self.current_name, self.current_port = 'starInfo_2', self.services['starInfo_2']
+            self.current_name, self.current_port = 'starinfo_2', self.services['starinfo_2']
         else:
             self.current_port = int(current_service.split(':')[-1])
             self.current_name = next((name for name, port in self.services.items() if port == self.current_port), None)
@@ -46,7 +46,7 @@ class ServiceManager:
     # Docker 컨테이너를 실행하는 함수
     def _run_container(self, name: str, port: int) -> None:
         os.system(
-            f"docker run -d --name={name} --restart unless-stopped -p {port}:8080 -e TZ=Asia/Seoul -v /dockerProjects/starInfo/volumes/gen:/gen --pull always ghcr.io/qblackbirdp/starInfo")
+            f"docker run -d --name={name} --restart unless-stopped -p {port}:8080 -e TZ=Asia/Seoul -v /dockerProjects/starInfo/volumes/gen:/gen --pull always ghcr.io/qblackbirdp/starinfo")
 
     def _switch_port(self) -> None:
         # Socat 포트를 전환하는 함수
