@@ -23,7 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**") // 모든 경로에 CORS 적용
-                .allowedOriginPatterns("http://localhost:7777", "http://localhost:9999", "http://localhost:4444")
+                .allowedOriginPatterns("http://localhost:7777", "http://localhost:9999", "http://localhost:4444", "https://www.astro.qyef.site")
                 .allowedMethods("*")
                 .allowedHeaders("*")
                 .exposedHeaders(HttpHeaders.AUTHORIZATION, HttpHeaders.LOCATION) // 필요한 헤더 노출
