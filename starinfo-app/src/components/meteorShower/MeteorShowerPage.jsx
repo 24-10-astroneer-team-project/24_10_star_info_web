@@ -258,6 +258,12 @@ const MeteorShowerPage = () => {
                 <Head />
                 <canvas ref={bgCanvasRef}></canvas> {/* 배경 캔버스 */}
                 <canvas ref={terrainCanvasRef}></canvas> {/* 지형 캔버스 */}
+                <div className="intro">
+                    <h1>The Spectacle of the Night Sky: Meteor Showers</h1>
+                    <p>
+                        Experience the enchanting celestial display created by the remnants of comets, painting the night sky with streaks of light.
+                    </p>
+                </div>
                 {dataLoading ? (
                     <LoadingSpinner />
                 ) : fetchError ? (
@@ -270,7 +276,6 @@ const MeteorShowerPage = () => {
                 ) : (
                     <div>No meteor shower information available</div>
                 )}
-
                 {/* 상세 정보 표시 */}
                 {selectedMeteor && (
                     <MeteorShowerPopup
@@ -283,6 +288,7 @@ const MeteorShowerPage = () => {
             {/* 푸터 영역 */}
             <Foot />
         </div>
+
     );
 };
 

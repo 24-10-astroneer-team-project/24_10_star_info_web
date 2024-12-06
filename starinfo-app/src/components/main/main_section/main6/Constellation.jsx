@@ -29,7 +29,7 @@ const Constellation = () => {
             // 중심을 올려서 설정 (stageHeight / 3)
             polygon = new Polygon(
                 stageWidth / 2,
-                stageHeight / 1.1, // 카드들이 중앙에 가까운 위치에서 회전하도록 조정
+                stageHeight / 1, // 카드들이 중앙에 가까운 위치에서 회전하도록 조정
                 stageHeight / 1.7, // 회전 반지름을 조정
                 15
             );

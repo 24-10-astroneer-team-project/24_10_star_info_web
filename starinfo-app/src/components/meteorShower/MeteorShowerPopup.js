@@ -40,6 +40,7 @@ const MeteorShowerPopup = ({ meteorData, onClose, isLoading }) => {
         return (
             <div className="meteor-details-popup">
                 <div className="loading-spinner"></div>
+                <p className="loading-text">데이터를 가져오는 중입니다...</p>
             </div>
         );
     }

@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
 .moonPhaseContainer {
     background-color: black;
     color: white;
-    font-family: "Sacramento", cursive;
+    font-family: "Poppins", sans-serif; /* 세련되고 깔끔한 글씨체로 변경 */
     text-align: center;
     padding: 4%;
     position: relative;
@@ -10,15 +12,19 @@
 .moonPhaseTitle {
     font-size: 60px;
     margin-top: 60px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(180, 180, 180, 0.9)); /* 은은한 그라데이션 추가 */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 /* 버튼과 입력 필드의 통일된 스타일 */
 .sharedStyle {
     border: 2px solid rgba(255, 255, 255, 0.5);
-    background: linear-gradient(145deg, rgba(30, 30, 30, 0.9), rgba(50, 50, 50, 0.9));
+    background: linear-gradient(145deg, rgba(30, 30, 30, 0.9), rgba(60, 60, 60, 0.9)); /* 기존보다 더 부드러운 그라데이션 */
     color: #ffffff;
-    font-size: 14px;
-    border-radius: 15px;
+    font-size: 16px;
+    font-family: "Poppins", sans-serif;
+    border-radius: 8px; /* 버튼을 약간 둥글게 */
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5), 0px 0px 10px rgba(255, 255, 255, 0.2);
@@ -28,29 +34,43 @@
 .searchBtn {
     padding: 12px 24px;
     position: absolute;
-    top: 30%;
-    left: 9%;
+    top: 24%;
+    left: 5%;
     z-index: 1000;
+    background: linear-gradient(90deg, rgba(50, 50, 50, 1), rgba(120, 120, 120, 1)); /* 버튼 그라데이션 */
+    border: none;
+    animation: glow 2s infinite;
+}
+
+/* 버튼에 은은한 빛나는 효과 추가 */
+@keyframes glow {
+    0% {
+        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1), 0px 0px 5px rgba(255, 255, 255, 0.2);
+    }
+    50% {
+        box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.4), 0px 0px 10px rgba(255, 255, 255, 0.6);
+    }
+    100% {
+        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1), 0px 0px 5px rgba(255, 255, 255, 0.2);
+    }
 }
 
 .searchBtn:hover,
 .executeBtn:hover {
-    background: linear-gradient(145deg, rgba(50, 50, 50, 1), rgba(70, 70, 70, 1));
-    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.6), 0px 0px 15px rgba(255, 255, 255, 0.3);
+    background: linear-gradient(90deg, rgba(80, 80, 80, 1), rgba(150, 150, 150, 1)); /* 호버 시 더욱 밝은 그라데이션 */
     transform: scale(1.05);
 }
 
 .searchBtn:active,
 .executeBtn:active {
     transform: scale(0.95);
-    box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.5), 0px 0px 8px rgba(255, 255, 255, 0.2);
 }
 
 /* 입력 필드 스타일 */
 .inputGroup {
     position: absolute;
-    top: calc(33% + 60px);
-    left: 9%;
+    top: calc(30% + 50px);
+    left: 5%;
     display: flex;
     justify-content: center;
     gap: 10px;
@@ -58,15 +78,16 @@
 }
 
 .moonPhaseInput {
-    padding: 10px 15px;
-    width: 60px;
+    padding: 12px 20px; /* 입력창을 더 크고 네모나게 */
+    width: 80px; /* 입력창 너비 확장 */
     text-align: center;
-    font-size: 14px;
+    font-size: 16px;
+    font-family: "Poppins", sans-serif;
     font-style: italic;
-    background: linear-gradient(145deg, rgba(20, 20, 20, 1), rgba(40, 40, 40, 1));
+    background: linear-gradient(145deg, rgba(40, 40, 40, 1), rgba(60, 60, 60, 1)); /* 입력 필드 그라데이션 */
     border: 2px solid rgba(255, 255, 255, 0.4);
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5), 0px 0px 10px rgba(255, 255, 255, 0.2);
-    border-radius: 15px;
+    border-radius: 8px; /* 네모난 모양 유지 */
     color: white;
 }
 
@@ -83,8 +104,11 @@
 
 /* 검색 버튼 */
 .executeBtn {
-    padding: 8px 16px;
+    padding: 12px 20px; /* 버튼을 더 크고 네모나게 */
     margin-left: 10px;
+    background: linear-gradient(145deg, rgba(60, 60, 60, 1), rgba(90, 90, 90, 1)); /* 검색 버튼 배경 그라데이션 */
+    border: none;
+    animation: glow 2s infinite;
 }
 
 /* 이미지 및 기타 텍스트 스타일 */
@@ -92,18 +116,23 @@
     height: 50vh;
     width: 100%;
     object-fit: contain;
+    margin-top: 10px; /* Moon Phase와 이미지 사이 거리 조정 */
 }
 
 .phaseInfo {
-    margin-top: 20px;
+    margin-top: 50px;
 }
 
 .imageHeader {
     font-size: 20px;
-    font-family: "Georgia";
+    font-family: "Poppins", sans-serif; /* 글씨체 통일 */
 }
 
 #phase {
     font-size: 60px;
     color: #f5f5f5;
+    font-family: "Poppins", sans-serif; /* 글씨체 통일 */
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(200, 200, 200, 0.8)); /* Phase 텍스트 그라데이션 추가 */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
