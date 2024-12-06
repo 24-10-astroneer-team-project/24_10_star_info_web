@@ -10,7 +10,6 @@ export const getUserLocationFromProfile = async (userId) => {
 
         // API 응답 확인
         console.log('API Response:', response.data);
-        console.log(`accessToken: ${accessToken}`);
 
         if (response.data && response.data.locations && response.data.locations.length > 0) {
             // 즐겨찾기 위치 ID 확인

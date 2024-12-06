@@ -1,3 +1,5 @@
+// UserLocationButton.jsx
+
 import React, {useState} from 'react';
 import './css/UserLocationButton.css';
 import {useAuth} from '../../services/AuthProvider';
@@ -40,7 +42,7 @@ function UserLocationButton({constellationData}) {
     if (isMinimized) {
         return (
             <div className="user-location-container minimized" onClick={toggleMinimize}
-                 title="클릭하면 팝업창이 최소화가 해제됩니다.">
+                 title="클릭하면 팝업창의 최소화가 해제됩니다.">
                 {/* 최소화된 상태에서 아이콘 추가 */}
                 <img
                     src={starIcon}

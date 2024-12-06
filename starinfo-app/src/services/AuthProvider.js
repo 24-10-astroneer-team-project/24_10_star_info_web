@@ -33,26 +33,11 @@ export const AuthProvider = ({ children }) => {
         const initializeAuth = async () => {
             setIsAuthLoading(true);
 
-<<<<<<< HEAD
-            if (token) {
-                try {
-                    const decoded = jwtDecode(token);
-
-                    if (decoded.exp * 1000 > Date.now()) {
-                        setIsAuthenticated(true);
-
-                        // 사용자 프로필 데이터 추가 가져오기
-                        const response = await axiosInstance.get(`/api/member/${userId}`);
-                        const userProfile = response.data;
-
-                        setUser({ ...decoded, userId, nickname: userProfile.nickname });
-=======
             try {
                 // 서버에서 인증 상태 확인
                 const response = await axios.get("/api/auth/check", {
                     withCredentials: true, // 쿠키 전송 허용
                 });
->>>>>>> 760540ee7eacab6f47ea9a425e160e786d3632b9
 
                 const { isAuthenticated, userInfo } = response.data;
                 console.log("[INFO] 인증 상태 확인 성공:", response.data);
@@ -64,15 +49,9 @@ export const AuthProvider = ({ children }) => {
                     localStorage.setItem("userId", response.data.userId);
                     console.log("[INFO] userId 저장 완료:", response.data.userId);
                 }
-<<<<<<< HEAD
-            }
-            else {
-                setIsAuthenticated(false);
-=======
             } catch (error) {
                 console.error("[ERROR] 인증 상태 확인 실패:", error);
                 logout();
->>>>>>> 760540ee7eacab6f47ea9a425e160e786d3632b9
             }
 
             setIsAuthLoading(false);
