@@ -71,47 +71,48 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     // Google 사용자 처리
-    private OAuth2User processGoogleUser(OAuth2User oAuth2User, String email, String googleLoginId) {
+    public CustomOAuth2User processGoogleUser(OAuth2User oAuth2User, String email, String googleLoginId) {
         // Google ID로 기존 사용자 확인
         Optional<Member> localUser = memberRepository.findByGoogleLoginId(googleLoginId);
+        boolean isNewUser;
 
-        // 기존 사용자 처리
+        Member user;
         if (localUser.isPresent()) {
-            Member existingUser = localUser.get();
+            // 기존 사용자
+            user = localUser.get();
+            isNewUser = false; // 기존 사용자이므로 false
+            log.info("기존 사용자 확인됨: {}, isNewUser: {}", email, isNewUser);
+        } else {
+            // 새 사용자 등록
+            isNewUser = true;
+            String displayName = oAuth2User.getAttribute("name") != null ? oAuth2User.getAttribute("name") : "사용자";
+            String nickname = email.split("@")[0];
 
-            // JWT 발급
-            String accessToken = jwtUtil.generateToken(existingUser.getGoogleLoginId(), existingUser.getEmail());
-            String refreshToken = jwtUtil.generateRefreshToken(existingUser.getGoogleLoginId(), existingUser.getEmail());
+            user = new Member();
+            user.setEmail(email);
+            user.setUName(displayName);
+            user.setNickname(nickname);
+            user.setGoogleLoginId(googleLoginId);
 
-            // Refresh Token Redis에 저장
-            redisRefreshTokenService.saveRefreshToken(existingUser.getEmail(), refreshToken);
-            log.info("Successfully Redis Save Token: {}", refreshToken);
-
-            return new CustomOAuth2User(existingUser, oAuth2User.getAttributes(), accessToken, refreshToken);
+            memberRepository.save(user);
+            log.info("로컬 DB에 새 Google 사용자 저장 완료: {}, isNewUser: {}", email, isNewUser);
         }
-
-        // 새 Google 사용자를 로컬 DB에 등록
-        if (memberRepository.findByEmail(email).isPresent()) {
-            throw new EmailAlreadyExistsException("이미 사용 중인 이메일입니다.");
-        }
-
-        // 사용자 정보를 사용해 DB에 새 사용자 생성
-        String displayName = oAuth2User.getAttribute("name") != null ? oAuth2User.getAttribute("name") : "사용자";
-        String nickname = email.split("@")[0];
-        createGoogleUserInLocalDB(email, displayName, nickname, googleLoginId);
-
-        // 새로 저장된 사용자 로드
-        Member newUser = memberRepository.findByGoogleLoginId(googleLoginId).orElseThrow();
 
         // JWT 발급
-        String accessToken = jwtUtil.generateToken(newUser.getGoogleLoginId(), newUser.getEmail());
-        String refreshToken = jwtUtil.generateRefreshToken(newUser.getGoogleLoginId(), newUser.getEmail());
+        String accessToken = jwtUtil.generateToken(user.getGoogleLoginId(), user.getEmail(), user.getId(), isNewUser);
+        String refreshToken = jwtUtil.generateRefreshToken(user.getGoogleLoginId(), user.getEmail(), user.getId());
 
         // Refresh Token Redis에 저장
-        redisRefreshTokenService.saveRefreshToken(newUser.getEmail(), refreshToken);
+        redisRefreshTokenService.saveRefreshToken(user.getEmail(), refreshToken);
+        log.info("Successfully Redis Save Token: {}", refreshToken);
 
-        return new CustomOAuth2User(newUser, oAuth2User.getAttributes(), accessToken, refreshToken);
+        // 최종 isNewUser 값 확인
+        log.info("processGoogleUser 완료. email: {}, googleLoginId: {}, isNewUser: {}", email, googleLoginId, isNewUser);
+
+        // CustomOAuth2User 반환
+        return new CustomOAuth2User(user, oAuth2User.getAttributes(), accessToken, refreshToken, isNewUser);
     }
+
 
     // 로컬 DB에 Google 사용자 생성
     private void createGoogleUserInLocalDB(String email, String uName, String nickname, String googleLoginId) {

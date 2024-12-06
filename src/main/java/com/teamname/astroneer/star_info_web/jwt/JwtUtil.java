@@ -29,20 +29,23 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
 
-    public String generateToken(String sub, String email) {
+    public String generateToken(String sub, String email, Long userId, boolean isNewUser) {
         return Jwts.builder()
                 .setSubject(email) // 이메일을 Subject로 설정
                 .claim("googleLoginId", sub) // Google sub를 id처럼 사용
+                .claim("userId", userId) // userId 추가
+                .claim("isNewUser", isNewUser)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String generateRefreshToken(String sub, String email) {
+    public String generateRefreshToken(String sub, String email, Long userId) {
         return Jwts.builder()
                 .setSubject(email)
                 .claim("googleLoginId", sub)
+                .claim("userId", userId) // userId 추가
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + refreshExpirationTime))
                 .signWith(key, SignatureAlgorithm.HS256)

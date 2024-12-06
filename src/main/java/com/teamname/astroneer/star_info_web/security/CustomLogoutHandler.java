@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import jakarta.servlet.http.Cookie;
 import org.springframework.stereotype.Component;
 
 public class CustomLogoutHandler implements LogoutHandler {
@@ -64,6 +65,11 @@ public class CustomLogoutHandler implements LogoutHandler {
                 System.err.println("Google 클라이언트 삭제 완료");
             }
 
+            // 쿠키 삭제
+            deleteCookie(response, "accessToken");
+            deleteCookie(response, "refreshToken");
+            System.err.println("쿠키 삭제 완료");
+
         } catch (Exception e) {
             System.err.println("로그아웃 중 예외 발생: " + e.getMessage());
             e.printStackTrace();
@@ -72,4 +78,13 @@ public class CustomLogoutHandler implements LogoutHandler {
         System.err.println("로그아웃 처리 완료");
     }
 
+    // 쿠키 삭제 메서드
+    private void deleteCookie(HttpServletResponse response, String cookieName) {
+        Cookie cookie = new Cookie(cookieName, null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0); // 쿠키 만료 처리
+        response.addCookie(cookie);
+    }
 }
