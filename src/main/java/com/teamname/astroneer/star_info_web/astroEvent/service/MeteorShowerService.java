@@ -48,7 +48,7 @@ public class MeteorShowerService {
     public String getMeteorShowerData(String cometName, String startDate) {
         // 외부 API 호출을 위한 URL 생성
         String url = String.format(
-                "http://64.110.98.105:5555/api/meteor_shower/info?comet=%s&start_date=%s",
+                "http://64.110.98.105:5555/api/meteor_shower/info?comet=%s&start_date=%s&range_days=1",
                 cometName, startDate
         );
 
@@ -65,8 +65,8 @@ public class MeteorShowerService {
         }
     }
 
-//    @Cacheable(value = "meteorShowerVisibility", key = "#meteorShowerName + '-' + #year + '-' + #latitude + '-' + #longitude")
-//    @Retryable(value = {RestClientException.class}, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+    @Cacheable(value = "meteorShowerVisibility", key = "#meteorShowerName + '-' + #year + '-' + #latitude + '-' + #longitude")
+    @Retryable(value = {RestClientException.class}, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public String getMeteorShowerVisibilityData(String meteorShowerName, int year, double latitude, double longitude) {
         try {
             // Step 1: DB에서 데이터 조회
