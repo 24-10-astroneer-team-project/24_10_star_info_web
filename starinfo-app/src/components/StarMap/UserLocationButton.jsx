@@ -66,7 +66,7 @@ function UserLocationButton({constellationData}) {
                     title="클릭하면 팝업창이 최소화됩니다."
                 />
                 <p className="user-info">
-                    <strong>{user?.nickname || '사용자'}</strong>님의 현재 선호 위치:
+                    <strong>{user?.nickname || '사용자'}</strong>의 현재 선호 위치:
                 </p>
                 <div className="location-info">
                     <p>지역: {cityName || '정보 없음'}</p>
