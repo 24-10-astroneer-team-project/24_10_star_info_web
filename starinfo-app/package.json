@@ -39,7 +39,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:7777/",
+  "proxy": "https://www.astro.qyef.site/",
   "eslintConfig": {
     "extends": [
       "react-app",

@@ -19,7 +19,7 @@ const processQueue = (error, token = null) => {
 };
 
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:7777", // 기본 URL
+    baseURL: "https://www.astro.qyef.site/", // 기본 URL
     withCredentials: true, // 쿠키 전송 허용
 });
 

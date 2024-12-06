@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:7777'
+    baseURL: 'https://www.astro.qyef.site'
 });
 
 api.interceptors.response.use(
