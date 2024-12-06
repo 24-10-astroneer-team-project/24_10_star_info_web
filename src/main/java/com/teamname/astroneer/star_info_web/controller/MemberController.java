@@ -5,10 +5,13 @@ import com.teamname.astroneer.star_info_web.dto.MemberDetailDTO;
 import com.teamname.astroneer.star_info_web.entity.Member;
 import com.teamname.astroneer.star_info_web.jwt.JwtUtil;
 import com.teamname.astroneer.star_info_web.mapper.MemberMapper;
+import com.teamname.astroneer.star_info_web.security.CustomOAuth2User;
 import com.teamname.astroneer.star_info_web.service.MemberService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,8 +42,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MemberMapper memberMapper;
-    private final RedisRefreshTokenService redisRefreshTokenService;
-    private final JwtUtil jwtUtil;
+
 
     @GetMapping("/me")
     public ResponseEntity<MemberDetailDTO> getAuthenticatedUser() {
@@ -106,77 +108,5 @@ public class MemberController {
     @GetMapping("/check-auth")
     public boolean checkAuthenticated(Authentication authentication) {
         return authentication != null && authentication.isAuthenticated();
-    }
-
-//    // JWT 기반 로그아웃 처리 API
-//    @PostMapping("/logout")
-//    public ResponseEntity<?> logout(@RequestBody Map<String, String> request) {
-//        String refreshToken = request.get("refreshToken");
-//
-//        try {
-//            // Refresh Token 검증
-//            String email = jwtUtil.validateToken(refreshToken);
-//
-//            // Redis에서 Refresh Token 삭제
-//            redisRefreshTokenService.deleteRefreshToken(email);
-//
-//            // SecurityContext 초기화 (선택 사항)
-//            SecurityContextHolder.clearContext();
-//
-//            return ResponseEntity.ok("Logged out successfully");
-//        } catch (JwtException e) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Refresh Token");
-//        }
-//    }
-
-    @PostMapping("/refresh")
-    public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) {
-        log.debug("=============================리프레시 토큰 로직 시작====================================");
-
-        try {
-            log.debug("RedisRefreshTokenService instance: {}", redisRefreshTokenService);
-            log.debug("JwtUtil instance: {}", jwtUtil);
-
-            String authHeader = request.getHeader("Authorization");
-            log.debug("Authorization 헤더 값: {}", authHeader);
-
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                log.error("Authorization 헤더가 없거나 형식이 잘못되었습니다.");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing or invalid Authorization header");
-            }
-
-            String refreshToken = authHeader.substring(7);
-            log.debug("Refresh Token 값: {}", refreshToken);
-
-            Claims claims = jwtUtil.validateToken(refreshToken);
-            log.debug("JWT Claims: {}", claims);
-
-            String email = claims.getSubject();
-            String googleLoginId = claims.get("googleLoginId", String.class);
-            boolean isValid = redisRefreshTokenService.validateRefreshToken(email, refreshToken);
-            log.debug("Redis 토큰 유효성 검증 결과: {}", isValid);
-
-            if (!isValid) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired Refresh Token");
-            }
-
-            // Retrieve userId
-            Optional<Member> memberOptional = memberService.findByGoogleLoginId(googleLoginId);
-            if (memberOptional.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
-            }
-            Member member = memberOptional.get();
-            Long userId = member.getId();
-
-            // Generate new Access Token
-            String newAccessToken = jwtUtil.generateToken(email, googleLoginId);
-            log.debug("새로 생성된 Access Token: {}", newAccessToken);
-
-            // Return Access Token and userId
-            return ResponseEntity.ok(Map.of("accessToken", newAccessToken, "userId", userId));
-        } catch (Exception e) {
-            log.error("리프레시 토큰 처리 중 예외 발생", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing refresh token");
-        }
     }
 }

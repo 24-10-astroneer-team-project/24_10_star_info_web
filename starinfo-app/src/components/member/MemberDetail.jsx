@@ -44,15 +44,8 @@ function MemberDetail() {
         }
 
         const fetchDetail = async () => {
-            const accessToken = localStorage.getItem("accessToken");
-            if (!accessToken) {
-                setError(new Error("로그인이 필요합니다."));
-                setLoading(false);
-                return;
-            }
-
             try {
-                const response = await fetchMemberDetail(userId, accessToken);
+                const response = await fetchMemberDetail(userId);
 
                 setMemberDetail(response.data); // 사용자 정보 설정
                 setFavoriteLocationId(response.data.favoriteLocationId); // 즐겨찾기 ID 설정
@@ -67,11 +60,9 @@ function MemberDetail() {
     }, [userId, location.state]);
 
     const handleUpdateFavoriteLocation = async (locationId) => {
-        const accessToken = localStorage.getItem("accessToken");
-
         try {
             // 서버에 즐겨찾기 위치 업데이트 요청
-            await updateFavoriteLocation(userId, locationId, accessToken);
+            await updateFavoriteLocation(userId, locationId);
 
             // 성공 메시지 표시
             toast.success("즐겨찾기 위치가 업데이트되었습니다.");
@@ -84,13 +75,10 @@ function MemberDetail() {
         }
     };
 
-
     const handleUpdateDescription = async (locationId) => {
-        const accessToken = localStorage.getItem("accessToken");
-
         try {
             const description = descriptions[locationId];
-            await updateLocationDescription(locationId, description, accessToken);
+            await updateLocationDescription(locationId, description);
             toast.success("위치 설명이 업데이트되었습니다.");
 
             // 상태에서 특정 locationId의 description만 업데이트
@@ -114,7 +102,6 @@ function MemberDetail() {
         }
     };
 
-
     const handleDescriptionChange = (locationId, value) => {
         setDescriptions((prevDescriptions) => ({
             ...prevDescriptions,
@@ -123,67 +110,19 @@ function MemberDetail() {
     };
 
     const handleDeleteLocation = async (locationId, isFavorite) => {
-        const accessToken = localStorage.getItem("accessToken");
-
-        const confirmDelete = () => {
-            deleteLocation(locationId, accessToken)
-                .then(async () => {
-                    toast.success("위치가 성공적으로 삭제되었습니다.");
-                    const response = await fetchMemberDetail(userId, accessToken);
-                    setMemberDetail(response.data);
-                })
-                .catch((err) => {
-                    console.error("Error deleting location:", err);
-                    toast.error("위치 삭제에 실패했습니다.");
-                });
+        const confirmDelete = async () => {
+            try {
+                await deleteLocation(locationId);
+                toast.success("위치가 성공적으로 삭제되었습니다.");
+                const response = await fetchMemberDetail(userId);
+                setMemberDetail(response.data);
+            } catch (err) {
+                console.error("Error deleting location:", err);
+                toast.error("위치 삭제에 실패했습니다.");
+            }
         };
 
-        // Custom Toast 메시지
-        toast(
-            ({ closeToast }) => (
-                <div>
-                    <p>
-                        {isFavorite
-                            ? "이 위치는 즐겨찾기로 설정되어 있습니다. 정말 삭제하시겠습니까?"
-                            : "이 위치를 삭제하시겠습니까?"}
-                    </p>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginTop: "10px" }}>
-                        <button
-                            style={{
-                                backgroundColor: "red",
-                                color: "white",
-                                border: "none",
-                                padding: "5px 10px",
-                                borderRadius: "5px",
-                                cursor: "pointer",
-                            }}
-                            onClick={() => {
-                                confirmDelete();
-                                closeToast();
-                            }}
-                        >
-                            예
-                        </button>
-                        <button
-                            style={{
-                                backgroundColor: "gray",
-                                color: "white",
-                                border: "none",
-                                padding: "5px 10px",
-                                borderRadius: "5px",
-                                cursor: "pointer",
-                            }}
-                            onClick={closeToast}
-                        >
-                            아니오
-                        </button>
-                    </div>
-                </div>
-            ),
-            {
-                autoClose: false, // 자동 닫힘 비활성화
-            }
-        );
+        confirmDelete();
     };
 
     return (

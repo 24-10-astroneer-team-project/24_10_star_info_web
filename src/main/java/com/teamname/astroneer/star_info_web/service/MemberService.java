@@ -125,4 +125,10 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
         }
         return null;
     }
+
+    public String getEmailByUserId(Long userId) {
+        return memberRepository.findById(userId)
+                .map(Member::getEmail)
+                .orElse(null);
+    }
 }
