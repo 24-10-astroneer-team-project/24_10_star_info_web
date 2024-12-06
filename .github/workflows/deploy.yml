@@ -98,8 +98,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ env.OWNER_LC }}/starinfo:${{ needs.makeTagAndRelease.outputs.tag_name }}
-            ghcr.io/${{ env.OWNER_LC }}/starinfo:latest
+            ghcr.io/${{ env.OWNER_LC }}/24_10_star_info_web:${{ needs.makeTagAndRelease.outputs.tag_name }}
+            ghcr.io/${{ env.OWNER_LC }}/24_10_star_info_web:latest
   deploy:
     runs-on: ubuntu-latest
     needs: [ buildImageAndPush ]
