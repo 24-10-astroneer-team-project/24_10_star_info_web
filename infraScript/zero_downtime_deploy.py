@@ -74,11 +74,25 @@ class ServiceManager:
         # 서비스 이름 자동 결정
         target_service = "app_1" if self.next_service == "app_1" else "app_2"
 
-        os.environ["TARGET_SERVICE"] = target_service  # 환경 변수로 설정
+        # Nginx 컨테이너가 준비될 때까지 기다리기
+        try:
+            # 최대 10초까지 기다려서 nginx가 실행 중인지 확인
+            retries = 10
+            while retries > 0:
+                response = os.system("docker exec nginx ps aux")
+                if response == 0:  # nginx가 실행 중이라면
+                    print("Nginx is up and running. Proceeding with config update.")
+                    break
+                retries -= 1
+                print(f"Waiting for nginx to start... {retries} retries left.")
+                time.sleep(1)
+        except Exception as e:
+            print(f"Error checking Nginx status: {e}")
+            return
+
         # 환경 변수를 명시적으로 전달하면서 Nginx 리로드
         try:
-            # Nginx 리로드
-            os.system(f"docker-compose exec nginx nginx -s reload")
+            os.system(f"docker exec -e TARGET_SERVICE={target_service} nginx nginx -s reload")
             print(f"Nginx configuration updated to route traffic to {target_service}.")
         except Exception as e:
             print(f"Error reloading Nginx: {e}")
