@@ -64,26 +64,26 @@ jobs:
           echo "REACT_APP_GOOGLE_MAPS_KEY=$REACT_APP_GOOGLE_MAPS_KEY" > starinfo-app/.env
           echo "REACT_APP_WEATHER_API_KEY=$REACT_APP_WEATHER_API_KEY" >> starinfo-app/.env
           echo "REACT_APP_WEATHER_API_URL=$REACT_APP_WEATHER_API_URL" >> starinfo-app/.env
-      - name: 백엔드 Json Key 생성
-        env:
-          SERVICE_ACCOUNT_JSON: ${{ secrets.TEAMASTRONEERSTARINFO_437713_78CB5A772263_JSON }}
-        run: |
-          echo "${SERVICE_ACCOUNT_JSON}" > src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
-          cat src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
-      - name: Secrets 값 확인
-        run: |
-          echo "Secrets 값: ${SERVICE_ACCOUNT_JSON}"
+#      - name: 백엔드 Json Key 생성
+#        env:
+#          SERVICE_ACCOUNT_JSON: ${{ secrets.TEAMASTRONEERSTARINFO_437713_78CB5A772263_JSON }}
+#        run: |
+#          echo "${SERVICE_ACCOUNT_JSON}" > src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
+#          cat src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
+#      - name: Secrets 값 확인
+#        run: |
+#          echo "Secrets 값: ${SERVICE_ACCOUNT_JSON}"
       - name: 백엔드 .env 생성
         env:
-          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+#          REDIS_HOST: ${{ secrets.REDIS_HOST }}
           REDIS_PORT: ${{ secrets.REDIS_PORT }}
           REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
         run: |
-          echo "REDIS_HOST=${REDIS_HOST}" > .env
-          echo "REDIS_PORT=${REDIS_PORT}" >> .env
+#          echo "REDIS_HOST=${REDIS_HOST}" > .env
+          echo "REDIS_PORT=${REDIS_PORT}" > .env
           echo "REDIS_PASSWORD=${REDIS_PASSWORD}" >> .env
           echo "JWT_SECRET=${JWT_SECRET}" >> .env
           echo "GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}" >> .env
