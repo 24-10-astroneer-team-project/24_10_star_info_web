@@ -90,15 +90,13 @@ services:
     image: nginx:latest
     container_name: nginx
     ports:
-      - "80:80"  # Nginx를 통해 80 포트로 접근
-    depends_on:
-      - app_1
-      - app_2
+      - "80:80"
     volumes:
-      - ./nginx.conf.template:/etc/nginx/nginx.conf.template  # template 파일 매핑
-    environment:
-      - TARGET_SERVICE=${TARGET_SERVICE}  # 환경 변수 설정
-    entrypoint: /bin/sh -c "envsubst < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+      - ./nginx.conf.template:/etc/nginx/nginx.conf.template
+    entrypoint: /bin/sh -c "export TARGET_SERVICE=app_1 && envsubst < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+#    depends_on:
+#      - app_1
+#      - app_2
     networks:
       - app_network
 
