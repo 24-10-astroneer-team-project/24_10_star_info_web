@@ -77,13 +77,9 @@ class ServiceManager:
         # 환경 변수 설정
         os.environ["TARGET_SERVICE"] = target_service  # 환경 변수로 설정
 
-        # 이미 존재하는 nginx.conf 파일을 사용
-        nginx_config_path = "/dockerProjects/starInfo/nginx.conf"
-        domain_name = "www.astro.qyef.site"  # 사용할 도메인 이름
-
-        # Nginx 설정 적용
+        # Nginx 설정을 적용하는 명령어 실행
         try:
-            os.system("docker exec nginx nginx -s reload")
+            os.system("docker exec nginx nginx -s reload")  # Nginx 설정을 리로드
             print(f"Nginx configuration updated to route traffic to {target_service}.")
         except Exception as e:
             print(f"Error reloading Nginx: {e}")
