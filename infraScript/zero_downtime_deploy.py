@@ -88,19 +88,22 @@ class ServiceManager:
         try:
             with open(nginx_config_path, "w") as nginx_conf:
                 nginx_conf.write(f"""
-                upstream backend {{
-                    server {target_service}:8080;
-                }}
-                server {{
-                    listen 80;
-                    server_name {domain_name};
-                    location / {{
-                        proxy_pass http://backend;
-                        proxy_set_header Host $host;
-                        proxy_set_header X-Real-IP $remote_addr;
-                        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                    }}
-                }}
+    http {{
+        upstream backend {{
+            server {target_service}:8080;
+        }}
+    
+        server {{
+            listen 80;
+            server_name {domain_name};
+            location / {{
+                proxy_pass http://backend;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            }}
+        }}
+    }}
                 """)
             print("Nginx config written successfully.")
         except Exception as e:
