@@ -37,6 +37,5 @@ COPY .env /app/.env
 # 빌드된 JAR 파일 복사
 COPY --from=gradle-build /app/build/libs/*.jar app.jar
 
-
 # JAR 파일 실행
 ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "/app/app.jar"]
