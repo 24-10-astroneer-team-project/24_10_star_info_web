@@ -136,18 +136,6 @@ jobs:
             # docker-compose.yml 파일 가져오기
             curl -o /dockerProjects/starInfo/docker-compose.yml https://raw.githubusercontent.com/24-10-astroneer-team-project/24_10_star_info_web/master/docker-compose.yml
             
-            # Docker Compose 실행
-            cd /dockerProjects/starInfo
-            export REDIS_HOST=${{ secrets.REDIS_HOST }}
-            export REDIS_PORT=${{ secrets.REDIS_PORT }}
-            export REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}
-            export MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
-            export MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}
-            export MYSQL_USER=${{ secrets.MYSQL_USER }}
-            export MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
-            docker-compose pull
-            docker-compose up -d
-            
             # zero_downtime_deploy.py 스크립트 가져오기 및 실행
             curl -o /dockerProjects/starInfo/zero_downtime_deploy.py https://raw.githubusercontent.com/24-10-astroneer-team-project/24_10_star_info_web/master/infraScript/zero_downtime_deploy.py
             chmod +x /dockerProjects/starInfo/zero_downtime_deploy.py
