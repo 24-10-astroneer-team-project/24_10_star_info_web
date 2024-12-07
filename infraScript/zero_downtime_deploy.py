@@ -74,11 +74,9 @@ class ServiceManager:
         # 서비스 이름 자동 결정
         target_service = "app_1" if self.next_service == "app_1" else "app_2"
 
+        os.environ["TARGET_SERVICE"] = target_service  # 환경 변수로 설정
         # 환경 변수를 명시적으로 전달하면서 Nginx 리로드
         try:
-            # 환경 변수를 docker-compose.yml에 전달하기 위해서
-            os.environ["TARGET_SERVICE"] = target_service  # 환경 변수로 설정
-
             # Nginx 리로드
             os.system(f"docker-compose exec nginx nginx -s reload")
             print(f"Nginx configuration updated to route traffic to {target_service}.")
@@ -103,6 +101,10 @@ class ServiceManager:
             print("Initial state detected. Starting all necessary services...")
             # 모든 서비스 시작 (최초 배포)
             os.system("docker-compose up -d")
+
+            # 최초 배포 시에도 Nginx 설정을 업데이트
+            self._update_nginx_config()
+
         else:
             # 3. 다음 서비스 시작 전에 이전 컨테이너 제거
             self._remove_container(self.next_service)
@@ -125,6 +127,7 @@ class ServiceManager:
             self._remove_container(self.current_service)
 
         print(f"Service switched to {self.next_service}!")
+
 
 if __name__ == "__main__":
     manager = ServiceManager()
