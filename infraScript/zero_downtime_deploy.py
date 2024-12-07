@@ -110,8 +110,9 @@ class ServiceManager:
         self._find_next_service()
 
         if self.current_service is None:
-            print("Initial state detected. Starting first service...")
-            self._restart_service(self.next_service)
+            print("Initial state detected. Starting all necessary services...")
+            # 모든 서비스 시작 (최초 배포)
+            os.system("docker-compose up -d")
         else:
             # 3. 다음 서비스 시작 전에 이전 컨테이너 제거
             self._remove_container(self.next_service)
@@ -134,7 +135,6 @@ class ServiceManager:
             self._remove_container(self.current_service)
 
         print(f"Service switched to {self.next_service}!")
-
 
 if __name__ == "__main__":
     manager = ServiceManager()

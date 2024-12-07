@@ -3,3 +3,8 @@ server:
 logging:
   level:
     root: WARN
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
