@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-import shutil
 import requests
 import time
 from typing import Optional
@@ -71,50 +70,21 @@ class ServiceManager:
 
     def _update_nginx_config(self) -> None:
         print("Updating Nginx configuration...")
+
+        # 서비스 이름 자동 결정
         target_service = "app_1" if self.next_service == "app_1" else "app_2"
-        nginx_config_path = "./nginx.conf"  # 현재 디렉토리에서 바로 생성
+
+        # 환경 변수 설정
+        os.environ["TARGET_SERVICE"] = target_service  # 환경 변수로 설정
+
+        # 이미 존재하는 nginx.conf 파일을 사용
+        nginx_config_path = "/dockerProjects/starInfo/nginx.conf"
         domain_name = "www.astro.qyef.site"  # 사용할 도메인 이름
-
-        # 경로가 디렉토리인 경우 확인하고 삭제
-        if os.path.isdir(nginx_config_path):
-            print(f"{nginx_config_path} is a directory. Removing it.")
-            shutil.rmtree(nginx_config_path)  # 디렉토리 제거
-
-        # 기존 파일이 존재하면 삭제
-        if os.path.exists(nginx_config_path) and not os.path.isdir(nginx_config_path):
-            print(f"{nginx_config_path} already exists. Removing it.")
-            os.remove(nginx_config_path)  # 기존 파일 제거
-
-        # Nginx 설정 파일 작성
-        try:
-            with open(nginx_config_path, "w") as nginx_conf:
-                nginx_conf.write(f"""
-    http {{
-        upstream backend {{
-            server {target_service}:8080;
-        }}
-    
-        server {{
-            listen 80;
-            server_name {domain_name};
-            location / {{
-                proxy_pass http://backend;
-                proxy_set_header Host $host;
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            }}
-        }}
-    }}
-                """)
-            print("Nginx config written successfully.")
-        except Exception as e:
-            print(f"Error writing Nginx config: {e}")
-            return
 
         # Nginx 설정 적용
         try:
             os.system("docker exec nginx nginx -s reload")
-            print(f"Nginx configuration updated to route traffic to {target_service} with domain {domain_name}.")
+            print(f"Nginx configuration updated to route traffic to {target_service}.")
         except Exception as e:
             print(f"Error reloading Nginx: {e}")
 
