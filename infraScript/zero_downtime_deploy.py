@@ -30,13 +30,19 @@ class ServiceManager:
                 "app_2" if "8083" in current_service else "app_1"
             )
         else:
-            self.current_service = "app_2"
+            # 초기 상태
+            self.current_service = None
+            print("No running service detected. Assuming initial state.")
 
     # 다음 실행할 서비스를 확인
     def _find_next_service(self) -> None:
-        self.next_service = (
-            "app_1" if self.current_service == "app_2" else "app_2"
-        )
+        if self.current_service is None:
+            # 초기 상태에서 app_1부터 시작
+            self.next_service = "app_1"
+        else:
+            self.next_service = (
+                "app_1" if self.current_service == "app_2" else "app_2"
+            )
 
     # Docker Compose 서비스 재시작
     def _restart_service(self, service_name: str) -> None:
@@ -55,7 +61,6 @@ class ServiceManager:
 
     def _switch_port(self) -> None:
         print("Switching socat port...")
-        # 기존 socat 포트 변경
         os.system(f"pkill -f 'socat -t0 TCP-LISTEN:{self.socat_port}'")
         time.sleep(5)
         target_port = 8082 if self.next_service == "app_1" else 8083
@@ -70,7 +75,6 @@ class ServiceManager:
         nginx_config_path = "/dockerProjects/starInfo/nginx.conf"
         domain_name = "www.astro.qyef.site/.com"  # 사용할 도메인 이름
 
-        # Nginx 설정 파일 동적 업데이트
         with open(nginx_config_path, "w") as nginx_conf:
             nginx_conf.write(f"""
             upstream backend {{
@@ -88,7 +92,6 @@ class ServiceManager:
             }}
             """)
 
-        # Nginx 재시작
         os.system("docker exec nginx nginx -s reload")
         print(f"Nginx configuration updated to route traffic to {target_service} with domain {domain_name}.")
 
@@ -106,27 +109,31 @@ class ServiceManager:
         self._find_current_service()
         self._find_next_service()
 
-        # 3. 다음 서비스 시작 전에 이전 컨테이너 제거
-        self._remove_container(self.next_service)
+        if self.current_service is None:
+            print("Initial state detected. Starting first service...")
+            self._restart_service(self.next_service)
+        else:
+            # 3. 다음 서비스 시작 전에 이전 컨테이너 제거
+            self._remove_container(self.next_service)
 
-        # 4. 다음 서비스 재시작
-        self._restart_service(self.next_service)
+            # 4. 다음 서비스 재시작
+            self._restart_service(self.next_service)
 
-        # 5. 서비스 상태 확인
-        while not self._is_service_up(self.next_service):
-            print(f"Waiting for {self.next_service} to be 'UP'...")
-            time.sleep(self.sleep_duration)
+            # 5. 서비스 상태 확인
+            while not self._is_service_up(self.next_service):
+                print(f"Waiting for {self.next_service} to be 'UP'...")
+                time.sleep(self.sleep_duration)
 
-        # 6. Nginx 설정 업데이트
-        self._update_nginx_config()
+            # 6. Nginx 설정 업데이트
+            self._update_nginx_config()
 
-        # 7. 포트 전환
-        self._switch_port()
+            # 7. 포트 전환
+            self._switch_port()
 
-        # 8. 현재 서비스 제거 (이전 서비스 정리)
-        self._remove_container(self.current_service)
+            # 8. 현재 서비스 제거 (이전 서비스 정리)
+            self._remove_container(self.current_service)
 
-        print(f"Service switched from {self.current_service} to {self.next_service}!")
+        print(f"Service switched to {self.next_service}!")
 
 
 if __name__ == "__main__":
