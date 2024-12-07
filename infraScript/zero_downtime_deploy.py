@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import shutil
 import requests
 import time
 from typing import Optional
@@ -77,7 +78,7 @@ class ServiceManager:
         # 경로가 디렉토리인 경우 확인하고 삭제
         if os.path.isdir(nginx_config_path):
             print(f"{nginx_config_path} is a directory. Removing it.")
-            os.rmdir(nginx_config_path)  # 디렉토리 제거
+            shutil.rmtree(nginx_config_path)  # 디렉토리 제거
 
         # 기존 파일이 존재하면 삭제
         if os.path.exists(nginx_config_path) and not os.path.isdir(nginx_config_path):
