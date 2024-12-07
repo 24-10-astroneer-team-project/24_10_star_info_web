@@ -1,97 +1,87 @@
 #!/usr/bin/env python3
 
 import os
-import requests  # HTTP 요청을 위한 모듈 추가
-import subprocess
+import requests
 import time
-from typing import Dict, Optional
+from typing import Optional
 
 
 class ServiceManager:
-    # 초기화 함수
     def __init__(self, socat_port: int = 8081, sleep_duration: int = 3) -> None:
         self.socat_port: int = socat_port
         self.sleep_duration: int = sleep_duration
-        self.services: Dict[str, int] = {
-            '24_10_star_info_web_1': 8082,
-            '24_10_star_info_web_2': 8083
-        }
-        self.current_name: Optional[str] = None
-        self.current_port: Optional[int] = None
-        self.next_name: Optional[str] = None
-        self.next_port: Optional[int] = None
+        self.services = ["app1", "app2"]
+        self.current_service: Optional[str] = None
+        self.next_service: Optional[str] = None
 
-    # 현재 실행 중인 서비스를 찾는 함수
-    def _find_current_service(self) -> None:
-        cmd: str = f"ps aux | grep 'socat -t0 TCP-LISTEN:{self.socat_port}' | grep -v grep | awk '{{print $NF}}'"
-        current_service: str = subprocess.getoutput(cmd)
-        if not current_service:
-            self.current_name, self.current_port = 's24_10_star_info_web_2', self.services['24_10_star_info_web_2']
-        else:
-            self.current_port = int(current_service.split(':')[-1])
-            self.current_name = next((name for name, port in self.services.items() if port == self.current_port), None)
-
-    # 다음에 실행할 서비스를 찾는 함수
-    def _find_next_service(self) -> None:
-        self.next_name, self.next_port = next(
-            ((name, port) for name, port in self.services.items() if name != self.current_name),
-            (None, None)
+    # 이미지 가져오기
+    def _pull_latest_image(self) -> None:
+        print("Pulling the latest image...")
+        os.system(
+            "docker pull ghcr.io/24-10-astroneer-team-project/24_10_star_info_web:latest"
         )
 
-    # Docker 컨테이너를 제거하는 함수
-    def _remove_container(self, name: str) -> None:
-        os.system(f"docker stop {name} 2> /dev/null")
-        os.system(f"docker rm -f {name} 2> /dev/null")
+    # 현재 실행 중인 서비스를 확인
+    def _find_current_service(self) -> None:
+        cmd = f"ps aux | grep 'socat -t0 TCP-LISTEN:{self.socat_port}' | grep -v grep | awk '{{print $NF}}'"
+        current_service = os.popen(cmd).read().strip()
+        if current_service:
+            self.current_service = (
+                "app2" if "8083" in current_service else "app1"
+            )
+        else:
+            self.current_service = "app2"
 
-    # Docker 컨테이너를 실행하는 함수
-    def _run_container(self, name: str, port: int) -> None:
-        os.system(
-            f"docker run -d --name={name} --restart unless-stopped -p {port}:8080 -e TZ=Asia/Seoul -v /dockerProjects/starInfo/volumes/gen:/gen --pull always ghcr.io/24-10-astroneer-team-project/24_10_star_info_web")
+    # 다음 실행할 서비스를 확인
+    def _find_next_service(self) -> None:
+        self.next_service = "app1" if self.current_service == "app2" else "app2"
 
-    def _switch_port(self) -> None:
-        # Socat 포트를 전환하는 함수
-        cmd: str = f"ps aux | grep 'socat -t0 TCP-LISTEN:{self.socat_port}' | grep -v grep | awk '{{print $2}}'"
-        pid: str = subprocess.getoutput(cmd)
+    # Docker Compose 서비스 재시작
+    def _restart_service(self, service_name: str) -> None:
+        print(f"Restarting {service_name}...")
+        os.system(f"docker-compose up -d {service_name}")
 
-        if pid:
-            os.system(f"kill -9 {pid} 2>/dev/null")
-
-        time.sleep(5)
-
-        os.system(
-            f"nohup socat -t0 TCP-LISTEN:{self.socat_port},fork,reuseaddr TCP:localhost:{self.next_port} &>/dev/null &")
-
-        # 서비스 상태를 확인하는 함수
-
-    def _is_service_up(self, port: int) -> bool:
+    # 서비스 상태 확인
+    def _is_service_up(self, service_name: str) -> bool:
+        port = 8082 if service_name == "app1" else 8083
         url = f"http://127.0.0.1:{port}/actuator/health"
         try:
-            response = requests.get(url, timeout=5)  # 5초 이내 응답 없으면 예외 발생
-            if response.status_code == 200 and response.json().get('status') == 'UP':
-                return True
+            response = requests.get(url, timeout=5)
+            return response.status_code == 200 and response.json().get("status") == "UP"
         except requests.RequestException:
-            pass
-        return False
+            return False
 
-    # 서비스를 업데이트하는 함수
+    # 포트 전환
+    def _switch_port(self) -> None:
+        print("Switching socat port...")
+        os.system(f"pkill -f 'socat -t0 TCP-LISTEN:{self.socat_port}'")
+        time.sleep(5)
+        target_port = 8082 if self.next_service == "app1" else 8083
+        os.system(
+            f"nohup socat -t0 TCP-LISTEN:{self.socat_port},fork,reuseaddr TCP:localhost:{target_port} &>/dev/null &"
+        )
+
+    # 서비스 업데이트
     def update_service(self) -> None:
+        # 1. 최신 이미지 가져오기
+        self._pull_latest_image()
+
+        # 2. 현재/다음 서비스 확인
         self._find_current_service()
         self._find_next_service()
 
-        self._remove_container(self.next_name)
-        self._run_container(self.next_name, self.next_port)
+        # 3. 다음 서비스 재시작
+        self._restart_service(self.next_service)
 
-        # 새 서비스가 'UP' 상태가 될 때까지 기다림
-        while not self._is_service_up(self.next_port):
-            print(f"Waiting for {self.next_name} to be 'UP'...")
+        # 4. 서비스 상태 확인
+        while not self._is_service_up(self.next_service):
+            print(f"Waiting for {self.next_service} to be 'UP'...")
             time.sleep(self.sleep_duration)
 
+        # 5. 포트 전환
         self._switch_port()
 
-        if self.current_name is not None:
-            self._remove_container(self.current_name)
-
-        print("Switched service successfully!")
+        print(f"Service switched from {self.current_service} to {self.next_service}!")
 
 
 if __name__ == "__main__":
