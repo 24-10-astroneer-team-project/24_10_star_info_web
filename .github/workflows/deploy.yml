@@ -82,7 +82,6 @@ jobs:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
         run: |
-#          echo "REDIS_HOST=${REDIS_HOST}" > .env
           echo "REDIS_PORT=${REDIS_PORT}" > .env
           echo "REDIS_PASSWORD=${REDIS_PASSWORD}" >> .env
           echo "JWT_SECRET=${JWT_SECRET}" >> .env
