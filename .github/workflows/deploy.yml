@@ -69,6 +69,10 @@ jobs:
           SERVICE_ACCOUNT_JSON: ${{ secrets.TEAMASTRONEERSTARINFO_437713_78CB5A772263_JSON }}
         run: |
           echo "${SERVICE_ACCOUNT_JSON}" > src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
+          cat src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
+      - name: Secrets 값 확인
+        run: |
+          echo "Secrets 값: ${SERVICE_ACCOUNT_JSON}"
       - name: 백엔드 .env 생성
         env:
           REDIS_HOST: ${{ secrets.REDIS_HOST }}
