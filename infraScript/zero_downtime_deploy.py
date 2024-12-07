@@ -63,10 +63,14 @@ class ServiceManager:
             f"nohup socat -t0 TCP-LISTEN:{self.socat_port},fork,reuseaddr TCP:localhost:{target_port} &>/dev/null &"
         )
 
-        # Nginx 설정 변경
+    # Nginx 설정 변경
+    def _update_nginx_config(self) -> None:
         print("Updating Nginx configuration...")
         target_service = "app_1" if self.next_service == "app_1" else "app_2"
         nginx_config_path = "/dockerProjects/starInfo/nginx.conf"
+        domain_name = "www.astro.qyef.site/.com"  # 사용할 도메인 이름
+
+        # Nginx 설정 파일 동적 업데이트
         with open(nginx_config_path, "w") as nginx_conf:
             nginx_conf.write(f"""
             upstream backend {{
@@ -74,7 +78,7 @@ class ServiceManager:
             }}
             server {{
                 listen 80;
-                server_name _;
+                server_name {domain_name};
                 location / {{
                     proxy_pass http://backend;
                     proxy_set_header Host $host;
@@ -84,9 +88,9 @@ class ServiceManager:
             }}
             """)
 
-        # Nginx 설정 적용
+        # Nginx 재시작
         os.system("docker exec nginx nginx -s reload")
-        print(f"Nginx configuration updated to route traffic to {target_service}.")
+        print(f"Nginx configuration updated to route traffic to {target_service} with domain {domain_name}.")
 
     def _remove_container(self, name: str) -> None:
         print(f"Removing container {name}...")
@@ -113,10 +117,13 @@ class ServiceManager:
             print(f"Waiting for {self.next_service} to be 'UP'...")
             time.sleep(self.sleep_duration)
 
-        # 6. 포트 전환
+        # 6. Nginx 설정 업데이트
+        self._update_nginx_config()
+
+        # 7. 포트 전환
         self._switch_port()
 
-        # 7. 현재 서비스 제거 (이전 서비스 정리)
+        # 8. 현재 서비스 제거 (이전 서비스 정리)
         self._remove_container(self.current_service)
 
         print(f"Service switched from {self.current_service} to {self.next_service}!")
