@@ -71,7 +71,7 @@ class ServiceManager:
     def _update_nginx_config(self) -> None:
         print("Updating Nginx configuration...")
         target_service = "app_1" if self.next_service == "app_1" else "app_2"
-        nginx_config_path = "/dockerProjects/starInfo/nginx.conf"  # 현재 디렉토리에서 바로 생성
+        nginx_config_path = "./nginx.conf"  # 현재 디렉토리에서 바로 생성
         domain_name = "www.astro.qyef.site"  # 사용할 도메인 이름
 
         # 경로가 디렉토리인 경우 확인하고 삭제
