@@ -81,10 +81,10 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          MYSQL_ROOT_PASSWORD: ${{ MYSQL_ROOT_PASSWORD }}
-          MYSQL_DATABASE: ${{ MYSQL_DATABASE }}
-          MYSQL_USER: ${{ MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ MYSQL_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
         run: |
           echo "REDIS_HOST=${REDIS_HOST}" > .env
           echo "REDIS_PORT=${REDIS_PORT}" >> .env
