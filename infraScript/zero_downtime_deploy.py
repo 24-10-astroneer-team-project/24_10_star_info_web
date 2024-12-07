@@ -10,7 +10,7 @@ class ServiceManager:
     def __init__(self, socat_port: int = 8081, sleep_duration: int = 3) -> None:
         self.socat_port: int = socat_port
         self.sleep_duration: int = sleep_duration
-        self.services = ["24_10_star_info_web_1", "24_10_star_info_web_2"]
+        self.services = ["app_1", "app_2"]
         self.current_service: Optional[str] = None
         self.next_service: Optional[str] = None
 
@@ -27,15 +27,15 @@ class ServiceManager:
         current_service = os.popen(cmd).read().strip()
         if current_service:
             self.current_service = (
-                "24_10_star_info_web_2" if "8083" in current_service else "24_10_star_info_web_1"
+                "app_2" if "8083" in current_service else "app_1"
             )
         else:
-            self.current_service = "24_10_star_info_web_2"
+            self.current_service = "app_2"
 
     # 다음 실행할 서비스를 확인
     def _find_next_service(self) -> None:
         self.next_service = (
-            "24_10_star_info_web_1" if self.current_service == "24_10_star_info_web_2" else "24_10_star_info_web_2"
+            "app_1" if self.current_service == "app_2" else "app_2"
         )
 
     # Docker Compose 서비스 재시작
@@ -45,7 +45,7 @@ class ServiceManager:
 
     # 서비스 상태 확인
     def _is_service_up(self, service_name: str) -> bool:
-        port = 8082 if service_name == "24_10_star_info_web_1" else 8083
+        port = 8082 if service_name == "app_1" else 8083
         url = f"http://127.0.0.1:{port}/actuator/health"
         try:
             response = requests.get(url, timeout=5)
@@ -53,15 +53,45 @@ class ServiceManager:
         except requests.RequestException:
             return False
 
-    # 포트 전환
     def _switch_port(self) -> None:
         print("Switching socat port...")
+        # 기존 socat 포트 변경
         os.system(f"pkill -f 'socat -t0 TCP-LISTEN:{self.socat_port}'")
         time.sleep(5)
-        target_port = 8082 if self.next_service == "24_10_star_info_web_1" else 8083
+        target_port = 8082 if self.next_service == "app_1" else 8083
         os.system(
             f"nohup socat -t0 TCP-LISTEN:{self.socat_port},fork,reuseaddr TCP:localhost:{target_port} &>/dev/null &"
         )
+
+        # Nginx 설정 변경
+        print("Updating Nginx configuration...")
+        target_service = "app_1" if self.next_service == "app_1" else "app_2"
+        nginx_config_path = "/dockerProjects/starInfo/nginx.conf"
+        with open(nginx_config_path, "w") as nginx_conf:
+            nginx_conf.write(f"""
+            upstream backend {{
+                server {target_service}:8080;
+            }}
+            server {{
+                listen 80;
+                server_name _;
+                location / {{
+                    proxy_pass http://backend;
+                    proxy_set_header Host $host;
+                    proxy_set_header X-Real-IP $remote_addr;
+                    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                }}
+            }}
+            """)
+
+        # Nginx 설정 적용
+        os.system("docker exec nginx nginx -s reload")
+        print(f"Nginx configuration updated to route traffic to {target_service}.")
+
+    def _remove_container(self, name: str) -> None:
+        print(f"Removing container {name}...")
+        os.system(f"docker stop {name} 2>/dev/null")
+        os.system(f"docker rm -f {name} 2>/dev/null")
 
     # 서비스 업데이트
     def update_service(self) -> None:
@@ -72,16 +102,22 @@ class ServiceManager:
         self._find_current_service()
         self._find_next_service()
 
-        # 3. 다음 서비스 재시작
+        # 3. 다음 서비스 시작 전에 이전 컨테이너 제거
+        self._remove_container(self.next_service)
+
+        # 4. 다음 서비스 재시작
         self._restart_service(self.next_service)
 
-        # 4. 서비스 상태 확인
+        # 5. 서비스 상태 확인
         while not self._is_service_up(self.next_service):
             print(f"Waiting for {self.next_service} to be 'UP'...")
             time.sleep(self.sleep_duration)
 
-        # 5. 포트 전환
+        # 6. 포트 전환
         self._switch_port()
+
+        # 7. 현재 서비스 제거 (이전 서비스 정리)
+        self._remove_container(self.current_service)
 
         print(f"Service switched from {self.current_service} to {self.next_service}!")
 
