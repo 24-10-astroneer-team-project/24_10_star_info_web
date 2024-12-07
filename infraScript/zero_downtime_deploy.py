@@ -75,6 +75,11 @@ class ServiceManager:
         nginx_config_path = "/dockerProjects/starInfo/nginx.conf"
         domain_name = "www.astro.qyef.site/.com"  # 사용할 도메인 이름
 
+        # 경로가 디렉토리인 경우 확인하고 삭제
+        if os.path.isdir(nginx_config_path):
+            print(f"{nginx_config_path} is a directory. Removing it.")
+            os.rmdir(nginx_config_path)  # 디렉토리 제거
+
         with open(nginx_config_path, "w") as nginx_conf:
             nginx_conf.write(f"""
             upstream backend {{
