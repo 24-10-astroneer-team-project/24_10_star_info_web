@@ -66,9 +66,9 @@ jobs:
           echo "REACT_APP_WEATHER_API_URL=$REACT_APP_WEATHER_API_URL" >> starinfo-app/.env
       - name: 백엔드 Json Key 생성
         env:
-          TEAMASTRONEERSTARINFO_437713_78CB5A772263: ${{ secrets.TEAMASTRONEERSTARINFO_437713_78CB5A772263_JSON }}
+          SERVICE_ACCOUNT_JSON: ${{ secrets.TEAMASTRONEERSTARINFO_437713_78CB5A772263_JSON }}
         run: |
-          echo "TEAMASTRONEERSTARINFO_437713_78CB5A772263: ${TEAMASTRONEERSTARINFO_437713_78CB5A772263_JSON}" > src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
+          echo "${SERVICE_ACCOUNT_JSON}" > src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
       - name: 백엔드 .env 생성
         env:
           REDIS_HOST: ${{ secrets.REDIS_HOST }}
