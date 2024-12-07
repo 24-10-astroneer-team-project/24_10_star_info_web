@@ -13,7 +13,6 @@
     overflow: auto; /* 스크롤 가능하게 설정 */
     padding: 20px; /* 카드와 화면 가장자리 사이 여백 */
     flex: 1; /* 남은 공간을 콘텐츠 영역이 차지하도록 설정 */
-    padding-bottom: 100px; /* 푸터를 위한 공간 추가 */
     z-index: 2; /* 캔버스 위에 콘텐츠를 표시 */
 }
 
@@ -32,87 +31,39 @@
     color: #fff;
     text-align: center;
     padding: 20px;
-    position: relative; /* 기본 위치로 설정 */
 }
 
 .intro {
     text-align: center; /* 텍스트 중앙 정렬 */
     margin-top: 100px; /* 상단 여백 */
+    color: #d1e7ff; /* 밝은 파란색 텍스트 */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* 은은한 그림자 */
     font-family: 'Cinzel', serif; /* 고급스러운 글씨체 */
     z-index: 2; /* 캔버스 위로 표시 */
     position: relative; /* 다른 요소와의 독립적 위치 설정 */
-    color: transparent; /* 기본 색상은 투명 */
-    background-image: linear-gradient(
-            to right,
-            #ffffff, /* 흰색 */
-            #8cbaff, /* 푸른색 */
-            #ffd700, /* 노란색 */
-            #ff8c00, /* 주황색 */
-            #32cd32, /* 녹색 */
-            #ff4500  /* 붉은색 */
-    );
-    background-size: 300% 300%; /* 애니메이션을 위한 배경 크기 */
-    -webkit-background-clip: text; /* 텍스트에만 배경 적용 */
-    background-clip: text;
-    animation: meteorGlow 12s infinite; /* 애니메이션 추가, 12초로 느리게 설정 */
 }
 
 .intro h1 {
-    font-size: 3em; /* 제목 크기 */
-    font-weight: 900; /* 글씨체 더 굵게 */
-    margin-bottom: 15px; /* 제목과 설명 간격 */
-    letter-spacing: 3px; /* 글자 간격 추가 */
+    font-size: 2.5em; /* 제목 크기 */
+    font-weight: bold; /* 굵게 설정 */
+    margin-bottom: 10px; /* 제목과 설명 간격 */
+    animation: fadeIn 1.5s ease-in-out; /* 부드러운 등장 애니메이션 */
 }
 
 .intro p {
-    font-size: 1.4em; /* 설명 텍스트 크기 증가 */
-    font-weight: 700; /* 설명 텍스트 굵게 */
-    line-height: 1.8; /* 줄 간격 넓게 설정 */
+    font-size: 1.2em; /* 설명 텍스트 크기 */
+    line-height: 1.6; /* 줄 간격 */
+    animation: fadeIn 2s ease-in-out; /* 부드러운 등장 애니메이션 */
 }
 
-/* 유성우 애니메이션 컨테이너 */
-.meteor-animation {
-    position: absolute;
-    top: -20%; /* 카드 밖에서 시작 */
-    left: 50%; /* 카드 중앙에서 시작 */
-    width: 2px;
-    height: 100px;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.8), transparent);
-    animation: meteor-fall 2s infinite ease-in-out; /* 유성우 낙하 애니메이션 */
-    transform: rotate(-45deg); /* 대각선으로 떨어지는 효과 */
-    opacity: 0.8;
-}
-
-/* 유성우 색상 - 각 유성우 이름에 따라 다르게 설정 */
-.meteor-animation.perseid {
-    background: linear-gradient(90deg, rgba(50, 205, 50, 0.8), transparent); /* 녹색 */
-}
-
-.meteor-animation.eta-aquariid {
-    background: linear-gradient(90deg, rgba(173, 216, 230, 0.8), transparent); /* 푸른색 */
-}
-
-.meteor-animation.orionid {
-    background: linear-gradient(90deg, rgba(255, 165, 0, 0.8), transparent); /* 주황색 */
-}
-
-.meteor-animation.ursid {
-    background: linear-gradient(90deg, rgba(255, 69, 0, 0.8), transparent); /* 붉은색 */
-}
-
-/* 유성우 낙하 애니메이션 */
-@keyframes meteor-fall {
+/* 텍스트 등장 애니메이션 */
+@keyframes fadeIn {
     0% {
-        top: -20%; /* 카드 상단 밖에서 시작 */
-        left: 50%; /* 중앙에서 시작 */
-        opacity: 0.8;
-    }
-    50% {
-        opacity: 1; /* 중간에 밝기 증가 */
+        opacity: 0;
+        transform: translateY(20px);
     }
     100% {
-        top: 120%; /* 카드 하단 밖으로 이동 */
-        left: 30%; /* 대각선 방향으로 이동 */
-        opacity: 0; /* 투명하게 사라짐 */
+        opacity: 1;
+        transform: translateY(0);
     }
 }
