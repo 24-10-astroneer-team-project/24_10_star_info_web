@@ -10,11 +10,11 @@ class ServiceManager:
     def __init__(self, socat_port: int = 8081, sleep_duration: int = 3) -> None:
         self.socat_port: int = socat_port
         self.sleep_duration: int = sleep_duration
-        self.services = ["app1", "app2"]
+        self.services = ["24_10_star_info_web_1", "24_10_star_info_web_2"]
         self.current_service: Optional[str] = None
         self.next_service: Optional[str] = None
 
-    # 이미지 가져오기
+    # 최신 이미지 가져오기
     def _pull_latest_image(self) -> None:
         print("Pulling the latest image...")
         os.system(
@@ -27,14 +27,16 @@ class ServiceManager:
         current_service = os.popen(cmd).read().strip()
         if current_service:
             self.current_service = (
-                "app2" if "8083" in current_service else "app1"
+                "24_10_star_info_web_2" if "8083" in current_service else "24_10_star_info_web_1"
             )
         else:
-            self.current_service = "app2"
+            self.current_service = "24_10_star_info_web_2"
 
     # 다음 실행할 서비스를 확인
     def _find_next_service(self) -> None:
-        self.next_service = "app1" if self.current_service == "app2" else "app2"
+        self.next_service = (
+            "24_10_star_info_web_1" if self.current_service == "24_10_star_info_web_2" else "24_10_star_info_web_2"
+        )
 
     # Docker Compose 서비스 재시작
     def _restart_service(self, service_name: str) -> None:
@@ -43,7 +45,7 @@ class ServiceManager:
 
     # 서비스 상태 확인
     def _is_service_up(self, service_name: str) -> bool:
-        port = 8082 if service_name == "app1" else 8083
+        port = 8082 if service_name == "24_10_star_info_web_1" else 8083
         url = f"http://127.0.0.1:{port}/actuator/health"
         try:
             response = requests.get(url, timeout=5)
@@ -56,7 +58,7 @@ class ServiceManager:
         print("Switching socat port...")
         os.system(f"pkill -f 'socat -t0 TCP-LISTEN:{self.socat_port}'")
         time.sleep(5)
-        target_port = 8082 if self.next_service == "app1" else 8083
+        target_port = 8082 if self.next_service == "24_10_star_info_web_1" else 8083
         os.system(
             f"nohup socat -t0 TCP-LISTEN:{self.socat_port},fork,reuseaddr TCP:localhost:{target_port} &>/dev/null &"
         )

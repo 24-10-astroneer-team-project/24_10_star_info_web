@@ -66,5 +66,3 @@ package-lock.json
 
 # Redis 관련 파일
 Redis-x64-3.0.504/
-
-docker-compose.yml

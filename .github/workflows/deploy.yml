@@ -75,18 +75,27 @@ jobs:
 #          echo "Secrets 값: ${SERVICE_ACCOUNT_JSON}"
       - name: 백엔드 .env 생성
         env:
-#          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
           REDIS_PORT: ${{ secrets.REDIS_PORT }}
           REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          MYSQL_ROOT_PASSWORD: ${{ MYSQL_ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ MYSQL_DATABASE }}
+          MYSQL_USER: ${{ MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ MYSQL_PASSWORD }}
         run: |
-          echo "REDIS_PORT=${REDIS_PORT}" > .env
+          echo "REDIS_HOST=${REDIS_HOST}" > .env
+          echo "REDIS_PORT=${REDIS_PORT}" >> .env
           echo "REDIS_PASSWORD=${REDIS_PASSWORD}" >> .env
           echo "JWT_SECRET=${JWT_SECRET}" >> .env
           echo "GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}" >> .env
           echo "GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}" >> .env
+          echo "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}" >> .env
+          echo "MYSQL_DATABASE=${MYSQL_DATABASE}" >> .env
+          echo "MYSQL_USER=${MYSQL_USER}" >> .env
+          echo "MYSQL_PASSWORD=${MYSQL_PASSWORD}" >> .env
       - name: application-secret.yml 생성
         env:
           ACTIONS_STEP_DEBUG: true
@@ -121,7 +130,25 @@ jobs:
           working-directory: /
           comment: Deploy
           command: |
+            # 필요한 디렉토리 생성
             mkdir -p /dockerProjects/starInfo
+            
+            # docker-compose.yml 파일 가져오기
+            curl -o /dockerProjects/starInfo/docker-compose.yml https://raw.githubusercontent.com/24-10-astroneer-team-project/24_10_star_info_web/master/docker-compose.yml
+            
+            # Docker Compose 실행
+            cd /dockerProjects/starInfo
+            export REDIS_HOST=${{ secrets.REDIS_HOST }}
+            export REDIS_PORT=${{ secrets.REDIS_PORT }}
+            export REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}
+            export MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
+            export MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}
+            export MYSQL_USER=${{ secrets.MYSQL_USER }}
+            export MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
+            docker-compose pull
+            docker-compose up -d
+            
+            # zero_downtime_deploy.py 스크립트 가져오기 및 실행
             curl -o /dockerProjects/starInfo/zero_downtime_deploy.py https://raw.githubusercontent.com/24-10-astroneer-team-project/24_10_star_info_web/master/infraScript/zero_downtime_deploy.py
             chmod +x /dockerProjects/starInfo/zero_downtime_deploy.py
             /dockerProjects/starInfo/zero_downtime_deploy.py
