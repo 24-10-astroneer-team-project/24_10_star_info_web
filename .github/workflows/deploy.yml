@@ -140,4 +140,4 @@ jobs:
             curl -o /dockerProjects/starInfo/zero_downtime_deploy.py https://raw.githubusercontent.com/24-10-astroneer-team-project/24_10_star_info_web/master/infraScript/zero_downtime_deploy.py
             chmod +x /dockerProjects/starInfo/zero_downtime_deploy.py
             ls -l /dockerProjects/starInfo/zero_downtime_deploy.py
-            python3 /dockerProjects/starInfo/zero_downtime_deploy.py
+            cd /dockerProjects/starInfo && python3 zero_downtime_deploy.py
