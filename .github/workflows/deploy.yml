@@ -64,15 +64,6 @@ jobs:
           echo "REACT_APP_GOOGLE_MAPS_KEY=$REACT_APP_GOOGLE_MAPS_KEY" > starinfo-app/.env
           echo "REACT_APP_WEATHER_API_KEY=$REACT_APP_WEATHER_API_KEY" >> starinfo-app/.env
           echo "REACT_APP_WEATHER_API_URL=$REACT_APP_WEATHER_API_URL" >> starinfo-app/.env
-#      - name: 백엔드 Json Key 생성
-#        env:
-#          SERVICE_ACCOUNT_JSON: ${{ secrets.TEAMASTRONEERSTARINFO_437713_78CB5A772263_JSON }}
-#        run: |
-#          echo "${SERVICE_ACCOUNT_JSON}" > src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
-#          cat src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
-#      - name: Secrets 값 확인
-#        run: |
-#          echo "Secrets 값: ${SERVICE_ACCOUNT_JSON}"
       - name: 백엔드 .env 생성
         env:
           REDIS_HOST: ${{ secrets.REDIS_HOST }}
@@ -81,10 +72,6 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-          MYSQL_USER: ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
         run: |
           echo "REDIS_HOST=${REDIS_HOST}" > .env
           echo "REDIS_PORT=${REDIS_PORT}" >> .env
@@ -92,10 +79,6 @@ jobs:
           echo "JWT_SECRET=${JWT_SECRET}" >> .env
           echo "GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}" >> .env
           echo "GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}" >> .env
-          echo "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}" >> .env
-          echo "MYSQL_DATABASE=${MYSQL_DATABASE}" >> .env
-          echo "MYSQL_USER=${MYSQL_USER}" >> .env
-          echo "MYSQL_PASSWORD=${MYSQL_PASSWORD}" >> .env
       - name: application-secret.yml 생성
         env:
           ACTIONS_STEP_DEBUG: true
@@ -126,18 +109,11 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          instance-ids: "i-01ad4f4c5586ea1ce"
+          instance-ids: "i-06106d9424222a3e4"
           working-directory: /
           comment: Deploy
           command: |
-            # 필요한 디렉토리 생성
             mkdir -p /dockerProjects/starInfo
-            
-            # docker-compose.yml 파일 가져오기
-            curl -o /dockerProjects/starInfo/docker-compose.yml https://raw.githubusercontent.com/24-10-astroneer-team-project/24_10_star_info_web/master/docker-compose.yml
-            
-            # zero_downtime_deploy.py 스크립트 가져오기 및 실행
             curl -o /dockerProjects/starInfo/zero_downtime_deploy.py https://raw.githubusercontent.com/24-10-astroneer-team-project/24_10_star_info_web/master/infraScript/zero_downtime_deploy.py
             chmod +x /dockerProjects/starInfo/zero_downtime_deploy.py
-            ls -l /dockerProjects/starInfo/zero_downtime_deploy.py
-            cd /dockerProjects/starInfo && python3 zero_downtime_deploy.py
+            /dockerProjects/starInfo/zero_downtime_deploy.py
