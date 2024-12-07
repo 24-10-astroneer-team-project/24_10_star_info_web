@@ -95,7 +95,8 @@ services:
       - app_1
       - app_2
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf # Nginx 설정 파일 매핑
+      - ./nginx.conf.template:/etc/nginx/nginx.conf.template  # template 파일 매핑
+    entrypoint: /bin/sh -c "envsubst < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
     networks:
       - app_network
 
