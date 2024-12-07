@@ -74,12 +74,13 @@ class ServiceManager:
         # 서비스 이름 자동 결정
         target_service = "app_1" if self.next_service == "app_1" else "app_2"
 
-        # 환경 변수 설정
-        os.environ["TARGET_SERVICE"] = target_service  # 환경 변수로 설정
-
-        # Nginx 설정을 적용하는 명령어 실행
+        # 환경 변수를 명시적으로 전달하면서 Nginx 리로드
         try:
-            os.system("docker exec nginx nginx -s reload")  # Nginx 설정을 리로드
+            # 환경 변수를 docker-compose.yml에 전달하기 위해서
+            os.environ["TARGET_SERVICE"] = target_service  # 환경 변수로 설정
+
+            # Nginx 리로드
+            os.system(f"docker-compose exec nginx nginx -s reload")
             print(f"Nginx configuration updated to route traffic to {target_service}.")
         except Exception as e:
             print(f"Error reloading Nginx: {e}")
