@@ -68,18 +68,22 @@ class ServiceManager:
             f"nohup socat -t0 TCP-LISTEN:{self.socat_port},fork,reuseaddr TCP:localhost:{target_port} &>/dev/null &"
         )
 
-    # Nginx 설정 변경
     def _update_nginx_config(self) -> None:
         print("Updating Nginx configuration...")
         target_service = "app_1" if self.next_service == "app_1" else "app_2"
         nginx_config_path = "/dockerProjects/starInfo/nginx.conf"
-        domain_name = "www.astro.qyef.site/.com"  # 사용할 도메인 이름
+        domain_name = "www.astro.qyef.site"  # 사용할 도메인 이름
 
         # 경로가 디렉토리인 경우 확인하고 삭제
         if os.path.isdir(nginx_config_path):
             print(f"{nginx_config_path} is a directory. Removing it.")
             os.rmdir(nginx_config_path)  # 디렉토리 제거
 
+        # 경로가 이미 존재하는지 확인하고, 파일로 생성
+        if os.path.exists(nginx_config_path):
+            os.remove(nginx_config_path)  # 기존 파일이 있으면 삭제
+
+        # Nginx 설정 파일 작성
         with open(nginx_config_path, "w") as nginx_conf:
             nginx_conf.write(f"""
             upstream backend {{
@@ -97,6 +101,7 @@ class ServiceManager:
             }}
             """)
 
+        # Nginx 설정 적용
         os.system("docker exec nginx nginx -s reload")
         print(f"Nginx configuration updated to route traffic to {target_service} with domain {domain_name}.")
 
