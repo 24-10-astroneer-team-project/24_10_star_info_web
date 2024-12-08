@@ -24,6 +24,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.web.SecurityFilterChain;
@@ -36,6 +37,8 @@ public class SecurityConfig {
     @Value("${spring.application.base-url}")
     private String baseUrl;
 
+    private final ClientRegistrationRepository clientRegistrationRepository;
+
     private final CustomOAuth2SuccessHandler oAuth2AuthenticationSuccessHandler;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomOAuth2UserService customOAuth2UserService;
@@ -46,12 +49,13 @@ public class SecurityConfig {
 
     // 생성자 주입을 통한 의존성 주입
     @Autowired
-    public SecurityConfig(CustomOAuth2SuccessHandler oAuth2AuthenticationSuccessHandler,
+    public SecurityConfig(ClientRegistrationRepository clientRegistrationRepository, CustomOAuth2SuccessHandler oAuth2AuthenticationSuccessHandler,
                           CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
                           @Lazy CustomOAuth2UserService customOAuth2UserService,
                           JwtUtil jwtUtil,
                           @Lazy RedisRefreshTokenService redisRefreshTokenService,
                           @Lazy OAuth2AuthorizedClientRepository authorizedClientRepository, MemberRepository memberRepository) {
+        this.clientRegistrationRepository = clientRegistrationRepository;
         this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
         this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
         this.customOAuth2UserService = customOAuth2UserService;
@@ -91,10 +95,17 @@ public class SecurityConfig {
                         exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint)
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage(baseUrl + "/react/login")
+                        .loginPage(baseUrl + "/react/login") // 로그인 페이지 설정
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                         .failureHandler(customOAuth2FailureHandler)
-                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService))
+                        .authorizationEndpoint(authorizationEndpoint ->
+                                authorizationEndpoint.authorizationRequestResolver(
+                                        new CustomAuthorizationRequestResolver(clientRegistrationRepository, baseUrl)
+                                )
+                        )
+                        .userInfoEndpoint(userInfoEndpoint ->
+                                userInfoEndpoint.userService(customOAuth2UserService)
+                        )
                 )
                 // 특정 경로에만 JwtAuthenticationFilter 추가
                 .addFilterBefore(
@@ -147,7 +158,7 @@ public class SecurityConfig {
 
     @Bean
     public CustomLogoutHandler customLogoutHandler(@Lazy OAuth2AuthorizedClientRepository authorizedClientRepository,
-                                             @Lazy RedisRefreshTokenService redisRefreshTokenService) {
+                                                   @Lazy RedisRefreshTokenService redisRefreshTokenService) {
         return new CustomLogoutHandler(authorizedClientRepository, redisRefreshTokenService);
     }
 }
