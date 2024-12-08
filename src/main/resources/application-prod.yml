@@ -11,7 +11,7 @@ spring:
     redis:
       host: ${REDIS_HOST}
       port: 6379
-      password: ${custom.secret.spring.data.redis.password}
+      password: ${REDIS_PASSWORD:}
 logging:
   level:
     root: INFO
