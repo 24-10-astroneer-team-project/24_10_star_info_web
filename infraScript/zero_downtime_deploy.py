@@ -6,7 +6,7 @@ import subprocess
 import time
 from typing import Dict, Optional
 
-
+# 업데이트 제대로 하는거 맞나?
 class ServiceManager:
     # 초기화 함수
     def __init__(self, socat_port: int = 8081, sleep_duration: int = 3) -> None:
