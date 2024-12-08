@@ -24,6 +24,6 @@ public class StarInfoWebApplication {
         // Spring Boot 애플리케이션 실행
         SpringApplication.run(StarInfoWebApplication.class, args);
 
-        System.out.println("====================== 웹!123aasdfsdfsddd다시 배포 테스트 start!!asdfsadf !!!!=======================");
+        System.out.println("==================asdf==== 웹!1asdf23aasdfsdfsddd다시 배포 테asdf스트 start!!asdfsadf !!!!=======================");
     }
 }
