@@ -1,7 +1,5 @@
 // src/api/axiosInstance.js
 
-// src/api/axiosInstance.js
-
 import axios from "axios";
 
 let isRefreshing = false; // 토큰 갱신 중인지 확인
