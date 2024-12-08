@@ -16,9 +16,9 @@ logging:
   level:
     root: INFO
     com.teamname.astroneer.star_info_web: INFO
-    org.springframework.data.redis.connection: DEBUG # 임시
-    io.lettuce.core: DEBUG # 임시
-    org.springframework.core.env: DEBUG
+    org.springframework.data.redis.connection: WARN # 임시
+    io.lettuce.core: WARN # 임시
+    org.springframework.core.env: WARN
 management:
   endpoints:
     web:
