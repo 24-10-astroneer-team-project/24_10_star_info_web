@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: prod
     include: secret, DB
   application:
     name: star_info_web
