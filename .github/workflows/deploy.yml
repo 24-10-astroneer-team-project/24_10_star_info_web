@@ -60,7 +60,7 @@ jobs:
           REACT_APP_GOOGLE_MAPS_KEY: ${{ secrets.REACT_APP_GOOGLE_MAPS_KEY }}
           REACT_APP_WEATHER_API_KEY: ${{ secrets.REACT_APP_WEATHER_API_KEY }}
           REACT_APP_WEATHER_API_URL: ${{ secrets.REACT_APP_WEATHER_API_URL }}
-          REACT_APP_BACKEND_URL: ${{ REACT_APP_BACKEND_URL }}
+          REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
         run: |
           echo "REACT_APP_GOOGLE_MAPS_KEY=$REACT_APP_GOOGLE_MAPS_KEY" > starinfo-app/.env
           echo "REACT_APP_WEATHER_API_KEY=$REACT_APP_WEATHER_API_KEY" >> starinfo-app/.env
