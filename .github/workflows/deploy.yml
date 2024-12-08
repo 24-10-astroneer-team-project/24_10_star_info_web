@@ -87,6 +87,16 @@ jobs:
         run: |
           echo "$APPLICATION_SECRET" > src/main/resources/application-secret.yml 
           echo "$APPLICATION_DB" > src/main/resources/application-DB.yml
+      - name: 구글 캘린더 Json 주입
+        env:
+          ACTIONS_STEP_DEBUG: true
+          SERVICE_SECRET_JSON: ${{ secrets.SERVICE_SECRET_JSON }}
+        run: |
+          echo "$SERVICE_SECRET_JSON" > src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
+      - name: Check JSON file creation
+        run: |
+          ls -l src/main/resources/
+          cat src/main/resources/teamastroneerstarinfo-437713-78cb5a772263.json
       - name: 빌드 앤 푸시
         uses: docker/build-push-action@v3
         with:
