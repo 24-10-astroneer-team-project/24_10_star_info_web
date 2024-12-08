@@ -7,11 +7,6 @@ spring:
   lifecycle:
     # 스프링부트가 종료 요청을 받은 후 기다려줄 수 있는 시간
     timeout-per-shutdown-phase: 1h
-  data:
-    redis:
-      host: ${REDIS_HOST}
-      port: 6379
-      password: ${REDIS_PASSWORD:}
 logging:
   level:
     root: INFO
