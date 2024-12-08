@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -17,9 +17,8 @@ public class RedisConfig implements SmartLifecycle {
 
     private boolean isRunning = false;
 
-    private LettuceConnectionFactory lettuceConnectionFactory;
+    private JedisConnectionFactory jedisConnectionFactory;
 
-    // YML 설정값 주입
     @Value("${spring.data.redis.host}")
     private String redisHost;
 
@@ -31,18 +30,16 @@ public class RedisConfig implements SmartLifecycle {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        System.err.println("Initializing RedisConnectionFactory...");
+        System.err.println("Initializing RedisConnectionFactory with Jedis...");
 
         RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration();
         redisConfig.setHostName(redisHost);
         redisConfig.setPort(redisPort);
         redisConfig.setPassword(redisPassword);
-        System.err.println("Redis Host: " + redisHost);
-        System.err.println("Redis Port: " + redisPort);
-        System.err.println("Redis Password: " + redisPassword);
-        lettuceConnectionFactory = new LettuceConnectionFactory(redisConfig);
-        lettuceConnectionFactory.afterPropertiesSet(); // 초기화 확인
-        return lettuceConnectionFactory;
+
+        jedisConnectionFactory = new JedisConnectionFactory(redisConfig);
+        jedisConnectionFactory.afterPropertiesSet(); // 초기화 확인
+        return jedisConnectionFactory;
     }
 
     @Bean
@@ -59,15 +56,15 @@ public class RedisConfig implements SmartLifecycle {
     @Override
     public void start() {
         isRunning = true;
-        System.out.println("RedisConfig started.");
+        System.out.println("RedisConfig with Jedis started.");
     }
 
     @Override
     public void stop() {
         isRunning = false;
         System.out.println("Stopping Redis connections...");
-        if (lettuceConnectionFactory != null) {
-            lettuceConnectionFactory.destroy();
+        if (jedisConnectionFactory != null) {
+            jedisConnectionFactory.destroy();
         }
     }
 
@@ -83,10 +80,9 @@ public class RedisConfig implements SmartLifecycle {
 
     @PreDestroy
     public void closeRedisConnection() {
-        if (lettuceConnectionFactory != null) {
-            System.err.println("Closing RedisConnectionFactory...");
-            lettuceConnectionFactory.destroy();
+        if (jedisConnectionFactory != null) {
+            System.err.println("Closing JedisConnectionFactory...");
+            jedisConnectionFactory.destroy();
         }
     }
-
 }

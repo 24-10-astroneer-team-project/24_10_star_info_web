@@ -54,6 +54,7 @@ dependencies {
     //Redis 설정
     implementation ("org.springframework.boot:spring-boot-starter-data-redis")
     implementation ("org.springframework.boot:spring-boot-starter-actuator")
+    implementation ("redis.clients:jedis:4.4.0")
 
     // spring Retry
     implementation ("org.springframework.retry:spring-retry:1.3.4")
