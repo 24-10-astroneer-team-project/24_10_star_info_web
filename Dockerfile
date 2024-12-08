@@ -24,6 +24,9 @@ COPY . .
 # React 빌드 결과물 복사
 COPY --from=react-build /app/starinfo-app/build /app/src/main/resources/static
 
+# dev 설정 파일 제거
+RUN rm -f src/main/resources/application-dev.yml
+
 # Gradle 빌드 수행 (React 빌드 태스크 제외)
 RUN ./gradlew build -x installReact -x buildReact --no-daemon --info --stacktrace
 
