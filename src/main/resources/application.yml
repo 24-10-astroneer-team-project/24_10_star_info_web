@@ -1,4 +1,5 @@
 spring:
+  forward-headers-strategy: native
   profiles:
     active: prod
     include: secret, DB
@@ -40,5 +41,5 @@ custom:
   dev:
     cookieDomain: localhost
   prod:
-    cookieDomain: www.astro.qyef.site/
+    cookieDomain: www.astro.qyef.site
     url: "https://${custom.prod.cookieDomain}"
