@@ -1,10 +1,12 @@
 package com.teamname.astroneer.star_info_web.config.redis;
 
 import jakarta.annotation.PreDestroy;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
@@ -17,10 +19,27 @@ public class RedisConfig implements SmartLifecycle {
 
     private LettuceConnectionFactory lettuceConnectionFactory;
 
+    // YML 설정값 주입
+    @Value("${spring.data.redis.host}")
+    private String redisHost;
+
+    @Value("${spring.data.redis.port}")
+    private int redisPort;
+
+    @Value("${spring.data.redis.password}")
+    private String redisPassword;
+
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         System.err.println("Initializing RedisConnectionFactory...");
-        lettuceConnectionFactory = new LettuceConnectionFactory();
+
+        // 기존 동작을 보존하면서 설정값 반영
+        RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration();
+        redisConfig.setHostName(redisHost);
+        redisConfig.setPort(redisPort);
+        redisConfig.setPassword(redisPassword);
+
+        lettuceConnectionFactory = new LettuceConnectionFactory(redisConfig);
         return lettuceConnectionFactory;
     }
 
@@ -28,6 +47,8 @@ public class RedisConfig implements SmartLifecycle {
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
+
+        // Serializer 설정
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         return template;
