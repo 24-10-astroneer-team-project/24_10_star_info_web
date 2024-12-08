@@ -86,7 +86,7 @@ jobs:
           APPLICATION_DB: ${{ secrets.APPLICATION_DB_YML }}
         run: |
           echo "$APPLICATION_SECRET" > src/main/resources/application-secret.yml 
-          echo "$APPLICATION_DB" >> src/main/resources/application-DB.yml
+          echo "$APPLICATION_DB" > src/main/resources/application-DB.yml
       - name: 빌드 앤 푸시
         uses: docker/build-push-action@v3
         with:
