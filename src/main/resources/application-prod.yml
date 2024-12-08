@@ -1,10 +1,29 @@
 server:
   port: 8080
+  shutdown: graceful
+spring:
+  autoconfigure:
+    exclude:
+  lifecycle:
+    # 스프링부트가 종료 요청을 받은 후 기다려줄 수 있는 시간
+    timeout-per-shutdown-phase: 1h
+  data:
+    redis:
+      host: 172.17.0.1
+      port: 6379
+      password: ${custom.secret.spring.data.redis.password}
 logging:
   level:
-    root: WARN
+    root: INFO
+    com.teamname.astroneer.star_info_web: INFO
+    org.springframework.data.redis.connection: DEBUG # 임시
+    io.lettuce.core: DEBUG # 임시
+    org.springframework.core.env: DEBUG
 management:
   endpoints:
     web:
       exposure:
         include: health
+custom:
+  site:
+    cookieDomain: ${custom.prod.cookieDomain}
