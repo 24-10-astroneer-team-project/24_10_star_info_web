@@ -4,6 +4,8 @@ spring:
     include: secret, DB
   application:
     name: star_info_web
+#    base-url: "http://localhost:8080"
+    base-url: "https://www.astro.qyef.site"
   jpa:
     hibernate:
       ddl-auto: update
