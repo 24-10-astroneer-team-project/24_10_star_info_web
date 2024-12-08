@@ -24,6 +24,6 @@ public class StarInfoWebApplication {
         // Spring Boot 애플리케이션 실행
         SpringApplication.run(StarInfoWebApplication.class, args);
 
-        System.out.println("================ㅁㄴㅇㄹ==asdf=asdfasdfstart!!asdfsadf !!!!=======================");
+        System.out.println("================ㅁㄴㅇㄹ==asdf=asdfㅁㄴㅇㄹasdfstart!!asㅁㄴㅇㄹdfsadf !!!!=======================");
     }
 }
