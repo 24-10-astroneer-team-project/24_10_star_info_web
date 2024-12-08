@@ -73,6 +73,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()  // FORWARD 요청은 인증 없이 허용
+                                .requestMatchers("/actuator/health").permitAll() // 서버 검증 확인.
                                 .requestMatchers("/", "/react/**", "/static/**", "/react/login", "/react/main").permitAll()  // React 경로 추가
                                 .requestMatchers("/login").anonymous() // 로그인되지 않은 사용자만 접근 가능
                                 .requestMatchers("/locations", "/locations/**", "/api/auth/refresh").permitAll()
