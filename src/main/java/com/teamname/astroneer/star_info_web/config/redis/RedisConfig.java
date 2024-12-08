@@ -33,13 +33,15 @@ public class RedisConfig implements SmartLifecycle {
     public RedisConnectionFactory redisConnectionFactory() {
         System.err.println("Initializing RedisConnectionFactory...");
 
-        // 기존 동작을 보존하면서 설정값 반영
         RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration();
         redisConfig.setHostName(redisHost);
         redisConfig.setPort(redisPort);
         redisConfig.setPassword(redisPassword);
-
+        System.err.println("Redis Host: " + redisHost);
+        System.err.println("Redis Port: " + redisPort);
+        System.err.println("Redis Password: " + redisPassword);
         lettuceConnectionFactory = new LettuceConnectionFactory(redisConfig);
+        lettuceConnectionFactory.afterPropertiesSet(); // 초기화 확인
         return lettuceConnectionFactory;
     }
 
@@ -86,4 +88,5 @@ public class RedisConfig implements SmartLifecycle {
             lettuceConnectionFactory.destroy();
         }
     }
+
 }
