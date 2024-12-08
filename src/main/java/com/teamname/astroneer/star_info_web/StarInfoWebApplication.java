@@ -12,11 +12,11 @@ public class StarInfoWebApplication {
         Dotenv dotenv = Dotenv.configure().ignoreIfMalformed().ignoreIfMissing().load();
 
         // .env 파일에서 환경 변수 설정
-//        System.setProperty("GOOGLE_CLIENT_ID", dotenv.get("GOOGLE_CLIENT_ID"));
-//        System.setProperty("GOOGLE_CLIENT_SECRET", dotenv.get("GOOGLE_CLIENT_SECRET"));
-//        System.setProperty("REDIS_HOST", dotenv.get("REDIS_HOST"));
-//        System.setProperty("REDIS_PORT", dotenv.get("REDIS_PORT"));
-//        System.setProperty("JWT_SECRET", dotenv.get("JWT_SECRET"));
+        System.setProperty("GOOGLE_CLIENT_ID", dotenv.get("GOOGLE_CLIENT_ID"));
+        System.setProperty("GOOGLE_CLIENT_SECRET", dotenv.get("GOOGLE_CLIENT_SECRET"));
+        System.setProperty("REDIS_HOST", dotenv.get("REDIS_HOST"));
+        System.setProperty("REDIS_PORT", dotenv.get("REDIS_PORT"));
+        System.setProperty("JWT_SECRET", dotenv.get("JWT_SECRET"));
 
         System.out.println(Dotenv.configure().ignoreIfMissing().load());
 //        System.out.println(System.getProperty("JWT_SECRET"));
