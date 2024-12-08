@@ -45,7 +45,6 @@
     position: relative;
     box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
     border-radius: 10px; /* 부드러운 모서리 */
-    overflow: hidden; /* 이미지 크기를 컨테이너에 맞춤 */
 }
 
 /* Intro 이미지 */

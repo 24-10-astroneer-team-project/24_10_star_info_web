@@ -12,27 +12,26 @@ function Foot() {
             <div className="sb_footer section_padding">
                 <div className="sb_footer-links">
                     <div className="sb_footer-links-div">
-                        <h4>별자리소개</h4>
-                        <p><a href="./main">테스트 항목</a></p>
-                        <p><a href="./main">테스트 항목</a></p>
-                    </div>
-                    <div className="sb_footer-links-div">
-                        <h4>이용안내</h4>
-                        <p><a href="./main">테스트 항목</a></p>
-                        <p><a href="./main">테스트 항목</a></p>
-                    </div>
-                    <div className="sb_footer-links-div">
                         <h4>사이트소개</h4>
                         <p><a href="./main">테스트 항목</a></p>
+                    </div>
+                    <div className="sb_footer-links-div">
+                        <h4>StarMap</h4>
+                        <p><a href="./main">테스트 항목</a></p>
                         <p><a href="./main">테스트 항목</a></p>
                     </div>
                     <div className="sb_footer-links-div">
-                        <h4>천체정보</h4>
+                        <h4>PlanetPage</h4>
                         <p><a href="./main">테스트 항목</a></p>
                         <p><a href="./main">테스트 항목</a></p>
                     </div>
                     <div className="sb_footer-links-div">
-                        <h3>개발자 문의</h3>
+                        <h4>MeteorShower</h4>
+                        <p><a href="./main">테스트 항목</a></p>
+                        <p><a href="./main">테스트 항목</a></p>
+                    </div>
+                    <div className="sb_footer-links-div">
+                        <h3>Developer</h3>
                         <div className="sns">
                             <p><img src={git_60} alt=""/></p>
                             <p><img src={mail_60} alt=""/></p>

@@ -70,7 +70,7 @@ const HelpIcon = () => {
                 <div className="intro-overlay" onClick={handleCloseIntro}>
                     <div className="intro-container">
                         <button className="arrow prev" onClick={handlePrevImage}>
-                            &#8592; {/* 이전 화살표 */}
+                            {"<"}
                         </button>
                         <img
                             src={images[currentImageIndex]}
@@ -78,7 +78,7 @@ const HelpIcon = () => {
                             className="intro-image"
                         />
                         <button className="arrow next" onClick={handleNextImage}>
-                            &#8594; {/* 다음 화살표 */}
+                            {">"}
                         </button>
                     </div>
                 </div>
