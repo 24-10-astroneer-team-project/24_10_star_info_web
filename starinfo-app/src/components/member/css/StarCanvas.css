@@ -1,0 +1,11 @@
+/* StarCanvas.css */
+#space {
+    position: fixed; /* 스크롤에도 항상 고정 */
+    top: 0;
+    left: 0;
+    width: 100vw; /* 전체 화면 너비 */
+    height: 100vh; /* 전체 화면 높이 */
+    z-index: -1; /* 컨텐츠 뒤로 배치 */
+    background: #000000; /* 기본 배경색 */
+    pointer-events: none; /* 캔버스 클릭 방지 */
+}

@@ -36,34 +36,35 @@
 .intro {
     text-align: center; /* 텍스트 중앙 정렬 */
     margin-top: 100px; /* 상단 여백 */
-    color: #d1e7ff; /* 밝은 파란색 텍스트 */
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* 은은한 그림자 */
+    color: #f9d423; /* 따뜻하고 생동감 있는 색상 */
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.6), 0 0 20px #f9d423, 0 0 40px #f39c12; /* 입체감과 빛나는 효과 */
     font-family: 'Cinzel', serif; /* 고급스러운 글씨체 */
     z-index: 2; /* 캔버스 위로 표시 */
     position: relative; /* 다른 요소와의 독립적 위치 설정 */
 }
 
 .intro h1 {
-    font-size: 2.5em; /* 제목 크기 */
+    font-size: 3em; /* 제목 크기 확대 */
     font-weight: bold; /* 굵게 설정 */
     margin-bottom: 10px; /* 제목과 설명 간격 */
-    animation: fadeIn 1.5s ease-in-out; /* 부드러운 등장 애니메이션 */
+    animation: textGlow 1.5s ease-in-out infinite alternate; /* 부드러운 글자 빛 애니메이션 */
+    color: #f39c12; /* 제목 색상 조정 */
 }
 
 .intro p {
-    font-size: 1.2em; /* 설명 텍스트 크기 */
-    line-height: 1.6; /* 줄 간격 */
+    font-size: 1.4em; /* 설명 텍스트 크기 확대 */
+    line-height: 1.8; /* 줄 간격 */
+    color: #ffffff; /* 밝은 텍스트 */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); /* 은은한 그림자 */
     animation: fadeIn 2s ease-in-out; /* 부드러운 등장 애니메이션 */
 }
 
-/* 텍스트 등장 애니메이션 */
-@keyframes fadeIn {
+/* 텍스트 빛 애니메이션 */
+@keyframes textGlow {
     0% {
-        opacity: 0;
-        transform: translateY(20px);
+        text-shadow: 0 0 10px #f39c12, 0 0 20px #e74c3c, 0 0 30px #f1c40f, 0 0 40px #f39c12;
     }
     100% {
-        opacity: 1;
-        transform: translateY(0);
+        text-shadow: 0 0 20px #f39c12, 0 0 30px #e67e22, 0 0 40px #f1c40f, 0 0 50px #f39c12;
     }
 }

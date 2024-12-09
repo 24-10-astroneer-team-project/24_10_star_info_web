@@ -261,7 +261,7 @@ const MeteorShowerPage = () => {
                 <div className="intro">
                     <h1>The Spectacle of the Night Sky: Meteor Showers</h1>
                     <p>
-                        Experience the enchanting celestial display created by the remnants of comets, painting the night sky with streaks of light.
+                        Each streak of light represents a unique meteor shower, a celestial display created by the remnants of comets. Hover over a meteor to uncover its story and details.
                     </p>
                 </div>
                 {dataLoading ? (

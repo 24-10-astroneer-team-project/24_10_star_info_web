@@ -6,23 +6,25 @@ function PopupProfile() {
     const numStars = 1900;
     const stars = useRef([]);
     const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
+    const [animationClass, setAnimationClass] = useState('');
+    const intervalRef = useRef(null); // 타이머 관리
 
     const profiles = [
         {
             id: 1,
             name: '한영신',
-            intro: '테스트 유저 1의 소개입니다.',
+            intro: '팀장 한영신입니다.',
             blog: 'https://velog.io/@tablo2525/posts',
             github: 'https://github.com/qBlackBirdp',
-            photo: './photos/test1.png',
+            photo: './photos/한영신.jpg',
         },
         {
             id: 2,
             name: '최은서',
-            intro: '테스트 유저 2의 소개입니다.',
+            intro: '최은서입니다',
             blog: 'https://velog.io/@lkh001030/posts',
             github: 'https://github.com/eunseo1030',
-            photo: './photos/test2.png',
+            photo: './photos/최은서.jpg',
         },
         {
             id: 3,
@@ -111,14 +113,32 @@ function PopupProfile() {
         };
     }, []);
 
+    useEffect(() => {
+        // 자동 프로필 전환 타이머 설정
+        intervalRef.current = setInterval(() => {
+            handleNextProfile();
+        }, 6000);
+
+        // 컴포넌트 언마운트 시 타이머 제거
+        return () => clearInterval(intervalRef.current);
+    }, [currentProfileIndex]);
+
     const handleNextProfile = () => {
-        setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
+        setAnimationClass(styles.slideOutLeft);
+        setTimeout(() => {
+            setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
+            setAnimationClass(styles.slideInRight);
+        }, 500);
     };
 
     const handlePreviousProfile = () => {
-        setCurrentProfileIndex((prevIndex) =>
-            prevIndex === 0 ? profiles.length - 1 : prevIndex - 1
-        );
+        setAnimationClass(styles.slideOutRight);
+        setTimeout(() => {
+            setCurrentProfileIndex((prevIndex) =>
+                prevIndex === 0 ? profiles.length - 1 : prevIndex - 1
+            );
+            setAnimationClass(styles.slideInLeft);
+        }, 500);
     };
 
     const currentProfile = profiles[currentProfileIndex];
@@ -126,7 +146,7 @@ function PopupProfile() {
     return (
         <div className={styles.popupContainer}>
             <canvas ref={canvasRef} className={styles.spaceCanvas}></canvas>
-            <div className={styles.popup}>
+            <div className={`${styles.popup} ${animationClass}`}>
                 <div className={styles.profileImageContainer}>
                     <img
                         src={require(`${currentProfile.photo}`)}

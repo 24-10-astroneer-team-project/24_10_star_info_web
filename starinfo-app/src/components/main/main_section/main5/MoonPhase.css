@@ -12,32 +12,32 @@
 .moonPhaseTitle {
     font-size: 60px;
     margin-top: 60px;
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(180, 180, 180, 0.9)); /* 은은한 그라데이션 추가 */
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(220, 220, 220, 1)); /* 더 밝고 부드러운 그라데이션 */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 /* 버튼과 입력 필드의 통일된 스타일 */
 .sharedStyle {
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    background: linear-gradient(145deg, rgba(30, 30, 30, 0.9), rgba(60, 60, 60, 0.9)); /* 기존보다 더 부드러운 그라데이션 */
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    background: linear-gradient(145deg, rgba(50, 50, 50, 0.9), rgba(100, 100, 100, 0.9)); /* 더 밝고 부드러운 그라데이션 */
     color: #ffffff;
     font-size: 16px;
     font-family: "Poppins", sans-serif;
     border-radius: 8px; /* 버튼을 약간 둥글게 */
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5), 0px 0px 10px rgba(255, 255, 255, 0.2);
+    box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.3), 0px 0px 20px rgba(200, 200, 200, 0.5);
 }
 
 /* 버튼 스타일 */
 .searchBtn {
-    padding: 12px 24px;
+    padding: 14px 28px; /* 버튼 크기를 확대 */
     position: absolute;
     top: 24%;
     left: 5%;
     z-index: 1000;
-    background: linear-gradient(90deg, rgba(50, 50, 50, 1), rgba(120, 120, 120, 1)); /* 버튼 그라데이션 */
+    background: linear-gradient(90deg, rgba(100, 100, 100, 1), rgba(200, 200, 200, 1)); /* 더 밝은 버튼 그라데이션 */
     border: none;
     animation: glow 2s infinite;
 }
@@ -45,25 +45,27 @@
 /* 버튼에 은은한 빛나는 효과 추가 */
 @keyframes glow {
     0% {
-        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1), 0px 0px 5px rgba(255, 255, 255, 0.2);
+        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2), 0px 0px 5px rgba(255, 255, 255, 0.4);
     }
     50% {
-        box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.4), 0px 0px 10px rgba(255, 255, 255, 0.6);
+        box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.5), 0px 0px 10px rgba(255, 255, 255, 0.8);
     }
     100% {
-        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1), 0px 0px 5px rgba(255, 255, 255, 0.2);
+        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2), 0px 0px 5px rgba(255, 255, 255, 0.4);
     }
 }
 
 .searchBtn:hover,
 .executeBtn:hover {
-    background: linear-gradient(90deg, rgba(80, 80, 80, 1), rgba(150, 150, 150, 1)); /* 호버 시 더욱 밝은 그라데이션 */
+    background: linear-gradient(90deg, rgba(180, 180, 180, 1), rgba(240, 240, 240, 1)); /* 호버 시 더욱 밝은 그라데이션 */
     transform: scale(1.05);
+    box-shadow: 0px 15px 30px rgba(255, 255, 255, 0.5), 0px 0px 25px rgba(200, 200, 200, 0.7); /* 강조된 그림자 */
 }
 
 .searchBtn:active,
 .executeBtn:active {
     transform: scale(0.95);
+    background: linear-gradient(90deg, rgba(120, 120, 120, 1), rgba(200, 200, 200, 1)); /* 클릭 시 약간 어두운 그라데이션 */
 }
 
 /* 입력 필드 스타일 */
@@ -78,35 +80,35 @@
 }
 
 .moonPhaseInput {
-    padding: 12px 20px; /* 입력창을 더 크고 네모나게 */
-    width: 80px; /* 입력창 너비 확장 */
+    padding: 14px 24px; /* 입력 필드 크기 확대 */
+    width: 100px; /* 너비 확대 */
     text-align: center;
-    font-size: 16px;
+    font-size: 18px; /* 글씨 크기 확대 */
     font-family: "Poppins", sans-serif;
     font-style: italic;
-    background: linear-gradient(145deg, rgba(40, 40, 40, 1), rgba(60, 60, 60, 1)); /* 입력 필드 그라데이션 */
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5), 0px 0px 10px rgba(255, 255, 255, 0.2);
-    border-radius: 8px; /* 네모난 모양 유지 */
+    background: linear-gradient(145deg, rgba(80, 80, 80, 1), rgba(150, 150, 150, 1)); /* 더 밝은 배경 그라데이션 */
+    border: 2px solid rgba(255, 255, 255, 0.6); /* 더 밝은 테두리 */
+    box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.3), 0px 0px 20px rgba(200, 200, 200, 0.5);
+    border-radius: 8px;
     color: white;
 }
 
 .moonPhaseInput:focus {
     outline: none;
-    border-color: rgba(255, 255, 255, 0.6);
-    box-shadow: 0px 10px 20px rgba(255, 255, 255, 0.4), 0px 0px 15px rgba(255, 255, 255, 0.5);
-    transform: scale(1.05);
+    border-color: rgba(255, 255, 255, 0.8); /* 포커스 시 테두리 더 밝게 */
+    box-shadow: 0px 15px 30px rgba(255, 255, 255, 0.6), 0px 0px 25px rgba(200, 200, 200, 0.7); /* 강조된 그림자 */
+    transform: scale(1.1); /* 살짝 확대 */
 }
 
 .moonPhaseInput::placeholder {
-    color: rgba(200, 200, 200, 0.7);
+    color: rgba(240, 240, 240, 0.8); /* 더 밝은 플레이스홀더 */
 }
 
 /* 검색 버튼 */
 .executeBtn {
-    padding: 12px 20px; /* 버튼을 더 크고 네모나게 */
+    padding: 14px 28px; /* 버튼을 더 크고 네모나게 */
     margin-left: 10px;
-    background: linear-gradient(145deg, rgba(60, 60, 60, 1), rgba(90, 90, 90, 1)); /* 검색 버튼 배경 그라데이션 */
+    background: linear-gradient(145deg, rgba(100, 100, 100, 1), rgba(180, 180, 180, 1)); /* 검색 버튼 배경 그라데이션 */
     border: none;
     animation: glow 2s infinite;
 }
@@ -132,7 +134,7 @@
     font-size: 60px;
     color: #f5f5f5;
     font-family: "Poppins", sans-serif; /* 글씨체 통일 */
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(200, 200, 200, 0.8)); /* Phase 텍스트 그라데이션 추가 */
+    background: linear-gradient(145deg, rgba(255, 255, 255, 1), rgba(220, 220, 220, 1)); /* Phase 텍스트 그라데이션 추가 */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }

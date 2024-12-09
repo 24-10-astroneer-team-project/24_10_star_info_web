@@ -6,7 +6,7 @@ import styleThird from './main_section/main3/ThirdSection.css';
 import SolarSystem_main from "./main_section/main3/SolarSystem_main";
 import WaveCanvas from "./main_section/main4/WaveCanvas";
 import MoonPhase from "./main_section/main5/MoonPhase";
-import RotatingPolygonSection from "./main_section/main6/Constellation";
+import ConstellationMap from "./main_section/main6-test/ConstellationMap"; // ConstellationMap 연결
 import IntroductionPage from "./main_section/main7/IntroductionPage"; // Main7 컴포넌트 추가
 import Head from "../layout/Head";
 import Foot from "../layout/Foot";
@@ -118,7 +118,7 @@ function MainPage() {
 
                     {/* 여섯 번째 섹션 */}
                     <div ref={(el) => (sections.current[5] = el)} style={{ height: '100vh' }}>
-                        <RotatingPolygonSection />
+                        <ConstellationMap />
                     </div>
 
                     {/* 일곱 번째 섹션 */}
