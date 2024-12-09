@@ -1,16 +1,21 @@
 // PlanetPage.jsx
 
 import React, {useEffect, useState} from 'react';
+import anime from 'animejs/lib/anime.es.js';
 import SolarSystem from './SolarSystem';
-
+import Head from "../layout/Head";
+import Foot from "../layout/Foot";
+import PlanetLocationButton from './PlanetLocationButton';
 import {useAuth} from '../../services/AuthProvider'; // 인증 훅
 import useUserLocation from '../../hooks/useUserLocation'; // 위치 정보 훅
 import useSaveLocation from "../../hooks/useSaveLocation";
 import useFetchPlanets from "../../hooks/planets/useFetchPlanets";
 
 import LoadingSpinner from '../ui/LoadingSpinner';
+import {useLocation, useNavigate} from 'react-router-dom'; // useLocation 추가
+import {PlanetPopup, planets} from './PlanetPopup';
+// Popup 컴포넌트와 행성 데이터 임포트
 import './css/PlanetPage.css';
-import PlanetLocationButton from "./PlanetLocationButton";
 
 const PlanetPage = () => {
     const {location, isLoading} = useUserLocation(); // 위치 정보
@@ -22,8 +27,36 @@ const PlanetPage = () => {
     const [solarSystemClass, setSolarSystemClass] = useState("earth");
     const [isDataOpen, setIsDataOpen] = useState(false);
     const [isManuallyOpened, setIsManuallyOpened] = useState(false); // 수동으로 열렸는지 여부
+    const [previousPlanet, setPreviousPlanet] = useState(null);
+    const [isPlanetPopupOpen, setPlanetPopupOpen] = useState(false);
     const [scaleFactor, setScaleFactor] = useState(1);
+
+    const navigate = useNavigate();
+    const locationSearch = useLocation(); // URL 파라미터를 가져오기 위해 useLocation 사용
+
     console.log("PlanetPage - Current location:", location);
+
+
+    const today = new Date().toISOString().split("T")[0];
+    const rangeDays = "1";
+
+    // URL에서 선택된 행성을 읽어 팝업 자동 열기
+    useEffect(() => {
+        const queryParams = new URLSearchParams(locationSearch.search);
+        const selectedPlanetName = queryParams.get('selectedPlanet'); // URL에서 selectedPlanet 파라미터 읽기
+
+        if (selectedPlanetName) {
+            const planet = planets.find(
+                (p) => p.name.toLowerCase() === selectedPlanetName.toLowerCase()
+            );
+
+            if (planet) {
+                setSolarSystemClass(selectedPlanetName.toLowerCase());
+                setPreviousPlanet(selectedPlanetName.toLowerCase());
+                setPlanetPopupOpen(true);
+            }
+        }
+    }, [locationSearch.search]);
 
     // 위치 저장 로직
     useEffect(() => {
@@ -50,7 +83,14 @@ const PlanetPage = () => {
                 if (isManuallyOpened) {
                     setIsDataOpen(window.innerWidth >= 1000);
                 }
-                ;
+
+                anime({
+                    targets: '#solar-system .planet',
+                    translateX: (el) => el.dataset.x,
+                    translateY: (el) => el.dataset.y,
+                    easing: 'easeInOutQuad',
+                    duration: 2000,
+                });
             }, 2000);
         };
 
@@ -74,27 +114,122 @@ const PlanetPage = () => {
         };
     }, []);
 
+    const handleToggleData = (e) => {
+        e.preventDefault();
+        setIsManuallyOpened((prev) => !prev);
+        setIsDataOpen((prev) => !prev);
+    };
+
+    const handlePlanetClick = (planetClass) => {
+        if (previousPlanet && previousPlanet === planetClass) return;
+
+        if (previousPlanet) {
+            anime({
+                targets: `#solar-system .planet[data-planet="${previousPlanet}"]`,
+                scale: [1.3, 1],
+                duration: 1000,
+                easing: 'easeInOutQuad',
+            });
+        }
+
+        anime({
+            targets: `#solar-system .planet[data-planet="${planetClass}"]`,
+            scale: [1, 1.3],
+            duration: 1000,
+            easing: 'easeInOutQuad',
+            complete: () => {
+                setTimeout(() => openPlanetPopup(planetClass), 500);
+            }
+        });
+
+        setPreviousPlanet(planetClass);
+        setSolarSystemClass(planetClass);
+    };
+
+    const openPlanetPopup = (planetClass) => {
+        setPlanetPopupOpen(true);
+        setTimeout(() => {
+            anime({
+                targets: '.planet-popup',
+                scale: [0.5, 1],
+                opacity: [0, 1],
+                duration: 300,
+                easing: 'easeOutBack',
+            });
+        }, 0);
+    };
+
+    const closePlanetPopup = () => {
+        if (previousPlanet) {
+            anime({
+                targets: `#solar-system .planet[data-planet="${previousPlanet}"]`,
+                scale: [1.3, 1],
+                duration: 1000,
+                easing: 'easeInOutQuad',
+                complete: () => setPreviousPlanet(null),
+            });
+        }
+        setPlanetPopupOpen(false);
+    };
+
     if (isLoading || dataLoading) {
         console.log("Loading state active. Waiting for data...");
         return <LoadingSpinner/>;
     }
 
+    const selectedPlanet = planets.find(
+        (planet) => planet.name.toLowerCase() === solarSystemClass.toLowerCase()
+    );
+
     return (
         <>
-            <div id="planet-page">
+            <div className="header">
+                <Head/>
+            </div>
+            <div id="planet-page" className={`planet-container ${bodyClass}`}>
                 <div id="navbar">
-                    <a id="toggle-data" href="#data">
+                    <a id="toggle-data" href="#data" onClick={handleToggleData}>
                         Data
                     </a>
                 </div>
 
+                {isDataOpen && (
+                    <div id="data">
+                        {planets.map((planet) => (
+                            <a
+                                key={planet.id}
+                                className={`${planet.name.toLowerCase()} ${
+                                    solarSystemClass === planet.name.toLowerCase()
+                                        ? 'active'
+                                        : ''
+                                }`}
+                                onClick={() => handlePlanetClick(planet.name.toLowerCase())}
+                                href={`#${planet.name.toLowerCase()}speed`}
+                            >
+                                {planet.name}
+                            </a>
+                        ))}
+                    </div>
+                )}
+
                 <div id="universe" className="scale-stretched">
-                    <div id="galaxy">
+                    <div id="galaxy" style={{transform: `scale(${scaleFactor})`}}>
                         <SolarSystem
                             solarSystemClass={solarSystemClass}
+                            handlePlanetClick={handlePlanetClick}
                         />
                     </div>
                 </div>
+
+                <PlanetPopup
+                    selectedPlanet={selectedPlanet}
+                    isPlanetPopupOpen={isPlanetPopupOpen}
+                    closePlanetPopup={closePlanetPopup}
+                />
+            </div>
+
+            <div className="footer">
+                <Foot/>
             </div>
             <PlanetLocationButton
                 planetData={planetData}
