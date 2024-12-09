@@ -48,7 +48,7 @@ function Head() {
                     <li><a href="/react/starmap">별자리</a></li>
                     <li><a href="/react/planet">행성</a></li>
                     <li><a href="/react/meteor">유성우</a></li>
-                    <li><a href="/react/map">위치 입력(임시)</a></li>
+                    <li><a href="/react/map">위치 입력</a></li>
                     {/* 로그인 상태에 따라 다른 링크 또는 메뉴 표시 */}
                     {isAuthenticated ? (
                         <>

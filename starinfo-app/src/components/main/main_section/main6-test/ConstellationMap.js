@@ -289,7 +289,6 @@ const ConstellationMap = () => {
 
         return () => {
             window.removeEventListener("resize", setCanvasSize);
-
         };
 
     }, []);
