@@ -155,7 +155,8 @@
     .navbar {
         gap: 15px;
     }
-    .navbar li a {
+    .navbar li a,
+    .navbar li .menu-item {
         font-size: 16px;
     }
 }
@@ -170,7 +171,9 @@
     .navbar {
         gap: 10px;
     }
-    .navbar li a {
+    .navbar li a,
+    .navbar li .menu-item {
         font-size: 14px;
     }
 }
+

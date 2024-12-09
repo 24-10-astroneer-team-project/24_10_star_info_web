@@ -46,11 +46,11 @@ function Head() {
                 onMouseLeave={handleMouseLeave}
             >
                 <ul className="navbar">
-                    <li><a href="./main">일정관리</a></li>
+                    <li><a href="./publicCalendar">일정관리</a></li>
                     <li><a href="./starmap">별보기</a></li>
                     <li><a href="./planet">행성</a></li>
                     <li><a href="./meteor">유성우</a></li>
-                    <li><a href="./map">위치 입력(임시)</a></li>
+                    <li><a href="./map">위치 입력</a></li>
                     {/* 로그인 상태에 따라 다른 링크 또는 메뉴 표시 */}
                     {isAuthenticated ? (
                         <>
