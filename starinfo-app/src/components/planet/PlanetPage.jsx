@@ -3,7 +3,7 @@ import anime from 'animejs/lib/anime.es.js';
 import SolarSystem from './SolarSystem';
 import Head from "../layout/Head";
 import Foot from "../layout/Foot";
-
+import PlanetLocationButton from './PlanetLocationButton';
 import { useAuth } from '../../services/AuthProvider'; // 인증 훅
 import useUserLocation from '../../hooks/useUserLocation'; // 위치 정보 훅
 import useSaveLocation from "../../hooks/useSaveLocation";
@@ -13,13 +13,13 @@ import LoadingSpinner from '../ui/LoadingSpinner';
 import { useNavigate, useLocation } from 'react-router-dom'; // useLocation 추가
 import { PlanetPopup, planets } from './PlanetPopup';
 // Popup 컴포넌트와 행성 데이터 임포트
-import './PlanetPage.css';
+import './css/PlanetPage.css';
 
 const PlanetPage = () => {
     const { location, isLoading } = useUserLocation(); // 위치 정보
     const { isAuthenticated, user } = useAuth(); // 인증 정보
     const { saveLocation, locationSaved } = useSaveLocation(); // 위치 저장 훅
-    const { planetData, dataLoading, fetchError } = useFetchPlanets(location, isLoading); // 행성 데이터 훅
+    const {planetData = {}, dataLoading, fetchError} = useFetchPlanets(location, isLoading);
 
     const [bodyClass, setBodyClass] = useState("opening hide-UI view-2D zoom-large data-close controls-close");
     const [solarSystemClass, setSolarSystemClass] = useState("earth");
@@ -229,6 +229,7 @@ const PlanetPage = () => {
             <div className="footer">
                 <Foot />
             </div>
+            <PlanetLocationButton planetData={planetData}/> {/* planetData 전달 */}
         </>
     );
 };

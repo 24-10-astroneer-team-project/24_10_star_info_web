@@ -1542,55 +1542,55 @@ dl.infos dd span:after {
 .planet-container {
     width: 100%;
     height: 100vh;
-    background-image: url('planet-img/planet-bc-img.png');
+    background-image: url('../planet-img/planet-bc-img.png');
     background-size: auto;
     background-position: center;
     background-repeat: repeat;
 }
 
 #universe {
-    background-image: url('planet-img/universe-img.png');
+    background-image: url('../planet-img/universe-img.png');
 }
 
 #sun {
-    background-image: url('planet-img/sun.png');
+    background-image: url('../planet-img/sun.png');
 }
 
 #mercury .planet {
-    background-image: url('planet-img/mercury.png');
+    background-image: url('../planet-img/mercury.png');
 }
 
 #venus .planet {
-    background-image: url('planet-img/venus.png');
+    background-image: url('../planet-img/venus.png');
 }
 
 #earth .planet {
-    background-image: url('planet-img/earth.png');
+    background-image: url('../planet-img/earth.png');
 }
 
 #earth .moon {
-    background-image: url('planet-img/moon.png');
+    background-image: url('../planet-img/moon.png');
 }
 
 #mars .planet {
-    background-image: url('planet-img/mars.png');
+    background-image: url('../planet-img/mars.png');
 }
 
 #jupiter .planet {
-    background-image: url('planet-img/jupiter.png');
+    background-image: url('../planet-img/jupiter.png');
 }
 
 #saturn .planet {
-    background-image: url('planet-img/saturn.png');
+    background-image: url('../planet-img/saturn.png');
 
 }
 
 #uranus .planet {
-    background-image: url('planet-img/uranus.png');
+    background-image: url('../planet-img/uranus.png');
 }
 
 #neptune .planet {
-    background-image: url('planet-img/neptune.png');
+    background-image: url('../planet-img/neptune.png');
 }
 
 /*!* --------------------------------------------------------------------------- 반응형 스타일 코드 *!*/
