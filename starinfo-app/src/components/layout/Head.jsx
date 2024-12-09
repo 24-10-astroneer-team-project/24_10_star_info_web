@@ -1,3 +1,5 @@
+// Head.jsx
+
 import React, { useState } from 'react';
 import { useAuth } from "../../services/AuthProvider"; // 로그인 상태 확인용
 import './Head.css';
