@@ -1,3 +1,5 @@
+// PlanetLocationPopup.jsx
+
 import React from 'react';
 import './css/PlanetLocationPopup.css';
 
@@ -5,8 +7,8 @@ const PlanetLocationPopup = ({ planetName, planetData, onClose }) => {
     if (!planetData) return null;
 
     return (
-        <div className="popup-overlay">
-            <div className="popup-container">
+        <div className="popup-overlay_planet">
+            <div className="popup-container_planet">
                 <button className="popup-close-button" onClick={onClose}>
                     ✕
                 </button>

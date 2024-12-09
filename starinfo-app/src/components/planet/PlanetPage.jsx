@@ -1,3 +1,5 @@
+// PlanetPage.jsx
+
 import React, {useEffect, useState} from 'react';
 import anime from 'animejs/lib/anime.es.js';
 import SolarSystem from './SolarSystem';

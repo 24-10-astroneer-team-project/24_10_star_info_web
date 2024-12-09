@@ -1,3 +1,5 @@
+// PlanetLocationButton.jsx
+
 import React, { useState } from 'react';
 import PlanetLocationPopup from './PlanetLocationPopup';
 import './css/PlanetLocationButton.css';
@@ -23,7 +25,9 @@ const PlanetLocationButton = ({ planetData, locationDescription }) => {
     return (
         <div>
             <div className="planet-popup-container">
+                <h4>사용자 설정 위치:</h4>
                 <h3>{locationDescription}</h3> {/* 위치 설명 표시 */}
+                <h4>해당 위치에서<br/>일주일 내에<br/>보이는 행성</h4>
                 <ul>
                     <li onClick={() => handlePlanetClick('Mercury')}>수성</li>
                     <li onClick={() => handlePlanetClick('Venus')}>금성</li>

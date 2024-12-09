@@ -1,9 +1,9 @@
-.popup-overlay {
+/* PlanetLocationPopup.css */
+
+.popup-overlay_planet {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
@@ -11,7 +11,7 @@
     z-index: 1000;
 }
 
-.popup-container {
+.popup-container_planet {
     background: white;
     padding: 20px;
     border-radius: 8px;
@@ -32,18 +32,18 @@
     cursor: pointer;
 }
 
-.popup-container h2 {
+.popup-container_planet h2 {
     margin-top: 0;
     font-size: 20px;
     text-align: center;
 }
 
-.popup-container ul {
+.popup-container_planet ul {
     list-style: none;
     padding: 0;
 }
 
-.popup-container li {
+.popup-container_planet li {
     margin-bottom: 10px;
     font-size: 14px;
     line-height: 1.5;
