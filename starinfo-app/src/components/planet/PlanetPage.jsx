@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import anime from 'animejs/lib/anime.es.js';
 import SolarSystem from './SolarSystem';
 import Head from "../layout/Head";
 import Foot from "../layout/Foot";
 import PlanetLocationButton from './PlanetLocationButton';
-import { useAuth } from '../../services/AuthProvider'; // 인증 훅
+import {useAuth} from '../../services/AuthProvider'; // 인증 훅
 import useUserLocation from '../../hooks/useUserLocation'; // 위치 정보 훅
 import useSaveLocation from "../../hooks/useSaveLocation";
 import useFetchPlanets from "../../hooks/planets/useFetchPlanets";
 
 import LoadingSpinner from '../ui/LoadingSpinner';
-import { useNavigate, useLocation } from 'react-router-dom'; // useLocation 추가
-import { PlanetPopup, planets } from './PlanetPopup';
+import {useLocation, useNavigate} from 'react-router-dom'; // useLocation 추가
+import {PlanetPopup, planets} from './PlanetPopup';
 // Popup 컴포넌트와 행성 데이터 임포트
 import './css/PlanetPage.css';
 
 const PlanetPage = () => {
-    const { location, isLoading } = useUserLocation(); // 위치 정보
-    const { isAuthenticated, user } = useAuth(); // 인증 정보
-    const { saveLocation, locationSaved } = useSaveLocation(); // 위치 저장 훅
+    const {location, isLoading} = useUserLocation(); // 위치 정보
+    const {isAuthenticated, user} = useAuth(); // 인증 정보
+    const {saveLocation, locationSaved} = useSaveLocation(); // 위치 저장 훅
     const {planetData = {}, dataLoading, fetchError} = useFetchPlanets(location, isLoading);
 
     const [bodyClass, setBodyClass] = useState("opening hide-UI view-2D zoom-large data-close controls-close");
@@ -172,7 +172,7 @@ const PlanetPage = () => {
 
     if (isLoading || dataLoading) {
         console.log("Loading state active. Waiting for data...");
-        return <LoadingSpinner />;
+        return <LoadingSpinner/>;
     }
 
     const selectedPlanet = planets.find(
@@ -182,7 +182,7 @@ const PlanetPage = () => {
     return (
         <>
             <div className="header">
-                <Head />
+                <Head/>
             </div>
             <div id="planet-page" className={`planet-container ${bodyClass}`}>
                 <div id="navbar">
@@ -211,7 +211,7 @@ const PlanetPage = () => {
                 )}
 
                 <div id="universe" className="scale-stretched">
-                    <div id="galaxy" style={{ transform: `scale(${scaleFactor})` }}>
+                    <div id="galaxy" style={{transform: `scale(${scaleFactor})`}}>
                         <SolarSystem
                             solarSystemClass={solarSystemClass}
                             handlePlanetClick={handlePlanetClick}
@@ -227,9 +227,12 @@ const PlanetPage = () => {
             </div>
 
             <div className="footer">
-                <Foot />
+                <Foot/>
             </div>
-            <PlanetLocationButton planetData={planetData}/> {/* planetData 전달 */}
+            <PlanetLocationButton
+                planetData={planetData}
+                locationDescription={location?.description || '정보 없음'}
+            /> {/* planetData 전달 */}
         </>
     );
 };
