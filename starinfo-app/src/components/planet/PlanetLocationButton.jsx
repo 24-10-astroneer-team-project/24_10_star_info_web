@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PlanetLocationPopup from './PlanetLocationPopup';
 import './css/PlanetLocationButton.css';
 import closeIcon from '../layout/asset/close_icon.png'; // 닫기 아이콘 경로
-import starIcon from '../layout/asset/test.png'; // 최소화 팝업창 아이콘 경로
+import planetIcon from '../layout/asset/test.png'; // 최소화 팝업창 아이콘 경로
 
 const PlanetLocationButton = ({ planetData, locationDescription }) => {
     const [selectedPlanet, setSelectedPlanet] = useState(null);
@@ -52,9 +52,9 @@ const PlanetLocationButton = ({ planetData, locationDescription }) => {
         return (
             <div className="planet-popup-container minimized" onClick={toggleMinimize}>
                 <img
-                    src={starIcon}
+                    src={planetIcon}
                     alt="스타 아이콘"
-                    className="star-icon"
+                    className="planet-icon"
                     title="클릭하면 팝업창의 최소화가 해제됩니다."
                 />
             </div>

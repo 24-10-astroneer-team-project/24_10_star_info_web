@@ -106,6 +106,7 @@
     animation-iteration-count: infinite;
     animation-timing-function: linear;
     position: absolute;
+    cursor: pointer;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%); /* 중앙에 고정 */
