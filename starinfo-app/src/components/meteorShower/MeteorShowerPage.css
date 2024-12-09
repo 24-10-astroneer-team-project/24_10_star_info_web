@@ -38,7 +38,7 @@
     margin-top: 100px; /* 상단 여백 */
     color: #f9d423; /* 따뜻하고 생동감 있는 색상 */
     text-shadow: 0 4px 6px rgba(0, 0, 0, 0.6), 0 0 20px #f9d423, 0 0 40px #f39c12; /* 입체감과 빛나는 효과 */
-    font-family: 'Cinzel', serif; /* 고급스러운 글씨체 */
+    font-family: 'Cinzel'; /* 고급스러운 글씨체 */
     z-index: 2; /* 캔버스 위로 표시 */
     position: relative; /* 다른 요소와의 독립적 위치 설정 */
 }

@@ -25,15 +25,16 @@ const MeteorShowerCardPage = ({ generalMeteorData, onShowDetails }) => {
         this.y = 0;
         this.len = Math.random() * 40 + 10;
         this.speed = Math.random() * 3 + 1; // 속도를 1에서 3 사이로 설정
-        this.size = Math.random() + 0.1;
+        this.size = Math.random() * 2 + 1; // 굵기를 더 두껍게 설정 (1에서 3 사이)
+
         this.color = color;
 
         this.reset = function () {
             this.x = Math.random() * width;
             this.y = 0;
             this.len = Math.random() * 40 + 10;
-            this.speed = Math.random() * 3 + 1; // 속도를 1에서 3 사이로 설정
-            this.size = Math.random() + 0.1;
+            this.speed = Math.random() * 3 + 1;
+            this.size = Math.random() * 2 + 1; // 재설정 시에도 굵기를 동일하게 조정
         };
 
         this.update = function () {
@@ -42,7 +43,7 @@ const MeteorShowerCardPage = ({ generalMeteorData, onShowDetails }) => {
             if (this.x < 0 || this.y >= height) {
                 this.reset();
             } else {
-                ctx.lineWidth = this.size;
+                ctx.lineWidth = this.size; // 굵기를 적용
                 ctx.strokeStyle = this.color;
                 ctx.beginPath();
                 ctx.moveTo(this.x, this.y);

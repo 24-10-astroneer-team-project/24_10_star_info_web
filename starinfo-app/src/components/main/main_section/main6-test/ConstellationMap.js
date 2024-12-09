@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import './test.css';
 import Main_Button from '../../../../components/layout/Main_Button'; // Main_Button 컴포넌트 임포트
+import Head from "../../../../components/layout/Head"; // Head 컴포넌트 import
 
 const ConstellationMap = () => {
     const canvasRef = useRef(null);
@@ -294,39 +295,42 @@ const ConstellationMap = () => {
     }, []);
 
     return (
-        <div
-            className="constellation-container"
-            style={{
-                position: "relative",
-                width: "100%",
-                height: "100vh",
-            }}
-        >
-            {/* 캔버스 */}
-            <canvas
-                ref={canvasRef}
+        <>
+            <Head />
+            <div
+                className="constellation-container"
                 style={{
+                    position: "relative",
                     width: "100%",
-                    height: "100%",
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    zIndex: 1,
+                    height: "100vh",
                 }}
-            />
-            {/* 메인 버튼 */}
-            <Main_Button
-                onClick={() => (window.location.href = "/react/starmap")}
-                label="별자리 정보 보러가기"
-                style={{
-                    position: "absolute",
-                    bottom: "20px",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    zIndex: 2, // 캔버스 위에 위치
-                }}
-            />
-        </div>
+            >
+                {/* 캔버스 */}
+                <canvas
+                    ref={canvasRef}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        zIndex: 1, // 캔버스는 배경으로 유지
+                    }}
+                />
+                {/* 메인 버튼 */}
+                <Main_Button
+                    onClick={() => (window.location.href = "/react/starmap")}
+                    label="별자리 정보 보러가기"
+                    style={{
+                        position: "absolute",
+                        bottom: "20px",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        zIndex: 2, // 헤더 위로 버튼 표시
+                    }}
+                />
+            </div>
+        </>
     );
 };
 
