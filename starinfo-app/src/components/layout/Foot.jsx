@@ -13,19 +13,19 @@ function Foot() {
                 <div className="sb_footer-links">
                     <div className="sb_footer-links-div">
                         <h4>SiteIntro</h4>
-                        <p><a href="./main"></a></p>
+                        <p><a href="/react/main"></a></p>
                     </div>
                     <div className="sb_footer-links-div">
                         <h4>StarMap</h4>
-                        <p><a href="./starmap">StarMapPage</a></p>
+                        <p><a href="/react/starmap">StarMapPage</a></p>
                     </div>
                     <div className="sb_footer-links-div">
                         <h4>Planet</h4>
-                        <p><a href="./planet">PlanetPage</a></p>
+                        <p><a href="/react/planet">PlanetPage</a></p>
                     </div>
                     <div className="sb_footer-links-div">
                         <h4>Meteor</h4>
-                        <p><a href="./meteor">MeteorShowerPage</a></p>
+                        <p><a href="/react/meteor">MeteorShowerPage</a></p>
                     </div>
                     <div className="sb_footer-links-div">
                         <h3>Developer</h3>

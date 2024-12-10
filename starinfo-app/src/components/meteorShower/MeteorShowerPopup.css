@@ -105,8 +105,13 @@
 }
 
 .loading-text {
+    position: absolute;
     margin-left: 20px; /* 로딩 스피너와 간격 */
-    font-size: 1.2rem; /* 글자 크기 */
+    top:50%;
+    left:35%;
+    right:0;
+    bottom: 50%;
+    font-size: 1.4rem; /* 글자 크기 */
     color: #d1e7ff; /* 밝은 푸른색 */
     font-weight: 700; /* 굵은 글씨 */
     text-shadow: 0 0 5px rgba(50, 150, 255, 0.5); /* 은은한 빛 효과 */

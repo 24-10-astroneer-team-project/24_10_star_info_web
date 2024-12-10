@@ -46,13 +46,13 @@ $color_mountain_silhouette: $purple;
 
 
 /* Style */
-.loading-text {
+.loading-text_page {
   position: absolute; // 절대 위치로 설정
   top: 5%; // 객체를 화면 상단 5%로 이동
   left: 50%; // 중앙 정렬
   transform: translate(-50%, 0); // 가로 방향 중앙 정렬
   color: white; // 텍스트 색상
-  font-size: 1.5rem; // 텍스트 크기
+  font-size: 2rem; // 텍스트 크기
   text-align: center; // 텍스트 중앙 정렬
   z-index: 9999; // 애니메이션보다 위에 보이도록 설정
   white-space: nowrap; // 텍스트 줄바꿈 방지 (필요시 조정)
