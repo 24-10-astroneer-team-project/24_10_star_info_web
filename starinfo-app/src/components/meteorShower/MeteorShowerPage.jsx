@@ -11,6 +11,7 @@ import LoadingSpinner from "../ui/LoadingSpinner";
 import useUserLocation from "../../hooks/useUserLocation";
 import {useAuth} from "../../services/AuthProvider";
 import MeteorShowerPopup from "./MeteorShowerPopup"; // 팝업 컴포넌트 추가
+import MeteorHelpIcon from "./MeteorHelpIcon";
 
 const MeteorShowerPage = () => {
     // Canvas 요소의 참조를 저장하기 위한 useRef 훅
@@ -244,6 +245,11 @@ const MeteorShowerPage = () => {
         };
     }, [dataLoading]);
 
+    const handleHelpClick = () => {
+        console.log("Help icon clicked!");
+        // 추후 모달 창이나 다른 동작을 여기에 연결 가능
+    };
+
     // 로딩 중인 경우 로딩 스피너만 표시
     if (dataLoading) {
         console.log("Loading state active. Waiting for data...");
@@ -254,6 +260,7 @@ const MeteorShowerPage = () => {
     return (
         <div className="meteor-page">
             {/* 헤더 영역 */}
+            <MeteorHelpIcon onClick={handleHelpClick} /> {/* 도움말 아이콘 추가 */}
             <div className="content">
                 <Head/>
                 <canvas ref={bgCanvasRef}></canvas>

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import './css/HelpIcon.css';
+import './MeteorHelpIcon.css';
 import questionMarkIcon from '../layout/asset/question_mark_icon.png';
 import introImage1 from '../layout/asset/StarMap_Intro_1.png';
 import introImage2 from '../layout/asset/StarMap_Intro_2.png';
 
-const HelpIcon = () => {
+const MeteorHelpIcon = () => {
     const [showIntro, setShowIntro] = useState(false); // Intro 이미지 표시 상태
     const [currentImageIndex, setCurrentImageIndex] = useState(0); // 현재 표시 중인 이미지의 인덱스
 
@@ -54,30 +54,30 @@ const HelpIcon = () => {
         <>
             {/* 도움말 아이콘 */}
             <div
-                className="meteor-help-icon-container"
+                className="help-icon-container"
                 onClick={handleHelpClick}
                 title="페이지 도움말"
             >
                 <img
                     src={questionMarkIcon}
                     alt="Help Icon"
-                    className="meteor-help-icon-image"
+                    className="help-icon-image"
                 />
             </div>
 
             {/* 도움말 이미지 오버레이 */}
             {showIntro && (
-                <div className="meteor-intro-overlay" onClick={handleCloseIntro}>
-                    <div className="meteor-intro-container">
+                <div className="intro-overlay" onClick={handleCloseIntro}>
+                    <div className="intro-container">
                         <button className="arrow prev" onClick={handlePrevImage}>
                             {"<"}
                         </button>
                         <img
                             src={images[currentImageIndex]}
                             alt={`Intro Image ${currentImageIndex + 1}`}
-                            className="meteor-intro-image"
+                            className="intro-image"
                         />
-                        <button className="meteor-arrow next" onClick={handleNextImage}>
+                        <button className="arrow next" onClick={handleNextImage}>
                             {">"}
                         </button>
                     </div>
@@ -87,4 +87,4 @@ const HelpIcon = () => {
     );
 };
 
-export default HelpIcon;
+export default MeteorHelpIcon;
