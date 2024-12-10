@@ -54,30 +54,30 @@ const HelpIcon = () => {
         <>
             {/* 도움말 아이콘 */}
             <div
-                className="help-icon-container"
+                className="meteor-help-icon-container"
                 onClick={handleHelpClick}
                 title="페이지 도움말"
             >
                 <img
                     src={questionMarkIcon}
                     alt="Help Icon"
-                    className="help-icon-image"
+                    className="meteor-help-icon-image"
                 />
             </div>
 
             {/* 도움말 이미지 오버레이 */}
             {showIntro && (
-                <div className="intro-overlay" onClick={handleCloseIntro}>
-                    <div className="intro-container">
+                <div className="meteor-intro-overlay" onClick={handleCloseIntro}>
+                    <div className="meteor-intro-container">
                         <button className="arrow prev" onClick={handlePrevImage}>
                             {"<"}
                         </button>
                         <img
                             src={images[currentImageIndex]}
                             alt={`Intro Image ${currentImageIndex + 1}`}
-                            className="intro-image"
+                            className="meteor-intro-image"
                         />
-                        <button className="arrow next" onClick={handleNextImage}>
+                        <button className="meteor-arrow next" onClick={handleNextImage}>
                             {">"}
                         </button>
                     </div>

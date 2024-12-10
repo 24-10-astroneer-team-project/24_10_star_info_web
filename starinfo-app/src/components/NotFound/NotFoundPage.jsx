@@ -101,7 +101,7 @@ const NotFoundPage = () => {
             <div className="not-found-content">
                 <h1>404 - Page Not Found</h1>
                 <p>We couldn't find the page you're looking for</p>
-                <a href="./react/main" className="back-home-button">Go Back Home</a>
+                <a href="/react/main" className="back-home-button">Go Back Home</a>
             </div>
         </div>
 

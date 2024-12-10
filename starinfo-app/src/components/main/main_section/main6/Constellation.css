@@ -17,7 +17,7 @@
 }
 
 .custom_button {
-    width: 270px; /* 버튼 너비 조정 */
+    width:  30vh; /* 버튼 너비 조정 */
     padding: 20px 20px; /* 버튼 내부 여백 조정 */
     background-color: transparent; /* Deep black with a slight gray tint */
     color: #ffffff; /* White text color */
