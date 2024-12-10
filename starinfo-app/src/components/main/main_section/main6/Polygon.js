@@ -56,7 +56,7 @@ export class Polygon {
         const angle = PI2 / this.images.length;
         const adjustedRadius = this.radius + this.spacing;
         ctx.translate(this.x, this.y);
-        this.rotate += moveX * 0.008;
+        this.rotate += moveX * 0.001;
         ctx.rotate(this.rotate);
 
         for (let i = 0; i < this.images.length; i++) {
