@@ -22,7 +22,7 @@ function LoadingSpinner() {
     return (
         <div className="loading-spinner-body w-full h-full flex flex-col items-center justify-center bg-gray-700">
             {/* 로딩 스피너와 텍스트 */}
-            <p className="loading-text">
+            <p className="loading-text_page">
                 데이터를 가져오는 중입니다. 잠시만 기다려 주세요...
             </p>
             <div className="spinner"></div>

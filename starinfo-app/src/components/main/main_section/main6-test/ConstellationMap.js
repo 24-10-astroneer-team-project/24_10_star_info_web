@@ -296,7 +296,7 @@ const ConstellationMap = () => {
 
     return (
         <>
-            <Head />
+            <Head/>
             <div
                 className="constellation-container"
                 style={{
@@ -305,7 +305,6 @@ const ConstellationMap = () => {
                     height: "100vh",
                 }}
             >
-                {/* 캔버스 */}
                 <canvas
                     ref={canvasRef}
                     style={{
@@ -314,10 +313,9 @@ const ConstellationMap = () => {
                         position: "absolute",
                         top: 0,
                         left: 0,
-                        zIndex: 1, // 캔버스는 배경으로 유지
+                        zIndex: 1,
                     }}
                 />
-                {/* 메인 버튼 */}
                 <Main_Button
                     onClick={() => (window.location.href = "/react/starmap")}
                     label="별자리 정보 보러가기"
@@ -326,7 +324,7 @@ const ConstellationMap = () => {
                         bottom: "20px",
                         left: "50%",
                         transform: "translateX(-50%)",
-                        zIndex: 2, // 헤더 위로 버튼 표시
+                        zIndex: 2,
                     }}
                 />
             </div>

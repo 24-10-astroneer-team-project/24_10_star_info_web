@@ -1,13 +1,12 @@
 /* ConstellationPopup.css */
-
 .popup-container {
     box-sizing: border-box;
     width: 30vw; /* Use viewport width for immediate responsiveness */
     max-width: 490px; /* Maximum width constraint */
     max-height: 100%;
     position: absolute;
-    top: 50%;
-    margin-left: -20%;
+    margin-left: -50%;
+    z-index:2;
     transform: translate(-50%, -50%);
     background: linear-gradient(#151829, #353A50);
     border: 0.5px solid rgba(255, 255, 255, 0.8);
@@ -20,10 +19,8 @@
     font-weight: 400;
     letter-spacing: -0.05em;
     opacity: 0;
-    z-index: 1;
     animation: fadeIn 0.3s ease forwards;
 }
-
 /* Image Container */
 .image-container {
     display: flex;
