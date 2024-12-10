@@ -1,5 +1,5 @@
 import React from 'react';
-import './PlanetPopup.css';
+import './css/PlanetPopup.css';
 
 // 이미지 파일을 동적으로 불러오는 함수
 const importAll = (requireContext) => {

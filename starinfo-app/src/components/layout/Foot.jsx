@@ -12,27 +12,23 @@ function Foot() {
             <div className="sb_footer section_padding">
                 <div className="sb_footer-links">
                     <div className="sb_footer-links-div">
-                        <h4>별자리소개</h4>
-                        <p><a href="./main">테스트 항목</a></p>
-                        <p><a href="./main">테스트 항목</a></p>
+                        <h4>SiteIntro</h4>
+                        <p><a href="/react/main"></a></p>
                     </div>
                     <div className="sb_footer-links-div">
-                        <h4>이용안내</h4>
-                        <p><a href="./main">테스트 항목</a></p>
-                        <p><a href="./main">테스트 항목</a></p>
+                        <h4>StarMap</h4>
+                        <p><a href="/react/starmap">StarMapPage</a></p>
                     </div>
                     <div className="sb_footer-links-div">
-                        <h4>사이트소개</h4>
-                        <p><a href="./main">테스트 항목</a></p>
-                        <p><a href="./main">테스트 항목</a></p>
+                        <h4>Planet</h4>
+                        <p><a href="/react/planet">PlanetPage</a></p>
                     </div>
                     <div className="sb_footer-links-div">
-                        <h4>천체정보</h4>
-                        <p><a href="./main">테스트 항목</a></p>
-                        <p><a href="./main">테스트 항목</a></p>
+                        <h4>Meteor</h4>
+                        <p><a href="/react/meteor">MeteorShowerPage</a></p>
                     </div>
                     <div className="sb_footer-links-div">
-                        <h3>개발자 문의</h3>
+                        <h3>Developer</h3>
                         <div className="sns">
                             <p><img src={git_60} alt=""/></p>
                             <p><img src={mail_60} alt=""/></p>
@@ -48,18 +44,10 @@ function Foot() {
                         <p>@{new Date().getFullYear()} CodeInn. All right reserved. </p>
                     </div>
                     <div className="sb_footer-below-links">
-                        <a href="">
                             <div><p>사이트 약관사항</p></div>
-                        </a>
-                        <a href="">
                             <div><p>개인정보보호</p></div>
-                        </a>
-                        <a href="">
                             <div><p>보안</p></div>
-                        </a>
-                        <a href="">
                             <div><p>쿠키 관련</p></div>
-                        </a>
                     </div>
 
 
