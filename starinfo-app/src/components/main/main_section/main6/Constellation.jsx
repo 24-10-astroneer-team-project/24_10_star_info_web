@@ -14,7 +14,7 @@ const Constellation = () => {
     };
 
     const handleMeteorButtonClick = () => {
-        window.location.href = '/react/meteor';
+        window.location.href = '/react/starmap';
     };
 
     useEffect(() => {
