@@ -309,7 +309,7 @@ const ConstellationPopup = ({ constellationId, isVisible, closePopup }) => {
                         별자리 정보
                     </button>
                 </div>
-                <div className={`content-container ${fade ? 'fade-out' : 'fade-in'}`}>
+                <div className={`star_content-container ${fade ? 'fade-out' : 'fade-in'}`}>
                     {activeTab === 'legend' ? (
                         <>
                             <div className="image-container">
