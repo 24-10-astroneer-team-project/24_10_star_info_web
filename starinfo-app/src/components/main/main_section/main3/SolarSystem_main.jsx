@@ -326,7 +326,7 @@ const SolarSystem_main = () => {
                 <div className={`${styles.solar_systm} thirdSectionSystem`}>
                     <div className={`${styles.planet} ${styles.pluto} thirdSectionPlanet`}>
                         <div className={`${styles.planet_description} ${styles.pluto} thirdSectionDescription`}
-                             onClick={() => handlePlanetClick('pluto')}
+
                         >
                             <h2>Dwarf planet</h2>
                             <h1>Pluto</h1>
