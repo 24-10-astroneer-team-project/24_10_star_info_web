@@ -16,6 +16,7 @@ import PrivateRoute from "./components/member/PrivateRoute";
 import MeteorShowerPage from "./components/meteorShower/MeteorShowerPage";
 import PublicCalendarPage from "./components/publicCalendar/publicCalendarPage";
 import GoogleAuthHandler from "./api/GoogleAuthHandler";
+import ConstellationMap from "./components/main/main_section/main6-test/ConstellationMap";
 // import LoadingSpinner from "./components/ui/LoadingSpinner";
 
 function App() {
@@ -28,6 +29,8 @@ function App() {
                     <Route path="/react/login" element={<LoginPage/>}/> {/* 로그인 페이지로 라우팅 */}
                     <Route path="/react/map" element={<MapComponent/>}/> {/* 지도 컴포넌트 라우트 추가 */}
                     <Route path="/react/starmap" element={<StarMap/>}/>
+                    <Route path="/react/constellation" element={<ConstellationMap />} />
+
                     <Route path="/react/planet" element={<PlanetPage/>}/>
                     <Route path="/react/meteor" element={<MeteorShowerPage />} /> {/* 유성우 페이지 */}
                     <Route path="/react/publicCalendar" element={<PublicCalendarPage/>}/>

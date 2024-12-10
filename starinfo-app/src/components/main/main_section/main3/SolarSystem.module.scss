@@ -878,6 +878,7 @@ body {
           text-transform: uppercase;
           z-index: 1;
 
+
           // 각 행성에 따른 색상 설정
           &.mercury {
             a {
@@ -974,7 +975,7 @@ body {
           p,
           a {
             font-weight: 100;
-            font-size: 10px;
+            font-size: 1.6vh;
             letter-spacing: 5px;
             margin: 0;
           }

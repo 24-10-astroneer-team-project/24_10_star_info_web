@@ -1,34 +1,151 @@
-/* MemberDetail.css */
-
+/* 상세 정보 카드 */
 .member-detail {
+    position: relative; /* 팝업 위치를 조정할 수 있도록 설정 */
+    z-index: 1; /* 캔버스 위로 배치 */
+    margin: 100px auto; /* 위쪽 여백을 50px -> 100px으로 변경하여 팝업을 아래로 이동 */
+    max-width: 700px; /* 최대 너비를 600px -> 700px으로 조정 */
+    max-height: 740px; /* 최대 높이를 550px -> 600px으로 조정 */
+    overflow-y: auto; /* 내부 스크롤 활성화 */
     padding: 20px;
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5),
+    0 0 40px rgba(255, 215, 0, 0.3),
+    0 0 60px rgba(255, 215, 0, 0.2); /* 은은한 빛 효과 */
+    text-align: center;
+    backdrop-filter: blur(15px); /* 배경 흐림 효과 */
+    transform: translateY(50px); /* 팝업을 아래로 50px 이동 */
 }
 
+/* 버튼 스타일 */
+.member-detail button {
+    margin-top: 15px;
+    margin-right: 10px; /* 버튼 간 간격 추가 */
+    padding: 10px 15px;
+    font-size: 14px;
+    background: linear-gradient(90deg, #ffdd57, #ffc107); /* 빛나는 노란색 그라데이션 */
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.4); /* 버튼 빛 효과 */
+}
+
+.member-detail button:hover {
+    background: linear-gradient(90deg, #ffc107, #ffdd57); /* 반전된 빛나는 효과 */
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.6); /* 더 강한 빛 효과 */
+    transform: scale(1.05); /* 버튼 확대 효과 */
+}
+
+/* 위치 설명 입력칸 스타일 */
+.member-detail input[type="text"] {
+    width: 50%; /* 입력칸 너비 설정 */
+    padding: 10px;
+    margin-top: 20px; /* 상단 여백 */
+    margin-bottom: 20px; /* 버튼과 간격 추가 */
+    font-size: 16px;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9); /* 밝은 배경 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 입력란 그림자 */
+    outline: none; /* 포커스 시 외곽선 제거 */
+    transition: all 0.3s ease;
+}
+
+
+
+/* 버튼 간 간격 */
+.member-detail .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* 버튼 사이 간격 */
+    flex-wrap: wrap; /* 버튼이 화면에 넘치면 줄 바꿈 */
+}
+
+/* 카드 내부 텍스트 */
 .member-detail h2 {
-    text-align: center;
     margin-bottom: 20px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #fff; /* 흰색 텍스트 */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8); /* 빛나는 텍스트 효과 */
 }
 
 .member-detail p {
     font-size: 16px;
-    margin: 5px 0;
+    margin: 10px 0;
+    color: #fff; /* 흰색 텍스트 */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8); /* 빛나는 텍스트 효과 */
 }
 
-.member-detail button {
-    margin-top: 10px;
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.member-detail a {
+    display: inline-block;
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
 }
 
-.member-detail button:hover {
-    background-color: #0056b3;
+.member-detail a:hover {
+    color: #0056b3;
+}
+
+/* 스크롤바 스타일 */
+.member-detail::-webkit-scrollbar {
+    width: 8px; /* 스크롤바 너비 */
+    height: 4px; /* 가로 스크롤바 높이 */
+}
+
+.member-detail::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #ffdd57, #ffc107); /* 노란색 빛 효과 */
+    border-radius: 5px; /* 부드러운 모서리 */
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+}
+
+.member-detail::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(90deg, #ffc107, #ffdd57); /* 반전된 빛 효과 */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+}
+
+.member-detail::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2); /* 스크롤바 트랙 배경 */
+    border-radius: 5px; /* 트랙 모서리 */
+}
+
+/* 기존 스타일 유지 */
+.header {
+    position: fixed; /* 항상 화면 상단에 고정 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10; /* 지도와 입력 필드보다 위에 표시 */
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* 페이지 전체 높이 */
+}
+
+.content-container {
+    flex: 1;
+    padding: 20px;
+    margin-top: 60px;
+    overflow-y: auto; /* 스크롤 활성화 */
+}
+
+.footer-container {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    flex-shrink: 0; /* 푸터가 압축되지 않도록 설정 */
+    position: relative;
+    margin-top: auto; /* 콘텐츠가 끝난 뒤 항상 하단에 배치 */
 }

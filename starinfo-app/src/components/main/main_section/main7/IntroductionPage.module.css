@@ -1,0 +1,22 @@
+:root {
+    --main-bg-color: rgba(0, 0, 0, 1); /* 블랙 배경 */
+    --button-bg-color: rgba(0, 0, 0, 0.8);
+    --button-text-color: rgba(209, 255, 255, 1);
+}
+
+.introductionPage {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.spaceCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+

@@ -140,6 +140,7 @@ const MapComponent = () => {
                             width: "80%",
                             borderRadius: "8px",
                             boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
+                            marginTop: "70px", // 위쪽 여백 추가
                         }}
                         onClick={handleMapClick}
                     >

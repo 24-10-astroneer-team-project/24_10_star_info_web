@@ -7,6 +7,9 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { fetchMemberDetail, updateFavoriteLocation, updateLocationDescription, deleteLocation } from './service/memberService';
 import LocationList from '../member/LocationList';
+import './css/StarCanvas.css'; // Star Canvas 관련 CSS 추가
+import Head from "../layout/Head"; // 헤더 추가
+import Foot from "../layout/Foot"; // 푸터 추가
 
 function MemberDetail() {
     const { userId } = useParams();
@@ -37,6 +40,95 @@ function MemberDetail() {
             },
         });
     };
+
+    useEffect(() => {
+        const canvas = document.getElementById("space");
+        const context = canvas.getContext("2d");
+        const screenW = window.innerWidth;
+        const screenH = window.innerHeight;
+        const stars = [];
+        const fps = 50;
+        const numStars = 2000;
+
+        const resizeCanvas = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            createStars(); // 창 크기가 변경될 때 별 재생성
+        };
+
+        const createStars = () => {
+            stars.length = 0; // 기존 별 초기화
+            for (let i = 0; i < numStars; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const length = Math.random() * 2 + 1;
+                const opacity = Math.random();
+                stars.push(new Star(x, y, length, opacity));
+            }
+        };
+
+        window.addEventListener("resize", () => {
+            resizeCanvas();
+            createStars(); // 창 크기 변경 시 별 재생성
+        });
+
+        canvas.width = screenW;
+        canvas.height = screenH;
+
+        // 별 생성
+        for (let i = 0; i < numStars; i++) {
+            const x = Math.random() * screenW;
+            const y = Math.random() * screenH;
+            const length = Math.random() * 2 + 1;
+            const opacity = Math.random();
+            stars.push(new Star(x, y, length, opacity));
+        }
+
+        function Star(x, y, length, opacity) {
+            this.x = x;
+            this.y = y;
+            this.length = length;
+            this.opacity = opacity;
+            this.factor = 1;
+            this.increment = Math.random() * 0.03;
+        }
+
+        resizeCanvas(); // 초기 호출
+        window.addEventListener("resize", resizeCanvas); // 이벤트 리스너 등록
+
+        Star.prototype.draw = function () {
+            context.save();
+            context.translate(this.x, this.y);
+
+            if (this.opacity > 1) this.factor = -1;
+            else if (this.opacity <= 0) this.factor = 1;
+            this.opacity += this.increment * this.factor;
+
+            context.beginPath();
+            for (let i = 0; i < 5; i++) {
+                context.lineTo(0, this.length);
+                context.translate(0, this.length);
+                context.rotate((Math.PI * 2) / 5);
+                context.lineTo(0, -this.length);
+                context.translate(0, -this.length);
+                context.rotate(-(Math.PI * 4) / 5);
+            }
+            context.closePath();
+            context.fillStyle = `rgba(255, 255, 200, ${this.opacity})`;
+            context.shadowBlur = 5;
+            context.shadowColor = '#ffff33';
+            context.fill();
+            context.restore();
+        };
+
+        function animate() {
+            context.clearRect(0, 0, canvas.width, canvas.height); // 캔버스 초기화
+            stars.forEach((star) => star.draw());
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    }, []);
 
     useEffect(() => {
         if (location.state?.fromSaveLocation) {
@@ -125,43 +217,67 @@ function MemberDetail() {
         confirmDelete();
     };
 
-    return (
-        <div className="member-detail">
-            <h2>사용자 상세 정보</h2>
-            <div>
-                <Link
-                    to="/react/map"
-                    state={{ from: location.pathname, fromSaveLocation: true }}
-                    style={{ display: 'inline-block', marginBottom: '20px', fontWeight: 'bold', color: '#007bff' }}
-                >
-                    위치 정보 저장하러 가기
-                </Link>
-            </div>
-            {loading && <p>로딩 중...</p>}
-            {error && <p>오류 발생: {error.message}</p>}
-            {memberDetail && (
-                <>
-                    <p>이름: {memberDetail.uname}</p>
-                    <p>닉네임: {memberDetail.nickname}</p>
-                    <p>이메일: {memberDetail.email}</p>
-                    <p>알림 활성화 여부: {memberDetail.alertEnabled ? '예' : '아니오'}</p>
 
-                    <h3>저장된 위치 목록</h3>
-                    <LocationList
-                        locations={memberDetail.locations}
-                        descriptions={descriptions}
-                        onUpdateFavorite={handleUpdateFavoriteLocation}
-                        favoriteLocationId={favoriteLocationId}
-                        onDescriptionChange={handleDescriptionChange}
-                        onSaveDescription={handleUpdateDescription}
-                        onDelete={handleDeleteLocation}
-                        onEdit={handleEditLocation}
-                    />
+            return (
+                <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+                    {/* 헤더 */}
+                    <Head />
 
-                </>
-            )}
-        </div>
-    );
+                    {/* 별 배경 및 상세 정보 섹션 */}
+                    <div style={{ position: "relative", height: "100vh" }}>
+                        {/* 캔버스 배경 */}
+                        <canvas
+                            id="space"
+                            style={{
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                width: "100%",
+                                height: "100%",
+                                zIndex: -1,
+                            }}
+                        ></canvas>
+
+                        {/* 사용자 상세 정보 */}
+                        <div className="member-detail" style={{ position: "relative", zIndex: 1 }}>
+                            <h2>사용자 상세 정보</h2>
+                            <div>
+                                <Link
+                                    to="/react/map"
+                                    state={{ from: location.pathname, fromSaveLocation: true }}
+                                >
+                                    위치 정보 저장하러 가기
+                                </Link>
+                            </div>
+
+                            {/* 로딩 상태 및 사용자 정보 렌더링 */}
+                            {loading && <p>로딩 중...</p>}
+                            {error && <p>오류 발생: {error.message}</p>}
+                            {memberDetail && (
+                                <>
+                                    <p>이름: {memberDetail.uname}</p>
+                                    <p>닉네임: {memberDetail.nickname}</p>
+                                    <p>이메일: {memberDetail.email}</p>
+                                    <p>알림 활성화 여부: {memberDetail.alertEnabled ? "예" : "아니오"}</p>
+
+                                    <h3>저장된 위치 목록</h3>
+                                    <LocationList
+                                        locations={memberDetail.locations}
+                                        descriptions={descriptions}
+                                        onUpdateFavorite={handleUpdateFavoriteLocation}
+                                        favoriteLocationId={favoriteLocationId}
+                                        onDescriptionChange={handleDescriptionChange}
+                                        onSaveDescription={handleUpdateDescription}
+                                        onDelete={handleDeleteLocation}
+                                        onEdit={handleEditLocation}
+                                    />
+                                </>
+                            )}
+                        </div>
+                    </div>
+
+                    <Foot />
+                </div>
+            );
 }
-
-export default MemberDetail;
+    export default MemberDetail;
