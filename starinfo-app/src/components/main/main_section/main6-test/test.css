@@ -1,14 +1,31 @@
 /* src/styles.css */
-body {
-    margin: 0;
-    background: #000313;
+.constellation-container {
+    height: 100vh;
+    background: #000313; /* 페이지 배경색 */
 }
 
-canvas {
+.constellation-container canvas {
     width: 100%;
-    position: relative;
+    position: absolute;
     top: 0;
     left: 0;
+}
+
+.constellation-container .constellation-text {
+    font: 12px sans-serif;
+    font-size: 0.75em;
+    fill: white;
+    text-anchor: middle;
+}
+
+.constellation-container .constellation-line {
+    stroke: #fff;
+    stroke-width: 0.4;
+}
+
+.constellation-container .constellation-line.zodiac {
+    stroke: #f2f237;
+    stroke-width: 0.8;
 }
 
 /* 추가 스타일 */
