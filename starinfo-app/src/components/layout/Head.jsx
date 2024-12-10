@@ -1,3 +1,5 @@
+// Head.jsx
+
 import React, { useState } from 'react';
 import { useAuth } from "../../services/AuthProvider"; // 로그인 상태 확인용
 import './Head.css';
@@ -44,7 +46,7 @@ function Head() {
                 onMouseLeave={handleMouseLeave}
             >
                 <ul className="navbar">
-                    <li><a href="/react/main">일정관리</a></li>
+                    <li><a href="/react/publicCalendar">일정관리</a></li>
                     <li><a href="/react/starmap">별자리</a></li>
                     <li><a href="/react/planet">행성</a></li>
                     <li><a href="/react/meteor">유성우</a></li>

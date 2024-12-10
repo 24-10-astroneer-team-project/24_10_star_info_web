@@ -1,7 +1,7 @@
 /* SolarSystem.jsx */
 /* 메인화면 중단 "공전하는" 행성들 담당 코드. 건들필요 x*/
 import React from "react";
-import './PlanetPage.css';
+import './css/PlanetPage.css';
 
 const SolarSystem = ({solarSystemClass, handlePlanetClick}) => {
     return (

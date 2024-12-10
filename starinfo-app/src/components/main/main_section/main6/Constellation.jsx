@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import { Polygon } from './Polygon';
+import React, {useEffect, useRef} from 'react';
+import {Polygon} from './Polygon';
+import Main_Button from '../../../../components/layout/Main_Button'; // Main_Button 컴포넌트 임포트
 import './Constellation.css';
 
 const Constellation = () => {
