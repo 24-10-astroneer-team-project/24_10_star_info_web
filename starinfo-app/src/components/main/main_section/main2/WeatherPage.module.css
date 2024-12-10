@@ -1,232 +1,233 @@
+/* 1. HTML 및 Body 기본 설정 */
 html, body {
-    height: 100%; /* 페이지와 브라우저 뷰포트를 100% 채움 */
-    margin: 0; /* 브라우저의 기본 여백 제거 */
+    height: 100%; /* 브라우저 높이와 페이지 높이를 동일하게 설정 */
+    margin: 0; /* 브라우저 기본 여백 제거 */
 }
 
+/* 2. 배경 스타일링 */
 .bg {
-    position: relative; /* 자식 요소의 위치를 기준으로 조정 가능 */
+    position: relative; /* 자식 요소 위치 기준을 설정 */
     background-image: url("https://images6.alphacoders.com/339/339532.png"); /* 배경 이미지 설정 */
-    background-size: cover; /* 배경 이미지를 요소 크기에 맞게 채움 */
+    background-size: cover; /* 배경 이미지를 요소 크기에 맞게 조정 */
     background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
     background-position: center; /* 배경 이미지를 중앙에 배치 */
-    height: 100vh; /* 높이를 브라우저 뷰포트의 100%로 설정 */
-    display: flex; /* 자식 요소를 플렉스 컨테이너로 설정 */
-    flex-direction: column; /* 자식 요소를 세로로 배치 */
+    height: 100vh; /* 높이를 뷰포트 전체로 설정 */
+    display: flex; /* 플렉스 박스 레이아웃 활성화 */
+    flex-direction: column; /* 자식 요소를 세로 방향으로 정렬 */
     align-items: center; /* 자식 요소를 가로 방향으로 중앙 정렬 */
     justify-content: center; /* 자식 요소를 세로 방향으로 중앙 정렬 */
-    width: 100%; /* 가로 너비를 100%로 설정 */
-    overflow: hidden; /* 넘치는 콘텐츠 숨김 */
+    width: 100%; /* 전체 너비를 100%로 설정 */
+    overflow: hidden; /* 넘치는 콘텐츠를 숨김 */
 }
 
-/* 배경 위에 그라데이션 효과 추가 */
+/* 3. 배경 위에 그라데이션 효과 추가 */
 .bg::before {
     content: ""; /* 가상 요소 생성 */
-    position: absolute; /* 부모를 기준으로 위치 지정 */
-    top: 0; /* 상단 위치 */
-    left: 0; /* 왼쪽 위치 */
-    right: 0; /* 오른쪽 위치 */
-    bottom: 0; /* 하단 위치 */
-    background: linear-gradient(
-            to bottom, /* 위에서 아래로 그라데이션 적용 */
-            rgba(0, 0, 0, 0.9) 0%,         /* 상단은 어두운 검정 */
-            rgba(0, 0, 0, 0.4) 40%,        /* 중간은 투명도가 낮은 검정 */
-            rgba(0, 0, 0, 0.4) 60%,        /* 중간 유지 */
-            rgba(0, 0, 0, 0.9) 100%        /* 하단은 다시 어두운 검정 */
+    position: absolute; /* 부모 기준 위치 설정 */
+    top: 0; /* 상단 고정 */
+    left: 0; /* 왼쪽 고정 */
+    right: 0; /* 오른쪽 고정 */
+    bottom: 0; /* 하단 고정 */
+    background: linear-gradient( /* 위에서 아래로 그라데이션 설정 */
+            to bottom,
+            rgba(0, 0, 0, 0.9) 0%, /* 상단은 짙은 검정 */
+            rgba(0, 0, 0, 0.4) 40%, /* 중간은 옅은 검정 */
+            rgba(0, 0, 0, 0.4) 60%, /* 중간 유지 */
+            rgba(0, 0, 0, 0.9) 100% /* 하단은 짙은 검정 */
     );
     z-index: 1; /* 배경 위에 위치 */
 }
 
-/* 텍스트 스타일 정의 */
+/* 4. 텍스트 스타일 */
 .textCenter {
     font-size: 56px; /* 텍스트 크기 */
     color: white; /* 텍스트 색상 */
-    text-align: center; /* 텍스트 중앙 정렬 */
+    text-align: center; /* 텍스트를 중앙 정렬 */
     margin-bottom: 20px; /* 아래쪽 여백 */
-    z-index: 2; /* 그라데이션보다 위에 위치 */
+    z-index: 2; /* 배경보다 위에 표시 */
 }
 
-/* 날씨 카드 스타일 */
+/* 5. 날씨 카드 스타일 */
 .box {
-    width: 20vw; /* 가로 너비를 화면 너비의 20%로 설정 */
-    height: 60vh; /* 세로 높이를 화면 높이의 60%로 설정 */
-    border-radius: 5px; /* 모서리를 둥글게 설정 */
+    width: 20vw; /* 카드 너비를 화면의 20%로 설정 */
+    height: 60vh; /* 카드 높이를 화면의 60%로 설정 */
+    border-radius: 5px; /* 카드 모서리를 둥글게 처리 */
     box-shadow: 0 2px 30px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
-    background: #eff3f9; /* 배경 색상 */
-    position: relative; /* 자식 요소의 위치 기준 */
-    overflow: hidden; /* 넘치는 콘텐츠 숨김 */
-    transform: translate3d(0, 0, 0); /* GPU 가속을 통한 위치 초기화 */
-    min-width: 200px; /* 최소 너비 */
-    min-height: 350px; /* 최소 높이 */
+    background: #eff3f9; /* 카드 배경 색상 */
+    position: relative; /* 자식 요소의 위치를 기준으로 조정 */
+    overflow: hidden; /* 넘치는 콘텐츠를 숨김 */
+    transform: translate3d(0, 0, 0); /* GPU 가속을 활성화 */
+    min-width: 200px; /* 최소 카드 너비 */
+    min-height: 350px; /* 최소 카드 높이 */
 }
 
-/* 움직이는 웨이브 효과 */
+/* 6. 웨이브 애니메이션 효과 */
 .wave {
-    opacity: 0.3; /* 투명도 */
-    position: absolute; /* 부모를 기준으로 위치 지정 */
-    top: 120%; /* 부모 요소 아래쪽 */
+    opacity: 0.3; /* 웨이브의 투명도 */
+    position: absolute; /* 부모를 기준으로 위치 설정 */
+    top: 120%; /* 화면 아래로 내려감 */
     left: 50%; /* 가로 중앙 */
-    background: white; /* 배경 색상 */
-    width: 500px; /* 웨이브의 너비 */
-    height: 500px; /* 웨이브의 높이 */
-    margin-left: -250px; /* 부모 기준으로 가로 중심 이동 */
-    margin-top: -250px; /* 부모 기준으로 세로 중심 이동 */
-    transform-origin: 50% 48%; /* 회전 기준점 설정 */
-    border-radius: 43%; /* 원 형태 */
-    animation: drift 3000ms infinite linear; /* 드리프트 애니메이션 */
-    z-index: 1; /* 카드 아래쪽 */
+    background: white; /* 웨이브 색상 */
+    width: 500px; /* 웨이브 너비 */
+    height: 500px; /* 웨이브 높이 */
+    margin-left: -250px; /* 중심 정렬 보정 */
+    margin-top: -250px; /* 중심 정렬 보정 */
+    transform-origin: 50% 48%; /* 회전 중심 설정 */
+    border-radius: 43%; /* 웨이브를 원형으로 만듦 */
+    animation: drift 3000ms infinite linear; /* 3초 동안 반복 회전 애니메이션 */
+    z-index: 1; /* 카드 아래쪽에 표시 */
 }
 
+/* 6.1 웨이브 효과 - 다른 속도 설정 */
 .wave.-three {
-    animation: drift 5000ms infinite linear; /* 더 느린 드리프트 */
-    z-index: 2 !important; /* z-index 재정의 */
-    opacity: 0.2; /* 더 희미한 웨이브 */
+    animation: drift 5000ms infinite linear; /* 느린 속도 */
+    z-index: 2 !important; /* z-index 우선순위 높임 */
+    opacity: 0.2; /* 더 희미한 투명도 */
 }
 
 .wave.-two {
-    animation: drift 7000ms infinite linear; /* 가장 느린 드리프트 */
+    animation: drift 7000ms infinite linear; /* 더 느린 속도 */
     opacity: 0.1; /* 거의 투명 */
-    z-index: 3 !important; /* 웨이브 중 가장 위 */
+    z-index: 3 !important; /* 가장 위 */
 }
 
-/* 날씨 아이콘을 포함하는 컨테이너 */
+/* 7. 날씨 아이콘과 정보 컨테이너 스타일 */
 .weathercon {
-    height: 55%; /* 부모 요소의 55% */
-    display: flex; /* 플렉스 컨테이너로 설정 */
+    height: 55%; /* 부모 요소 높이의 55% */
+    display: flex; /* 플렉스 박스 레이아웃 */
     justify-content: center; /* 가로 중앙 정렬 */
     align-items: center; /* 세로 중앙 정렬 */
-    font-size: 3em; /* 폰트 크기 */
+    font-size: 3em; /* 아이콘 크기 */
 }
 
-/* 카드 하단 정보 스타일 */
+/* 8. 카드 하단 정보 */
 .info {
-    position: absolute; /* 부모 기준으로 위치 설정 */
-    bottom: 0; /* 하단 위치 */
+    position: absolute; /* 부모 기준 위치 */
+    bottom: 0; /* 하단 고정 */
     width: 100%; /* 전체 너비 */
-    height: 45%; /* 높이 */
-    z-index: 4; /* 카드 위에 위치 */
+    height: 45%; /* 높이 비율 */
+    z-index: 4; /* 카드 위에 표시 */
 }
 
-/* 도시 이름 스타일 */
+/* 9. 도시 이름 스타일 */
 .location {
-    text-align: center; /* 텍스트 중앙 정렬 */
+    text-align: center; /* 중앙 정렬 */
     font-weight: 800; /* 굵은 글꼴 */
 }
 
-/* 날짜 스타일 */
+/* 10. 날짜 스타일 */
 .date {
     text-align: center; /* 중앙 정렬 */
     margin-top: 5%; /* 위쪽 여백 */
-    color: grey; /* 회색 텍스트 */
+    color: grey; /* 텍스트 색상 */
     font-size: 70%; /* 텍스트 크기 */
 }
 
-/* 온도 텍스트 스타일 */
+/* 11. 온도 텍스트 스타일 */
 .temp {
     margin-top: 10%; /* 위쪽 여백 */
     text-align: center; /* 중앙 정렬 */
 }
 
-/* 날씨 설명 텍스트 */
+/* 12. 날씨 설명 텍스트 */
 .description {
     text-align: center; /* 중앙 정렬 */
-    color: grey; /* 회색 텍스트 */
+    color: grey; /* 텍스트 색상 */
     font-size: 0.8rem; /* 텍스트 크기 */
 }
 
-/* 웨이브 애니메이션 정의 */
+/* 13. 웨이브 애니메이션 정의 */
 @keyframes drift {
     from {
-        transform: rotate(0deg); /* 회전 시작 */
+        transform: rotate(0deg); /* 처음에 0도 회전 */
     }
     to {
-        transform: rotate(360deg); /* 한 바퀴 회전 */
+        transform: rotate(360deg); /* 360도 회전 */
     }
 }
 
-/* 페이지 전체 스타일 */
+/* 14. 페이지 전체 스타일 */
 .weather-page {
     padding: 20px; /* 내부 여백 */
-    background: #f0f4f8; /* 배경 색상 */
+    background: #f0f4f8; /* 페이지 배경 색상 */
 }
 
-/* 타이틀 컨테이너 스타일 */
+/* 15. 타이틀 컨테이너 */
 .titleContainer {
-    position: absolute; /* 페이지에서 절대 위치 */
-    top: 200px; /* 상단에서 10px 간격 */
-    left: 50%; /* 가로 중앙 정렬 */
-    transform: translateX(-50%); /* 완벽한 중앙 정렬 */
+    position: absolute; /* 절대 위치 */
+    top: 200px; /* 상단에서 200px 아래 */
+    left: 50%; /* 가로 중앙 */
+    transform: translateX(-50%); /* 정확한 가로 중앙 */
     z-index: 2; /* 배경보다 위 */
     text-align: center; /* 텍스트 중앙 정렬 */
 }
 
-
+/* 16. 날씨 제목 스타일 */
 .weatherTitle {
-    margin-top: 100px;
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 20px;
-    z-index: 10;
-    color: whitesmoke;
+    margin-top: 1px; /* 위쪽 여백 */
+    text-align: center; /* 중앙 정렬 */
+    font-size: 2rem; /* 글자 크기 */
+    margin-bottom: 20px; /* 아래쪽 여백 */
+    z-index: 10; /* 최상위 표시 */
+    color: whitesmoke; /* 색상 설정 */
 }
 
-/* 카드 컨테이너 스타일 */
+/* 17. 카드 컨테이너 */
 .cardContainer {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
-    z-index: 3; /* 그라데이션보다 위 */
-    position: relative; /* z-index 활성화를 위해 position 추가 */
-    margin-top: 50px; /* 컨테이너를 50px 아래로 이동 */
+    display: flex; /* 플렉스 박스 레이아웃 */
+    justify-content: center; /* 가로 중앙 정렬 */
+    flex-wrap: wrap; /* 줄 바꿈 허용 */
+    gap: 20px; /* 카드 간격 */
+    z-index: 3; /* 배경 위 */
+    position: relative; /* z-index 활성화를 위한 position 설정 */
+    margin-top: 50px; /* 컨테이너 상단 여백 */
 }
 
-.weatherSearchContainer{
-    z-index: 70;
+/* 18. 검색창 스타일 */
+.weatherSearchContainer {
+    z-index: 70; /* 검색창 최상위 표시 */
 }
 
-.weatherSearchInput{
-    z-index: 70;
-    width: 200px;
-    height: 30px; /* 약간 더 높게 조정 */
-    padding: 8px 12px; /* 내부 여백 추가 */
-    font-size: 16px;
-    color: #FFFFFF; /* 흰색 텍스트 */
-    background: linear-gradient(90deg, #232526, #414345); /* 어두운 우주 느낌의 배경 */
-    border: 1px solid #6B6A6F; /* 희미한 회색 테두리 */
-    border-radius: 8px; /* 부드러운 모서리 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* 깊이감 있는 그림자 */
+.weatherSearchInput {
+    z-index: 70; /* 검색창 최상위 표시 */
+    width: 200px; /* 입력창 너비 */
+    height: 30px; /* 입력창 높이 */
+    padding: 8px 12px; /* 내부 여백 */
+    font-size: 16px; /* 글자 크기 */
+    color: #FFFFFF; /* 글자 색상 */
+    background: linear-gradient(90deg, #232526, #414345); /* 배경 그라데이션 */
+    border: 1px solid #6B6A6F; /* 테두리 색상 */
+    border-radius: 8px; /* 둥근 테두리 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* 그림자 효과 */
     outline: none; /* 클릭 시 기본 외곽선 제거 */
-    transition: all 0.3s ease; /* 부드러운 애니메이션 효과 */
+    transition: all 0.3s ease; /* 부드러운 애니메이션 */
 }
 
-.weatherSearchInput:focus{
-    z-index: 70;
-    border-color: #7A77FF; /* 포커스 시 파란빛 강조 */
-    box-shadow: 0 0 10px rgba(122, 119, 255, 0.8); /* 빛나는 효과 */
-    background: linear-gradient(90deg, #414345, #232526); /* 그라데이션 반전 */
-    transform: scale(1.02); /* 살짝 확대 */
+/* 검색 입력창 포커스 상태 */
+.weatherSearchInput:focus {
+    border-color: #7A77FF; /* 포커스 시 테두리 강조 */
+    box-shadow: 0 0 10px rgba(122, 119, 255, 0.8); /* 포커스 시 빛나는 효과 */
+    background: linear-gradient(90deg, #414345, #232526); /* 배경 반전 */
+    transform: scale(1.02); /* 약간 확대 */
 }
 
-.weatherSearchInput::placeholder{
+.weatherSearchInput::placeholder {
     color: rgba(255, 255, 255, 0.7); /* 희미한 흰색 텍스트 */
 }
 
-.weatherSearchButton{
-    width: 100px;
-    height: 50px;
-    padding: 8px 16px;
-    background: linear-gradient(90deg, #1E2A78, #4C4177); /* 우주 분위기의 그라데이션 */
-    color: #FFFFFF; /* 흰색 텍스트 */
-    border: 1px solid #5D5AFF; /* 밝은 파란색 테두리 */
-    border-radius: 8px; /* 둥근 모서리 */
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
+/* 검색 버튼 */
+.weatherSearchButton {
+    width: 100px; /* 버튼 너비 */
+    height: 50px; /* 버튼 높이 */
+    padding: 8px 16px; /* 내부 여백 */
+    background: linear-gradient(90deg, #1E2A78, #4C4177); /* 배경 그라데이션 */
+    color: #FFFFFF; /* 텍스트 색상 */
+    border: 1px solid #5D5AFF; /* 테두리 색상 */
+    border-radius: 8px; /* 둥근 테두리 */
+    cursor: pointer; /* 클릭 가능 상태 */
+    font-size: 16px; /* 글자 크기 */
+    font-weight: bold; /* 굵은 글자 */
     text-shadow: 0 0 5px #FFFFFF, 0 0 10px #FFFFFF; /* 빛나는 텍스트 효과 */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* 버튼 그림자 */
-    transition: all 0.3s ease; /* 호버 시 부드러운 애니메이션 */
-}
-
-.weatherSearchButton{
-
+    transition: all 0.3s ease; /* 부드러운 애니메이션 */
 }

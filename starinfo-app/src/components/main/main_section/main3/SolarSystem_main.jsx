@@ -135,8 +135,8 @@ const SolarSystem_main = () => {
                             <h2>Planet</h2>
                             <h1>Mercury</h1>
                             <p>
-                                태양에 가장 가까운 행성입니다. 다른 모든 행성보다 빠르게 태양을 공전하며, 이러한 이유로 로마인들은 이 행성을 발이 빠른 전령 신의 이름을 따서
-                                명명했습니다.
+                                "태양에 가장 가까운 행성입니다. 다른 모든 행성보다 빠르게 태양을 공전하며, 이러한 이유로 로마인들은 이 행성을 발이 빠른 전령 신의 이름을 따서
+                                명명했습니다."
                             </p>
                         </div>
                         <div className={`${styles.overlay} thirdSectionOverlay`}></div>
@@ -331,8 +331,7 @@ const SolarSystem_main = () => {
                             <h2>Dwarf planet</h2>
                             <h1>Pluto</h1>
                             <p>
-                                "한때 아홉 번째 행성이었
-                                던 명왕성은 이제 우리 태양계에서 가장 큰 왜소 행성으로 <br/>분류됩니다."
+                                "한때 아홉 번째 행성이었던 명왕성은 이제 우리 태양계에서 가장 큰 왜소 행성으로 분류됩니다."
                             </p>
                         </div>
                         <div className={`${styles.overlay} thirdSectionOverlay`}></div>

@@ -9,8 +9,12 @@ const Constellation = () => {
     let polygon, moveX = 0, isDown = false, offsetX = 0;
     let stars = []; // 별 데이터를 저장할 배열
 
-    const handleButtonClick = () => {
-        window.location.href = '/react/meteor'; // 버튼 클릭 시 이동할 경로
+    const handleExperienceButtonClick = () => {
+        window.location.href = '/react/constellation';
+    };
+
+    const handleMeteorButtonClick = () => {
+        window.location.href = '/react/meteor';
     };
 
     useEffect(() => {
@@ -26,11 +30,10 @@ const Constellation = () => {
             canvas.height = stageHeight * pixelRatio;
             ctx.scale(pixelRatio, pixelRatio);
 
-            // 중심을 올려서 설정 (stageHeight / 3)
             polygon = new Polygon(
                 stageWidth / 2,
-                stageHeight / 1.1, // 카드들이 중앙에 가까운 위치에서 회전하도록 조정
-                stageHeight / 1.7, // 회전 반지름을 조정
+                stageHeight / 1,
+                stageHeight / 1.7,
                 15
             );
 
@@ -105,14 +108,28 @@ const Constellation = () => {
         };
     }, [pixelRatio]);
 
+    const CustomButton = ({ onClick, label }) => (
+        <button
+            onClick={onClick}
+            className="custom_button"
+        >
+            {label}
+        </button>
+    );
+
     return (
-        <div className="rotating-polygon-section" style={{position: 'relative'}}>
+        <div className="rotating-polygon-section">
             <canvas ref={canvasRef} className="rotating-polygon-canvas"></canvas>
-            {/* 버튼 추가 */}
-            <Main_Button
-                onClick={handleButtonClick}
-                label="별자리 정보 보러가기"
-            />
+            <div className="button-container">
+                <CustomButton
+                    onClick={handleExperienceButtonClick}
+                    label="별자리 체험 하러가기"
+                />
+                <CustomButton
+                    onClick={handleMeteorButtonClick}
+                    label="별자리 정보 보러가기"
+                />
+            </div>
         </div>
     );
 };
