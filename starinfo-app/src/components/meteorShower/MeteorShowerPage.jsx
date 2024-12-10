@@ -255,11 +255,16 @@ const MeteorShowerPage = () => {
         <div className="meteor-page">
             {/* 헤더 영역 */}
             <div className="content">
-                <Head />
-                <canvas ref={bgCanvasRef}></canvas> {/* 배경 캔버스 */}
-                <canvas ref={terrainCanvasRef}></canvas> {/* 지형 캔버스 */}
+                <Head/>
+                <canvas ref={bgCanvasRef}></canvas>
+                {/* 배경 캔버스 */}
+                <canvas ref={terrainCanvasRef}></canvas>
+                {/* 지형 캔버스 */}
+                <div className="intro"><h1>The Spectacle of the Night Sky: Meteor Showers</h1> <p> 빛의 각 흔적은 혜성의 잔해로 만들어진
+                    고유한 유성우를 나타냅니다. 유성 위에 마우스를 올리면 그
+                    이야기를 탐험하고 세부 정보를 확인할 수 있습니다. </p></div>
                 {dataLoading ? (
-                    <LoadingSpinner />
+                    <LoadingSpinner/>
                 ) : fetchError ? (
                     <div>Error loading meteor shower information...</div>
                 ) : generalMeteorData && generalMeteorData.length > 0 ? (
@@ -270,7 +275,6 @@ const MeteorShowerPage = () => {
                 ) : (
                     <div>No meteor shower information available</div>
                 )}
-
                 {/* 상세 정보 표시 */}
                 {selectedMeteor && (
                     <MeteorShowerPopup
@@ -281,8 +285,9 @@ const MeteorShowerPage = () => {
                 )}
             </div>
             {/* 푸터 영역 */}
-            <Foot />
+            <Foot/>
         </div>
+
     );
 };
 

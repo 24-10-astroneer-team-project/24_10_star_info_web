@@ -9,7 +9,7 @@
     justify-content: center;
     align-items: center;
     z-index: 100;
-    backdrop-filter: blur(4px); /* 배경 블러 효과 */
+    backdrop-filter: blur(2px); /* 배경 블러 효과 */
     overflow: hidden;
 }
 
@@ -34,7 +34,8 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2), 0 0 30px rgba(255, 255, 255, 0.4);
     width: 60%;
-    max-width: 1000px;
+    animation: fadeIn 0.3s ease-in-out;
+    max-width: 60%;
     max-height: 70vh;
     padding: 20px 30px;
     text-align: center;
@@ -174,4 +175,10 @@
     to {
         opacity: 0.3;
     }
+}
+
+/* 닫기 버튼 스타일 */
+.popup-close-button {
+    color: #ffffff;
+    font-weight: bold;
 }

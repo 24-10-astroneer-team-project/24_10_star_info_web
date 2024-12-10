@@ -24,41 +24,47 @@ function FavoriteLocationPopup({ locationDescription, constellations, onClose })
         }
     };
 
-    // 별자리, 방향 데이터를 한글화 하는 함수
     const getKoreanConstellation = (constellation) => {
-        if (constellation === "Tau") return "황소자리";
-        if (constellation === "Ori") return "오리온자리";
-        if (constellation === "Leo") return "사자자리";
-        if (constellation === "Cnc") return "게자리";
-        if (constellation === "Gem") return "쌍둥이자리";
-        if (constellation === "Vir") return "처녀자리";
-        if (constellation === "Lib") return "천칭자리";
-        if (constellation === "Sco") return "전갈자리";
-        if (constellation === "Oph") return "뱀주인자리";
-        if (constellation === "Sgr") return "궁수자리";
-        if (constellation === "Cap") return "염소자리";
-        if (constellation === "Aqr") return "물병자리";
-        if (constellation === "Psc") return "물고기자리";
-        if (constellation === "Ari") return "양자리";
+        const constellations = {
+            Tau: "황소자리",
+            Ori: "오리온자리",
+            Leo: "사자자리",
+            Cnc: "게자리",
+            Gem: "쌍둥이자리",
+            Vir: "처녀자리",
+            Lib: "천칭자리",
+            Sco: "전갈자리",
+            Oph: "뱀주인자리",
+            Sgr: "궁수자리",
+            Cap: "염소자리",
+            Aqr: "물병자리",
+            Psc: "물고기자리",
+            Ari: "양자리",
+        };
+        return constellations[constellation] || constellation;
+    };
 
-        return constellation; // 매칭되지 않으면 원래 값을 반환
-    }; //별자리
     const getKoreanDirection = (azimuth) => {
-        if (azimuth === "West") return "서쪽";
-        if (azimuth === "East") return "동쪽";
-        if (azimuth === "North") return "북쪽";
-        if (azimuth === "South") return "남쪽";
-        if (azimuth === "Southwest") return "남서쪽";
-        if (azimuth === "Southeast") return "남동쪽";
-        if (azimuth === "Northwest") return "북서쪽";
-        if (azimuth === "Northeast") return "북동쪽";
-
-        return azimuth; // 매칭되지 않으면 원래 값을 반환
-    }; // 방향
+        const directions = {
+            West: "서쪽",
+            East: "동쪽",
+            North: "북쪽",
+            South: "남쪽",
+            Southwest: "남서쪽",
+            Southeast: "남동쪽",
+            Northwest: "북서쪽",
+            Northeast: "북동쪽",
+        };
+        return directions[azimuth] || azimuth;
+    };
 
     return (
         <div className="favorite-location-popup" onClick={handleOverlayClick}>
             <div className="popup-content" onClick={handlePopupClick}>
+                {/* 닫기 버튼 추가 */}
+                <button className="popup-close-button" onClick={onClose}>
+                    ✕
+                </button>
                 <h2>현재 즐겨찾기된 위치 정보</h2>
                 <div className="location-header">
                     <p className="location-description">위치 설명: {locationDescription}</p>
@@ -82,9 +88,9 @@ function FavoriteLocationPopup({ locationDescription, constellations, onClose })
                         {constellations.map((data, index) => (
                             <tr key={index}>
                                 <td>{data.date}</td>
-                                <td>{getKoreanConstellation(data.constellation)}</td> {/* 별자리 한글 변환 */}
+                                <td>{getKoreanConstellation(data.constellation)}</td>
                                 <td>{data.max_altitude}</td>
-                                <td>{getKoreanDirection(data.azimuth)}</td> {/* 방향 한글 변환 */}
+                                <td>{getKoreanDirection(data.azimuth)}</td>
                                 <td>{data.best_visibility_time}</td>
                             </tr>
                         ))}

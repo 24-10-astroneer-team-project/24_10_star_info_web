@@ -1,8 +1,3 @@
-
-// function WeatherPage() {
-//     const handleButtonClick = () => {
-//         window.location.href = 'https://www.naver.com'; // Redirect to Naver
-//     };
 import React from 'react';
 import './Main_Button.css';
 

@@ -19,9 +19,6 @@
     font-family: 'Open sans', sans-serif;
     text-transform: uppercase;
     font-weight: bold;
-    font-size: 18px;
-    margin: 20px 0;
-    width: 50%; /* Adjust this percentage as needed */
     display: block;
 }
 
@@ -42,27 +39,19 @@
     background-image: radial-gradient(circle, #061c3d, #041833, #04142a, #041021, #030b18);
 }
 
-.subtitle {
-    font-size: 15px;
-}
-
 .month {
-    font-size: 12px;
+    font-size: 0.75vw;
     font-weight: normal;
     fill-opacity: 0;
 }
 
-.subtitle {
-    fill-opacity: 0;
-}
-
 .title {
-    font-size: 20px;
+    font-size: 1.2vw;
     animation: fillPath_title 0.8s linear forwards 0.8s; /* 2초 지연 후 2초에 걸쳐 나타남 */
     fill-opacity: 0; /* 기본 투명도 */
 }
 
-.month, .title, .subtitle {
+.month, .title {
     fill: white;
     filter: drop-shadow(0 0 1rem black);
 }
@@ -89,9 +78,10 @@
         stroke-width: 0;
     }
 }
+
 .constellation path {
     stroke: white;
-    stroke-width: 1;
+    stroke-width: 1.8;
     fill: none;
     filter: url(#glow) drop-shadow(0 0 2rem black) ;
     stroke-dasharray: 550;
@@ -99,15 +89,27 @@
     pointer-events: all;
 }
 
-.constellation:hover path,
-.drawConstellation path {
-    animation: drawPath 1s linear forwards;
+/* text에 hover했을 때 텍스트 강조 */
+.title:hover{
+    font-size: 1.5vw;
+    cursor: pointer;
+    animation: fillPath 1s linear forwards;
 }
 
-.constellation:hover text,
+.constellation.selected path,
+.drawConstellation path {
+    animation: drawPath 1s linear forwards;
+    stroke: #FFE066; /* 연노랑 */
+    stroke-dasharray: 750;
+    stroke-dashoffset: 750;
+}
+
+.constellation.selected text,
 .drawConstellation text {
-    font-size: 24px;
+    font-size: 1.5vw;
     animation: fillPath 1s linear forwards;
+    filter: drop-shadow(0 0 1rem black) drop-shadow(0 0 0.5rem black);
+    fill: #FFE066; /* 연노랑 */
 }
 
 .diagram path {
@@ -119,8 +121,10 @@
 }
 
 .milkyway path {
+    z-index: -999;
     filter: url("#glow");
     fill: rgba(255,255,255,0.03);
+    pointer-events: none; /* 마우스 이벤트를 차단 */
 }
 
 @keyframes fillPath {
@@ -131,7 +135,7 @@
 
 @keyframes fillPath_title {
     to {
-        fill-opacity: 0.5;
+        fill-opacity: 0.7;
     }
 }
 
@@ -150,7 +154,7 @@
 
 .drawDiagram path,
 .drawMonths path {
-    animation: drawPath 4s linear forwards;
+    animation: drawPath 3.5s linear forwards;
 }
 
 .drawDiagram text,

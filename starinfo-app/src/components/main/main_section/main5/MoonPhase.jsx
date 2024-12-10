@@ -56,11 +56,9 @@ function MoonPhase() {
         setDate({ ...date, [name]: parseInt(value) });
     };
 
-    const handleSubmit = (e) => {
-        if (e.key === 'Enter') {
-            calculateMoonPhase(date.year, date.month, date.day);
-            setShowInputs(false); // 검색 완료 후 입력창 닫기
-        }
+    const handleSearchClick = () => {
+        calculateMoonPhase(date.year, date.month, date.day);
+        setShowInputs(false); // 검색 완료 후 입력창 닫기
     };
 
     return (
@@ -71,32 +69,31 @@ function MoonPhase() {
                 <div className="inputGroup">
                     <input
                         className="moonPhaseInput"
-                        name="day"
-                        placeholder="DD"
+                        name="year"
+                        placeholder="YYYY"
                         onChange={handleInput}
-                        onKeyDown={handleSubmit}
                     />
                     <input
                         className="moonPhaseInput"
                         name="month"
                         placeholder="MM"
                         onChange={handleInput}
-                        onKeyDown={handleSubmit}
                     />
                     <input
                         className="moonPhaseInput"
-                        name="year"
-                        placeholder="YYYY"
+                        name="day"
+                        placeholder="DD"
                         onChange={handleInput}
-                        onKeyDown={handleSubmit}
                     />
+                    <button className="executeBtn" onClick={handleSearchClick}>
+                        Search
+                    </button>
                 </div>
             )}
             <div className="imageHolder">
                 <img src={imageSrc} alt="Moon Phase" />
             </div>
             <div className="phaseInfo">
-
                 <span id="phase">{phase}</span>
             </div>
         </div>
