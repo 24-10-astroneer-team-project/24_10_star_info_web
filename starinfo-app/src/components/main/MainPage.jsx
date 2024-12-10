@@ -7,11 +7,13 @@ import SolarSystem_main from "./main_section/main3/SolarSystem_main";
 import WaveCanvas from "./main_section/main4/WaveCanvas";
 import MoonPhase from "./main_section/main5/MoonPhase";
 import RotatingPolygonSection from "./main_section/main6/Constellation";
+import IntroductionPage from "./main_section/main7/IntroductionPage"; // Main7 컴포넌트 추가
 import Head from "../layout/Head";
 import Foot from "../layout/Foot";
 import { toast } from "react-toastify";
 import { useAuth } from "../../services/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
+
 
 function MainPage() {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -122,10 +124,8 @@ function MainPage() {
 
                     {/* 일곱 번째 섹션 */}
                     <div ref={(el) => (sections.current[6] = el)} style={{ height: '100vh', position: 'relative', backgroundColor: '#333' }}>
-                        <div style={{ color: 'white', textAlign: 'center', paddingTop: '40vh', fontSize: '24px' }}>
-                            사진 넣을 페이지
-                        </div>
-                        {/* 푸터 이동 */}
+                        <IntroductionPage />
+                        {/* 푸터: Main7에만 표시 */}
                         <div style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                             <Foot />
                         </div>

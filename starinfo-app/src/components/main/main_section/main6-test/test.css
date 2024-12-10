@@ -1,0 +1,63 @@
+/* src/styles.css */
+body {
+    margin: 0;
+    background: #000313;
+}
+
+canvas {
+    width: 100%;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+/* 추가 스타일 */
+.constellation-text {
+    font: 12px sans-serif;
+    font-size: 0.75em;
+    fill: white;
+    text-anchor: middle;
+}
+
+.constellation-bg {
+    background: #000313;
+    fill: #000313;
+}
+
+.constellation-line {
+    stroke: #fff;
+    stroke-width: 0.4;
+}
+
+.constellation-line.zodiac {
+    stroke: #f2f237;
+    stroke-width: 0.8;
+}
+
+.constellation-zodiac-bg {
+    stroke: #000313;
+    stroke-width: 2.5;
+}
+
+.constellation-svg {
+    -webkit-animation: infinite-rotate 240s linear infinite;
+    animation: infinite-rotate 240s linear infinite;
+}
+
+@-webkit-keyframes infinite-rotate {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes infinite-rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
